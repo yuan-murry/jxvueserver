@@ -2,9 +2,130 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.gxzh.jxvueserver.mapper.HomeMapper">
-    <select id="selectJgsyName" resultType="string">
-        select jgsy_name
-        from jgsy_common where jgsy_code = '360100-01-10002'
+    <select id="selectSydwpie" resultType="com.gxzh.jxvueserver.dto.SydwPie">
+        select *
+        from (select jgsy_system_code, count(*) jgcount
+              from jgsy_common jc
+              where jc.jgsy_states = '1' and jc.jgsy_type='12' and jc.dep_code like #{depCode}
+              group by ROLLUP(jc.jgsy_system_code))
+                 pivot(sum(jgcount)
+    for jgsy_system_code in('' AS zj,
+                            '01' AS dw,
+                            '02' AS rd,
+                            '03' AS zf,
+                            '04' AS zx,
+                            '07' AS fy,
+                            '08' AS jcy,
+                            '06' AS qt,
+                            '05' AS mzdp))
+    </select>
+
+    <select id="selectXzjgpie" resultType="com.gxzh.jxvueserver.dto.XzjgPie">
+        select *
+        from (select jgsy_system_code, count(*) jgcount
+              from jgsy_common jc
+              where jc.jgsy_states = '1' and jc.jgsy_type in ('04','06','10') and jc.dep_code like #{depCode}
+              group by ROLLUP(jc.jgsy_system_code))
+                 pivot(sum(jgcount)
+    for jgsy_system_code in('' AS zj,
+                            '01' AS dw,
+                            '02' AS rd,
+                            '03' AS zf,
+                            '04' AS zx,
+                            '07' AS fy,
+                            '08' AS jcy,
+                            '06' AS qt,
+                            '05' AS mzdp))
+    </select>
+
+    <select id="selectBzqk" resultType="com.gxzh.jxvueserver.dto.Bzqk">
+        select sum(dzq_bz) dzq_bz,
+               sum(dzq_zz) dzq_zz,
+               sum(qebk_bz + cebt_bz + jfzl_bz) sy_bz,
+               sum(qebk_zz + cebt_zz + jfzl_zz) sy_zz
+        from v_bzzz where geocode like #{depCode}
+
+    </select>
+
+    <select id="selectXzLdzs" resultType="com.gxzh.jxvueserver.dto.Ldzs">
+        select sum((case
+                        when vv.ldzs + vv.bmldzzbz + vv.bmldfzbz + vv.bmqtldbz +
+                             vv.nsldzzbz + vv.nsldfzbz + vv.qtldzs + vv.nsldzzbz2 +
+                             vv.nsldfzbz2 + vv.nsldzzbz3 + vv.nsldfzbz3 >
+                             vv.sbjzzbz + vv.sbjfzbz + vv.tjjzzbz + vv.tjjfzbz + vv.xcjzzbz +
+                             vv.xcjfzbz + vv.xkjzzbz + vv.xkjfzbz + vv.gjzzbz + vv.gjfzbz +
+                             vv.wdjbzs + vv.qtbzs then
+                                vv.ldzs + vv.bmldzzbz + vv.bmldfzbz + vv.bmqtldbz + vv.nsldzzbz +
+                                vv.nsldfzbz + vv.qtldzs + vv.nsldzzbz2 + vv.nsldfzbz2 +
+                                vv.nsldzzbz3 + vv.nsldfzbz3
+                        else
+                                vv.sbjzzbz + vv.sbjfzbz + vv.tjjzzbz + vv.tjjfzbz + vv.xcjzzbz +
+                                vv.xcjfzbz + vv.xkjzzbz + vv.xkjfzbz + vv.gjzzbz + vv.gjfzbz +
+                                vv.wdjbzs + vv.qtbzs
+            end)) ldbz,
+               sum((case
+                        when vv.ldrs + vv.bmldzzzz + vv.bmldfzzz + vv.bmqtldzz +
+                             vv.nsldzzzz + vv.nsldfzzz + vv.qtldzz + vv.nsldzzzz2 +
+                             vv.nsldfzzz2 + vv.nsldzzzz3 + vv.nsldfzzz3 >
+                             vv.sbjzzzz + vv.sbjfzzz + vv.tjjzzzz + vv.tjjfzzz + vv.xcjzzzz +
+                             vv.xcjfzzz + vv.xkjzzzz + vv.xkjfzzz + vv.gjzzzz + vv.gjfzzz +
+                             vv.wdjzzs + vv.qtzzs then
+                                vv.ldrs + vv.bmldzzzz + vv.bmldfzzz + vv.bmqtldzz + vv.nsldzzzz +
+                                vv.nsldfzzz + vv.qtldzz + vv.nsldzzzz2 + vv.nsldfzzz2 +
+                                vv.nsldzzzz3 + vv.nsldfzzz3
+                        else
+                                vv.sbjzzzz + vv.sbjfzzz + vv.tjjzzzz + vv.tjjfzzz + vv.xcjzzzz +
+                                vv.xcjfzzz + vv.xkjzzzz + vv.xkjfzzz + vv.gjzzzz + vv.gjfzzz +
+                                vv.wdjzzs + vv.qtzzs
+                   end)) ldzz
+
+        from bmldzs vv
+                 left join jgsy_common jc
+                           on jc.jgsy_code = vv.jgsy_code
+        where jc.jgsy_type in('04','06','10')
+          and jc.jgsy_states = '1' and jc.dep_code like #{depCode}
+
+    </select>
+
+    <select id="selectSyLdzs" resultType="com.gxzh.jxvueserver.dto.Ldzs">
+        select sum((case
+                        when vv.bmldzzbz + vv.bmldfzbz + vv.bmqtldbz + vv.nsldzzbz +
+                             vv.nsldfzbz + vv.qtldzs + vv.nsldzzbz2 + vv.nsldfzbz2 +
+                             vv.nsldzzbz3 + vv.nsldfzbz3 >
+                             vv.sbjzzbz + vv.sbjfzbz + vv.tjjzzbz + vv.tjjfzbz + vv.xcjzzbz +
+                             vv.xcjfzbz + vv.xkjzzbz + vv.xkjfzbz + vv.gjzzbz + vv.gjfzbz +
+                             vv.wdjbzs + vv.qtbzs then
+                                vv.bmldzzbz + vv.bmldfzbz + vv.bmqtldbz + vv.nsldzzbz +
+                                vv.nsldfzbz + vv.qtldzs + vv.nsldzzbz2 + vv.nsldfzbz2 +
+                                vv.nsldzzbz3 + vv.nsldfzbz3
+                        else
+                                vv.sbjzzbz + vv.sbjfzbz + vv.tjjzzbz + vv.tjjfzbz + vv.xcjzzbz +
+                                vv.xcjfzbz + vv.xkjzzbz + vv.xkjfzbz + vv.gjzzbz + vv.gjfzbz +
+                                vv.wdjbzs + vv.qtbzs
+            end)) ldbz,
+               sum((case
+                        when vv.bmldzzzz + vv.bmldfzzz + vv.bmqtldzz + vv.nsldzzzz +
+                             vv.nsldfzzz + vv.qtldzz + vv.nsldzzzz2 + vv.nsldfzzz2 +
+                             vv.nsldzzzz3 + vv.nsldfzzz3 >
+                             vv.sbjzzzz + vv.sbjfzzz + vv.tjjzzzz + vv.tjjfzzz + vv.xcjzzzz +
+                             vv.xcjfzzz + vv.xkjzzzz + vv.xkjfzzz + vv.gjzzzz + vv.gjfzzz +
+                             vv.wdjzzs + vv.qtzzs then
+                                vv.bmldzzzz + vv.bmldfzzz + vv.bmqtldzz + vv.nsldzzzz +
+                                vv.nsldfzzz + vv.qtldzz + vv.nsldzzzz2 + vv.nsldfzzz2 +
+                                vv.nsldzzzz3 + vv.nsldfzzz3
+                        else
+                                vv.sbjzzzz + vv.sbjfzzz + vv.tjjzzzz + vv.tjjfzzz + vv.xcjzzzz +
+                                vv.xcjfzzz + vv.xkjzzzz + vv.xkjfzzz + vv.gjzzzz + vv.gjfzzz +
+                                vv.wdjzzs + vv.qtzzs
+                   end)) ldzz
+
+        from bmldzs vv
+                 left join jgsy_common jc
+                           on jc.jgsy_code = vv.jgsy_code
+        where jc.jgsy_type = '12'
+          and jc.jgsy_states = '1'
+          and jc.dep_code like #{depCode}
+
     </select>
 
 </mapper>
