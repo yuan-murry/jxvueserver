@@ -41,9 +41,39 @@
     <select id="selectBzqk" resultType="com.gxzh.jxvueserver.dto.Bzqk">
         select sum(dzq_bz) dzq_bz,
                sum(dzq_zz) dzq_zz,
-               sum(qebk_bz + cebt_bz + jfzl_bz) sy_bz,
-               sum(qebk_zz + cebt_zz + jfzl_zz) sy_zz
-        from v_bzzz where geocode like #{depCode}
+               sum(sy_bz) sy_bz,
+               sum(sy_zz) sy_zz,
+               sum(xz_dfp) xz_dfp,
+               sum(sy_dfp) sy_dfp
+        from (select sum(dzq_bz) dzq_bz,
+                     sum(dzq_zz) dzq_zz,
+                     sum(qebk_bz + cebt_bz + jfzl_bz) sy_bz,
+                     sum(qebk_zz + cebt_zz + jfzl_zz) sy_zz,
+                     0 as xz_dfp,
+                     0 as sy_dfp
+              from v_bzzz
+              where geocode like #{depCode}
+              union all
+
+              select 0 as dzq_bz,
+                     0 as dzq_zz,
+                     0 as sy_bz,
+                     0 as sy_zz,
+                     sum(case
+                             when jgsy_system_code = 'xz_dfp' then
+                                 bz
+                             else
+                                 0
+                         end) xz_dfp,
+                     sum(case
+                             when jgsy_system_code in
+                                  ('qebk_dfp', 'jfzl_dfp', 'cebt_dfp') then
+                                 bz
+                             else
+                                 0
+                         end) sy_dfp
+              from V_TONGJI_DFPBZ_tjb t
+              where dep_code like #{depCode})
 
     </select>
 

@@ -8,4 +8,7 @@ public class Bzqk {
     private Integer dzqZz=0;
     private Integer syBz=0;
     private Integer syZz=0;
+    private Integer xzDfp=0;
+    private Integer syDfp=0;
+
 }
