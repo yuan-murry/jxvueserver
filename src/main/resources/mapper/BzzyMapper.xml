@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gxzh.jxvueserver.mapper.BzzyMapper">
+    <select id="getXzbzpie_sheng" resultType="com.gxzh.jxvueserver.dto.Gdbz">
+        select substr(geocode, 1, 4) || '00'                  code,
+               (select desp
+                from geocode g
+                where g.code = substr(geocode, 1, 4) || '00') desp,
+               (select decode(substr(code, 3, 4), '0000', 0, g.dis_order)
+                from geocode g
+                where g.code = substr(geocode, 1, 4) || '00') dis_order,
+               sum(dzq_bz)                                    dzq_bz,
+               sum(dzq_zz)                                    dzq_zz,
+               sum(qebk_bz + cebt_bz + jfzl_bz)               sy_bz,
+               sum(qebk_zz + cebt_zz + jfzl_zz)               sy_zz,
+               sum(sykbs_xz)                                  sykbs_xz,
+               sum(sykbs_sy)                                  sykbs_sy,
+               sum(xz_dfp)                                    xz_dfp,
+               sum(sy_dfp)                                    sy_dfp
+        from (select geocode,
+                     t.dzq_bz,
+                     t.dzq_zz,
+                     decode(t.jgtype, 'sy', t.qebk_bz, 0) qebk_bz,
+                     decode(t.jgtype, 'sy', t.cebt_bz, 0) cebt_bz,
+                     decode(t.jgtype, 'sy', t.jfzl_bz, 0) jfzl_bz,
+                     decode(t.jgtype, 'sy', t.qebk_zz, 0) qebk_zz,
+                     decode(t.jgtype, 'sy', t.cebt_zz, 0) cebt_zz,
+                     decode(t.jgtype, 'sy', t.jfzl_zz, 0) jfzl_zz,
+                     0 as                                 sykbs_xz,
+                     0 as                                 sykbs_sy,
+                     0 as                                 xz_dfp,
+                     0 as                                 sy_dfp
+              from v_bzzz t
+              where t.geocode like '36%'
+
+              union all
+              select substr(bc.jgsy_code, 1, 4) || '00' geocode,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     sum(case
+                             when bcd.bz_type = 'a' then
+                                 bcd.reply_num - nvl(bcd.used_num, 0)
+                             else
+                                 0
+                         end)                           sykbs_xz,
+                     sum(case
+                             when bcd.bz_type in ('11', '12', '20') then
+                                 bcd.reply_num - nvl(bcd.used_num, 0)
+                             else
+                                 0
+                         end)                           sykbs_sy,
+                     0,
+                     0
+              from bill_check bc,
+                   bill_check_detail bcd
+              where bc.bill_state = '2'
+                and bc.bill_valid = '1'
+                and bc.bill_no = bcd.bill_no
+              group by substr(bc.jgsy_code, 1, 4)
+
+              union all
+
+              select dep_code geocode,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     sum(case
+                             when jgsy_system_code = 'xz_dfp' then
+                                 bz
+                             else
+                                 0
+                         end) xz_dfp,
+                     sum(case
+                             when jgsy_system_code in
+                                  ('qebk_dfp', 'jfzl_dfp', 'cebt_dfp') then
+                                 bz
+                             else
+                                 0
+                         end) sy_dfp
+              from V_TONGJI_DFPBZ_tjb t
+              group by t.dep_code)
+        where geocode != '360000'
+        group by substr(geocode, 1, 4)
+        order by dis_order
+    </select>
+
+    <select id="getXzbzpie_shi" resultType="com.gxzh.jxvueserver.dto.Gdbz">
+        select geocode                                        code,
+               (select desp
+                from geocode g
+                where g.code = geocode)                       desp,
+               (select decode(substr(code, 3, 4), '0000', 0, g.dis_order)
+                from geocode g
+                where g.code = substr(geocode, 1, 4) || '00') dis_order,
+               sum(dzq_bz)                                    dzq_bz,
+               sum(dzq_zz)                                    dzq_zz,
+               sum(qebk_bz + cebt_bz + jfzl_bz)               sy_bz,
+               sum(qebk_zz + cebt_zz + jfzl_zz)               sy_zz,
+               sum(sykbs_xz)                                  sykbs_xz,
+               sum(sykbs_sy)                                  sykbs_sy,
+               sum(xz_dfp)                                    xz_dfp,
+               sum(sy_dfp)                                    sy_dfp
+        from (select geocode,
+                     t.dzq_bz,
+                     t.dzq_zz,
+                     decode(t.jgtype, 'sy', t.qebk_bz, 0) qebk_bz,
+                     decode(t.jgtype, 'sy', t.cebt_bz, 0) cebt_bz,
+                     decode(t.jgtype, 'sy', t.jfzl_bz, 0) jfzl_bz,
+                     decode(t.jgtype, 'sy', t.qebk_zz, 0) qebk_zz,
+                     decode(t.jgtype, 'sy', t.cebt_zz, 0) cebt_zz,
+                     decode(t.jgtype, 'sy', t.jfzl_zz, 0) jfzl_zz,
+                     0 as                                 sykbs_xz,
+                     0 as                                 sykbs_sy,
+                     0 as                                 xz_dfp,
+                     0 as                                 sy_dfp
+              from v_bzzz t
+              where t.geocode like #{depCode}
+
+              union all
+              select substr(bc.jgsy_code, 1, 6) geocode,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     sum(case
+                             when bcd.bz_type = 'a' then
+                                 bcd.reply_num - nvl(bcd.used_num, 0)
+                             else
+                                 0
+                         end)                   sykbs_xz,
+                     sum(case
+                             when bcd.bz_type in ('11', '12', '20') then
+                                 bcd.reply_num - nvl(bcd.used_num, 0)
+                             else
+                                 0
+                         end)                   sykbs_sy,
+                     0,
+                     0
+              from bill_check bc,
+                   bill_check_detail bcd
+              where bc.bill_state = '2'
+                and bc.bill_valid = '1'
+                and bc.bill_no = bcd.bill_no
+              group by substr(bc.jgsy_code, 1, 6)
+
+              union all
+
+              select dep_code geocode,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     sum(case
+                             when jgsy_system_code = 'xz_dfp' then
+                                 bz
+                             else
+                                 0
+                         end) xz_dfp,
+                     sum(case
+                             when jgsy_system_code in
+                                  ('qebk_dfp', 'jfzl_dfp', 'cebt_dfp') then
+                                 bz
+                             else
+                                 0
+                         end) sy_dfp
+              from V_TONGJI_DFPBZ_tjb t
+              group by t.dep_code)
+        where geocode like #{depCode}
+          and geocode != #{allCode}
+        group by geocode
+        order by dis_order
+
+
+    </select>
+
+    <select id="getLdzspie_sheng" resultType="com.gxzh.jxvueserver.dto.BzzyLdzs">
+        select g.desp                                                     desp,
+               decode(length(substr(ageocode, 1, 4)),
+                      4,
+                      decode(substr(ageocode, 3, 4), '0000', 0, dis_order),
+                      decode(substr(ageocode, 5, 2), '00', 0, dis_order)) dis_order,
+               ageocode as                                                geocode,
+               ldbz,
+               ldzz
+        from (select decode(length(substr(geocode, 1, 4)),
+                            4,
+                            substr(geocode, 1, 4) || '00',
+                            substr(geocode, 1, 4)) ageocode,
+                     sum(b.sbjzzbz + b.sbjfzbz + tjjzzbz + tjjfzbz + xcjzzbz +
+                         xcjfzbz + xkjzzbz + xkjfzbz + gjzzbz + gjfzbz + qtbzs +
+                         wdjbzs)                   ldbz,
+                     sum(b.sbjzzzz + b.sbjfzzz + tjjzzzz + tjjfzzz + xcjzzzz +
+                         xcjfzzz + xkjzzzz + xkjfzzz + gjzzzz + gjfzzz + qtzzs +
+                         wdjzzs)                   ldzz
+
+              from bmldzs b,
+                   v_bzzz j
+              where b.jgsy_code = j.jgsy_code
+                and j.geocode like '36%'
+                and j.geocode!='360000'
+              group by substr(geocode, 1, 4)) a
+                 left join geocode g
+                           on a.ageocode = g.code
+        order by dis_order nulls first
+    </select>
+
+    <select id="getLdzspie_shi" resultType="com.gxzh.jxvueserver.dto.BzzyLdzs">
+        select g.desp                                                     desp,
+               decode(length(substr(ageocode, 1, 6)),
+                      4,
+                      decode(substr(ageocode, 3, 4), '0000', 0, dis_order),
+                      decode(substr(ageocode, 5, 2), '00', 0, dis_order)) dis_order,
+               a.*
+        from (select decode(length(substr(geocode, 1, 6)),
+                            4,
+                            substr(geocode, 1, 6) || '00',
+                            substr(geocode, 1, 6)) ageocode,
+                     sum(b.sbjzzbz + b.sbjfzbz + tjjzzbz + tjjfzbz + xcjzzbz +
+                         xcjfzbz + xkjzzbz + xkjfzbz + gjzzbz + gjfzbz + qtbzs +
+                         wdjbzs)                   ldbz,
+                     sum(b.sbjzzzz + b.sbjfzzz + tjjzzzz + tjjfzzz + xcjzzzz +
+                         xcjfzzz + xkjzzzz + xkjfzzz + gjzzzz + gjfzzz + qtzzs +
+                         wdjzzs)                   ldzz
+
+              from bmldzs b,
+                   v_bzzz j
+              where b.jgsy_code = j.jgsy_code
+                and j.geocode like #{depCode}
+                and j.geocode!=#{allCode}
+              group by substr(geocode, 1, 6)) a
+                 left join geocode g
+                           on a.ageocode = g.code
+        order by dis_order nulls first
+
+    </select>
+
+    <select id="getBzzyBzlx" resultType="com.gxzh.jxvueserver.dto.BzzyBzlx">
+        select sum(dzq_bz)  dzq_bz,
+               sum(ga_bz)   ga_bz,
+               sum(jcy_bz)  jcy_bz,
+               sum(fy_bz)   fy_bz,
+               sum(sf_bz)   sf_bz,
+               sum(qebk_bz) qebk_bz,
+               sum(cebt_bz) cebt_bz,
+               sum(jfzl_bz) jfzl_bz
+        from v_bzzz
+        where geocode like #{depCode}
+    </select>
+
+    <select id="getNoUse" resultType="com.gxzh.jxvueserver.dto.BzzyNoUse">
+        with tt as
+        (SELECT update_time, jgsy_code
+        FROM (SELECT ROW_NUMBER() OVER(PARTITION BY jgsy_code ORDER BY update_time DESC NULLS LAST) mtime,
+        update_time,
+        jgsy_code
+        FROM t_ry_jbxx
+        WHERE states = '1' and jgsy_code like #{depCode})
+        WHERE mtime = 1)
+
+        select *
+        from (select (select jj.jgsy_name
+        from jgsy_common jj
+        where jj.jgsy_code = jc.jgsy_code) jgsy_name,
+        max(t.update_time) lasttime,
+        (select ((local.l_a_xz_st + local.l_a_zf_ga + local.l_a_zf_jcy +
+        local.l_a_zf_fy + local.l_a_zf_sf + local.l_a_qebk +
+        local.l_a_cebt + local.l_a_jfzl) -
+        (local.l_r_xz_st + local.l_r_zf_ga + local.l_r_zf_jcy +
+        local.l_r_zf_fy + local.l_r_zf_sf + local.l_r_qebk +
+        local.l_r_cebt + local.l_r_jfzl)) bzs
+        from local
+        where local.jgsy_code = jgsy_code) as bzs
+        from tt t, jgsy_common jc
+        where jc.jgsy_code = t.jgsy_code
+        and floor(to_number(sysdate -
+        to_date(to_char(t.update_time,
+        'yyyy-mm-dd hh24:mi:ss'),
+        'yyyy-mm-dd hh24:mi:ss')) / 365) > 3
+        and jc.jgsy_chaobz = '0'
+        and jc.jgsy_type = '04'
+        and jc.jgsy_states = '1'
+
+        group by jc.jgsy_code
+
+        union all
+
+        select (select jj.jgsy_name
+        from jgsy_common jj
+        where jj.jgsy_code = jc.jgsy_code) jgsy_name,
+        max(t.update_time) lasttime,
+        (select ((zf_sf_bz + zf_fy_bz + zf_jcy_bz + zf_ga_bz +
+        qebkbzrs + cebtbzrs + jfzlbzrs) -
+        (zf_sf_zz + zf_fy_zz + zf_jcy_zz + zf_ga_zz +
+        qebksyry + cebtsyry + jfzlsyry)) bzs
+        from sy
+        where sy.jgsy_code = jgsy_code
+        and rownum = 1) as bzs
+        from tt t, jgsy_common jc
+        where jc.jgsy_code = t.jgsy_code
+        and floor(to_number(sysdate -
+        to_date(to_char(t.update_time,
+        'yyyy-mm-dd hh24:mi:ss'),
+        'yyyy-mm-dd hh24:mi:ss')) / 365) > 3
+        and jc.jgsy_chaobz = '0'
+        and jc.jgsy_type = '12'
+        and jc.jgsy_states = '1'
+        group by jc.jgsy_code
+
+        union all
+
+        select (select jj.jgsy_name
+        from jgsy_common jj
+        where jj.jgsy_code = jc.jgsy_code) jgsy_name,
+        max(t.update_time) lasttime,
+        (select ((jdxz.xz_bz + jdxz.zf_ga_bz + jdxz.zf_jcy_bz +
+        jdxz.zf_fy_bz + jdxz.zf_sf_bz + jdxz.qebk_bz +
+        jdxz.cebt_bz + jdxz.jfzl_bz) -
+        (jdxz.xz_zz + jdxz.zf_ga_zz + jdxz.zf_jcy_zz +
+        jdxz.zf_fy_zz + jdxz.zf_sf_zz + jdxz.qebk_zz +
+        jdxz.cebt_zz + jdxz.jfzl_zz)) bzs
+        from jdxz
+        where jdxz.jgsy_code = jgsy_code) as bzs
+        from tt t, jgsy_common jc
+        where jc.jgsy_code = t.jgsy_code
+        and floor(to_number(sysdate -
+        to_date(to_char(t.update_time,
+        'yyyy-mm-dd hh24:mi:ss'),
+        'yyyy-mm-dd hh24:mi:ss')) / 365) > 3
+        and jc.jgsy_chaobz = '0'
+        and jc.jgsy_type = '10'
+        and jc.jgsy_states = '1'
+        group by jc.jgsy_code)
+        where rownum &lt;= 15
+    </select>
+    <select id="getRetire" resultType="com.gxzh.jxvueserver.dto.BzzyRetire">
+
+        select nvl(sum((case
+        when ((t.xb = '1' and to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(add_months(sysdate, 12) - interval '60' year,
+        'yyyymmdd')) or
+        (xb = '2' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+        'yyyymmdd') and zwjb > '132') or
+        (xb = '2' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+        'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+        (t.zbzt = '01' or t.zbzt like '02%') then
+        1
+        end)),
+        0) oneyear,
+        nvl(sum((case
+        when ((t.xb = '1' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(add_months(sysdate, 12 * 2) - interval '60' year,
+        'yyyymmdd')) or
+        (xb = '2' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+        'yyyymmdd') and zwjb > '132') or
+        (xb = '2' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+        'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+        (t.zbzt = '01' or t.zbzt like '02%') then
+        1
+        end)),
+        0) twoyear,
+        nvl(sum((case
+        when ((t.xb = '1' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(add_months(sysdate, 12 * 3) - interval '60' year,
+        'yyyymmdd')) or
+        (xb = '2' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+        'yyyymmdd') and zwjb > '132') or
+        (xb = '2' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+        'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+        (t.zbzt = '01' or t.zbzt like '02%') then
+        1
+        end)),
+        0) threeyear,
+        nvl(sum((case
+        when ((t.xb = '1' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(add_months(sysdate, 12 * 4) - interval '60' year,
+        'yyyymmdd')) or
+        (xb = '2' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+        'yyyymmdd') and zwjb > '132') or
+        (xb = '2' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+        'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+        (t.zbzt = '01' or t.zbzt like '02%') then
+        1
+        end)),
+        0) fouryear,
+        nvl(sum((case
+        when ((t.xb = '1' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(add_months(sysdate, 12 * 5) - interval '60' year,
+        'yyyymmdd')) or
+        (xb = '2' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+        'yyyymmdd') and zwjb > '132') or
+        (xb = '2' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+        'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+        (t.zbzt = '01' or t.zbzt like '02%') then
+        1
+        end)),
+        0) fiveyear
+
+        from t_ry_jbxx t, jgsy_common j
+        where t.jgsy_code = j.jgsy_code
+        and (j.jgsy_states = '1' or j.jgsy_states is null)
+        and j.dep_code like #{depCode}
+
+    </select>
+    <select id="getInsdstry" resultType="com.gxzh.jxvueserver.dto.BzzyIndstry">
+        select (select substr(hyfl_name, 0, 2) from hyfl where hyfl_code = hylb) hyname,
+        bzs,
+        zzs
+        from (select substr(hylb, 0, 2) || '0000' hylb,
+        sum(qebkbzrs + cebtbzrs + jfzlbzrs) as bzs,
+        sum(qebksyry + cebtsyry + jfzlsyry) as zzs
+        from sy
+        where jgsy_states = '1' and jgsy_code like #{depCode}
+        group by substr(hylb, 0, 2))
+        where rownum &lt;= 10
+        order by bzs desc
+
+
+    </select>
+
+
+</mapper>
