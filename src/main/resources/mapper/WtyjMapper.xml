@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.gxzh.jxvueserver.mapper.WtyjMapper">
+    <select id="selectCbz" resultType="com.gxzh.jxvueserver.entity.Cbz" parameterType="java.lang.String">
+        select
+                (select desp from geocode g where g.code =geocode ) desp,
+                (select decode(substr(code,5,2),'00',0,g.dis_order) from geocode g
+                 where g.code =geocode ) dis_order,
+                sum(chaobz) as chaobz,
+                sum(chaozs) as chaozs,
+                sum(chaojg) as chaojg
+        from
+            (select  g.code as geocode,
+                     desp as desp,
+                     nvl(j.jgsy_chaobz,0) as chaobz,
+                     nvl(j.jgsy_chaozs,0) as chaozs,
+                     nvl(j.jgsy_chaojg,0) as chaojg
+
+             from geocode g
+                      left join jgsy_common j on g.code=j.dep_code and j.jgsy_states='1'
+             where  g.code like #{depcode}
+               AND g.code != #{code}) group by geocode
+
+
+
+
+
+
+    </select>
+
+
+
+
+</mapper>
