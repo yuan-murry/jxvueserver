@@ -273,192 +273,198 @@
 
     <select id="getNoUse" resultType="com.gxzh.jxvueserver.dto.BzzyNoUse">
         with tt as
-        (SELECT update_time, jgsy_code
-        FROM (SELECT ROW_NUMBER() OVER(PARTITION BY jgsy_code ORDER BY update_time DESC NULLS LAST) mtime,
-        update_time,
-        jgsy_code
-        FROM t_ry_jbxx
-        WHERE states = '1' and jgsy_code like #{depCode})
-        WHERE mtime = 1)
+                 (SELECT update_time, jgsy_code
+                  FROM (SELECT ROW_NUMBER() OVER(PARTITION BY jgsy_code ORDER BY update_time DESC NULLS LAST) mtime,
+                               update_time,
+                               jgsy_code
+                        FROM t_ry_jbxx
+                        WHERE states = '1'
+                          and jgsy_code like #{depCode})
+                  WHERE mtime = 1)
 
         select *
         from (select (select jj.jgsy_name
-        from jgsy_common jj
-        where jj.jgsy_code = jc.jgsy_code) jgsy_name,
-        max(t.update_time) lasttime,
-        (select ((local.l_a_xz_st + local.l_a_zf_ga + local.l_a_zf_jcy +
-        local.l_a_zf_fy + local.l_a_zf_sf + local.l_a_qebk +
-        local.l_a_cebt + local.l_a_jfzl) -
-        (local.l_r_xz_st + local.l_r_zf_ga + local.l_r_zf_jcy +
-        local.l_r_zf_fy + local.l_r_zf_sf + local.l_r_qebk +
-        local.l_r_cebt + local.l_r_jfzl)) bzs
-        from local
-        where local.jgsy_code = jgsy_code) as bzs
-        from tt t, jgsy_common jc
-        where jc.jgsy_code = t.jgsy_code
-        and floor(to_number(sysdate -
-        to_date(to_char(t.update_time,
-        'yyyy-mm-dd hh24:mi:ss'),
-        'yyyy-mm-dd hh24:mi:ss')) / 365) > 3
-        and jc.jgsy_chaobz = '0'
-        and jc.jgsy_type = '04'
-        and jc.jgsy_states = '1'
+                      from jgsy_common jj
+                      where jj.jgsy_code = jc.jgsy_code)    jgsy_name,
+                     max(t.update_time)                     lasttime,
+                     (select ((local.l_a_xz_st + local.l_a_zf_ga + local.l_a_zf_jcy +
+                               local.l_a_zf_fy + local.l_a_zf_sf + local.l_a_qebk +
+                               local.l_a_cebt + local.l_a_jfzl) -
+                              (local.l_r_xz_st + local.l_r_zf_ga + local.l_r_zf_jcy +
+                               local.l_r_zf_fy + local.l_r_zf_sf + local.l_r_qebk +
+                               local.l_r_cebt + local.l_r_jfzl)) bzs
+                      from local
+                      where local.jgsy_code = jgsy_code) as bzs
+              from tt t,
+                   jgsy_common jc
+              where jc.jgsy_code = t.jgsy_code
+                and floor(to_number(sysdate -
+                                    to_date(to_char(t.update_time,
+                                                    'yyyy-mm-dd hh24:mi:ss'),
+                                            'yyyy-mm-dd hh24:mi:ss')) / 365) > 3
+                and jc.jgsy_chaobz = '0'
+                and jc.jgsy_type = '04'
+                and jc.jgsy_states = '1'
 
-        group by jc.jgsy_code
+              group by jc.jgsy_code
 
-        union all
+              union all
 
-        select (select jj.jgsy_name
-        from jgsy_common jj
-        where jj.jgsy_code = jc.jgsy_code) jgsy_name,
-        max(t.update_time) lasttime,
-        (select ((zf_sf_bz + zf_fy_bz + zf_jcy_bz + zf_ga_bz +
-        qebkbzrs + cebtbzrs + jfzlbzrs) -
-        (zf_sf_zz + zf_fy_zz + zf_jcy_zz + zf_ga_zz +
-        qebksyry + cebtsyry + jfzlsyry)) bzs
-        from sy
-        where sy.jgsy_code = jgsy_code
-        and rownum = 1) as bzs
-        from tt t, jgsy_common jc
-        where jc.jgsy_code = t.jgsy_code
-        and floor(to_number(sysdate -
-        to_date(to_char(t.update_time,
-        'yyyy-mm-dd hh24:mi:ss'),
-        'yyyy-mm-dd hh24:mi:ss')) / 365) > 3
-        and jc.jgsy_chaobz = '0'
-        and jc.jgsy_type = '12'
-        and jc.jgsy_states = '1'
-        group by jc.jgsy_code
+              select (select jj.jgsy_name
+                      from jgsy_common jj
+                      where jj.jgsy_code = jc.jgsy_code) jgsy_name,
+                     max(t.update_time)                  lasttime,
+                     (select ((zf_sf_bz + zf_fy_bz + zf_jcy_bz + zf_ga_bz +
+                               qebkbzrs + cebtbzrs + jfzlbzrs) -
+                              (zf_sf_zz + zf_fy_zz + zf_jcy_zz + zf_ga_zz +
+                               qebksyry + cebtsyry + jfzlsyry)) bzs
+                      from sy
+                      where sy.jgsy_code = jgsy_code
+                        and rownum = 1) as               bzs
+              from tt t,
+                   jgsy_common jc
+              where jc.jgsy_code = t.jgsy_code
+                and floor(to_number(sysdate -
+                                    to_date(to_char(t.update_time,
+                                                    'yyyy-mm-dd hh24:mi:ss'),
+                                            'yyyy-mm-dd hh24:mi:ss')) / 365) > 3
+                and jc.jgsy_chaobz = '0'
+                and jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+              group by jc.jgsy_code
 
-        union all
+              union all
 
-        select (select jj.jgsy_name
-        from jgsy_common jj
-        where jj.jgsy_code = jc.jgsy_code) jgsy_name,
-        max(t.update_time) lasttime,
-        (select ((jdxz.xz_bz + jdxz.zf_ga_bz + jdxz.zf_jcy_bz +
-        jdxz.zf_fy_bz + jdxz.zf_sf_bz + jdxz.qebk_bz +
-        jdxz.cebt_bz + jdxz.jfzl_bz) -
-        (jdxz.xz_zz + jdxz.zf_ga_zz + jdxz.zf_jcy_zz +
-        jdxz.zf_fy_zz + jdxz.zf_sf_zz + jdxz.qebk_zz +
-        jdxz.cebt_zz + jdxz.jfzl_zz)) bzs
-        from jdxz
-        where jdxz.jgsy_code = jgsy_code) as bzs
-        from tt t, jgsy_common jc
-        where jc.jgsy_code = t.jgsy_code
-        and floor(to_number(sysdate -
-        to_date(to_char(t.update_time,
-        'yyyy-mm-dd hh24:mi:ss'),
-        'yyyy-mm-dd hh24:mi:ss')) / 365) > 3
-        and jc.jgsy_chaobz = '0'
-        and jc.jgsy_type = '10'
-        and jc.jgsy_states = '1'
-        group by jc.jgsy_code)
+              select (select jj.jgsy_name
+                      from jgsy_common jj
+                      where jj.jgsy_code = jc.jgsy_code)   jgsy_name,
+                     max(t.update_time)                    lasttime,
+                     (select ((jdxz.xz_bz + jdxz.zf_ga_bz + jdxz.zf_jcy_bz +
+                               jdxz.zf_fy_bz + jdxz.zf_sf_bz + jdxz.qebk_bz +
+                               jdxz.cebt_bz + jdxz.jfzl_bz) -
+                              (jdxz.xz_zz + jdxz.zf_ga_zz + jdxz.zf_jcy_zz +
+                               jdxz.zf_fy_zz + jdxz.zf_sf_zz + jdxz.qebk_zz +
+                               jdxz.cebt_zz + jdxz.jfzl_zz)) bzs
+                      from jdxz
+                      where jdxz.jgsy_code = jgsy_code) as bzs
+              from tt t,
+                   jgsy_common jc
+              where jc.jgsy_code = t.jgsy_code
+                and floor(to_number(sysdate -
+                                    to_date(to_char(t.update_time,
+                                                    'yyyy-mm-dd hh24:mi:ss'),
+                                            'yyyy-mm-dd hh24:mi:ss')) / 365) > 3
+                and jc.jgsy_chaobz = '0'
+                and jc.jgsy_type = '10'
+                and jc.jgsy_states = '1'
+              group by jc.jgsy_code)
         where rownum &lt;= 15
     </select>
     <select id="getRetire" resultType="com.gxzh.jxvueserver.dto.BzzyRetire">
 
         select nvl(sum((case
-        when ((t.xb = '1' and to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(add_months(sysdate, 12) - interval '60' year,
-        'yyyymmdd')) or
-        (xb = '2' and
-        to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
-        'yyyymmdd') and zwjb > '132') or
-        (xb = '2' and
-        to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
-        'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
-        (t.zbzt = '01' or t.zbzt like '02%') then
-        1
-        end)),
-        0) oneyear,
-        nvl(sum((case
-        when ((t.xb = '1' and
-        to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(add_months(sysdate, 12 * 2) - interval '60' year,
-        'yyyymmdd')) or
-        (xb = '2' and
-        to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
-        'yyyymmdd') and zwjb > '132') or
-        (xb = '2' and
-        to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
-        'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
-        (t.zbzt = '01' or t.zbzt like '02%') then
-        1
-        end)),
-        0) twoyear,
-        nvl(sum((case
-        when ((t.xb = '1' and
-        to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(add_months(sysdate, 12 * 3) - interval '60' year,
-        'yyyymmdd')) or
-        (xb = '2' and
-        to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
-        'yyyymmdd') and zwjb > '132') or
-        (xb = '2' and
-        to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
-        'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
-        (t.zbzt = '01' or t.zbzt like '02%') then
-        1
-        end)),
-        0) threeyear,
-        nvl(sum((case
-        when ((t.xb = '1' and
-        to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(add_months(sysdate, 12 * 4) - interval '60' year,
-        'yyyymmdd')) or
-        (xb = '2' and
-        to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
-        'yyyymmdd') and zwjb > '132') or
-        (xb = '2' and
-        to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
-        'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
-        (t.zbzt = '01' or t.zbzt like '02%') then
-        1
-        end)),
-        0) fouryear,
-        nvl(sum((case
-        when ((t.xb = '1' and
-        to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(add_months(sysdate, 12 * 5) - interval '60' year,
-        'yyyymmdd')) or
-        (xb = '2' and
-        to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
-        'yyyymmdd') and zwjb > '132') or
-        (xb = '2' and
-        to_char(csrq, 'yyyymmdd') &lt;=
-        to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
-        'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
-        (t.zbzt = '01' or t.zbzt like '02%') then
-        1
-        end)),
-        0) fiveyear
+                            when ((t.xb = '1' and to_char(csrq, 'yyyymmdd') &lt;=
+                                                  to_char(add_months(sysdate, 12) - interval '60' year,
+                                                          'yyyymmdd')) or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+                                           'yyyymmdd') and zwjb > '132') or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+                                           'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+                                 (t.zbzt = '01' or t.zbzt like '02%') then
+                                1
+            end)),
+                   0) oneyear,
+               nvl(sum((case
+                            when ((t.xb = '1' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(add_months(sysdate, 12 * 2) - interval '60' year,
+                                           'yyyymmdd')) or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+                                           'yyyymmdd') and zwjb > '132') or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+                                           'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+                                 (t.zbzt = '01' or t.zbzt like '02%') then
+                                1
+                   end)),
+                   0) twoyear,
+               nvl(sum((case
+                            when ((t.xb = '1' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(add_months(sysdate, 12 * 3) - interval '60' year,
+                                           'yyyymmdd')) or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+                                           'yyyymmdd') and zwjb > '132') or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+                                           'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+                                 (t.zbzt = '01' or t.zbzt like '02%') then
+                                1
+                   end)),
+                   0) threeyear,
+               nvl(sum((case
+                            when ((t.xb = '1' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(add_months(sysdate, 12 * 4) - interval '60' year,
+                                           'yyyymmdd')) or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+                                           'yyyymmdd') and zwjb > '132') or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+                                           'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+                                 (t.zbzt = '01' or t.zbzt like '02%') then
+                                1
+                   end)),
+                   0) fouryear,
+               nvl(sum((case
+                            when ((t.xb = '1' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(add_months(sysdate, 12 * 5) - interval '60' year,
+                                           'yyyymmdd')) or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+                                           'yyyymmdd') and zwjb > '132') or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+                                           'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+                                 (t.zbzt = '01' or t.zbzt like '02%') then
+                                1
+                   end)),
+                   0) fiveyear
 
-        from t_ry_jbxx t, jgsy_common j
+        from t_ry_jbxx t,
+             jgsy_common j
         where t.jgsy_code = j.jgsy_code
-        and (j.jgsy_states = '1' or j.jgsy_states is null)
-        and j.dep_code like #{depCode}
+          and (j.jgsy_states = '1' or j.jgsy_states is null)
+          and j.dep_code like #{depCode}
 
     </select>
     <select id="getInsdstry" resultType="com.gxzh.jxvueserver.dto.BzzyIndstry">
         select (select substr(hyfl_name, 0, 2) from hyfl where hyfl_code = hylb) hyname,
-        bzs,
-        zzs
-        from (select substr(hylb, 0, 2) || '0000' hylb,
-        sum(qebkbzrs + cebtbzrs + jfzlbzrs) as bzs,
-        sum(qebksyry + cebtsyry + jfzlsyry) as zzs
-        from sy
-        where jgsy_states = '1' and jgsy_code like #{depCode}
-        group by substr(hylb, 0, 2))
+               bzs,
+               zzs
+        from (select substr(hylb, 0, 2) || '0000'           hylb,
+                     sum(qebkbzrs + cebtbzrs + jfzlbzrs) as bzs,
+                     sum(qebksyry + cebtsyry + jfzlsyry) as zzs
+              from sy
+              where jgsy_states = '1'
+                and jgsy_code like #{depCode}
+              group by substr(hylb, 0, 2))
         where rownum &lt;= 10
         order by bzs desc
 

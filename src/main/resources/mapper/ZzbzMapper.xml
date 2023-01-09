@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gxzh.jxvueserver.mapper.ZzbzMapper">
+
+
+    <select id="getUseCondition" resultType="com.gxzh.jxvueserver.dto.ZzbzUseCondition">
+        select sum(zzkbs) zzkbs,sum(zzkbzzs) zzkbzzs from sy where jgsy_code like #{depCode} and jgsy_states='1'
+    </select>
+    <select id="getZzbzAllot_sheng" resultType="com.gxzh.jxvueserver.dto.ZzbzAllot">
+        select (select desp from geocode where code = substr(geo_code, 0, 4) || '00') desp,
+               sum(bzzl) bzzl,
+               sum(zzkbs) zzkbs,
+               sum(zzkbzzs) zzkbzzs
+        from (select dw_gcode as geo_code, sum(bzs) bzzl, 0 as zzkbs, 0 as zzkbzzs
+              from bzfp
+              where bzlx = '13'
+              group by dw_gcode
+              union all
+              select geo_code, 0, sum(zzkbs) zzkbs, sum(zzkbzzs) zzkbzzs
+              from sy
+              where jgsy_states = '1'
+              group by geo_code)
+        where geo_code != '360000'
+        group by substr(geo_code, 0, 4)
+    </select>
+    <select id="getZzbzAllot_shi" resultType="com.gxzh.jxvueserver.dto.ZzbzAllot">
+        select (select desp from geocode where code = geo_code) desp,
+               sum(bzzl) bzzl,
+               sum(zzkbs) zzkbs,
+               sum(zzkbzzs) zzkbzzs
+        from (select dw_gcode as geo_code, sum(bzs) bzzl, 0 as zzkbs, 0 as zzkbzzs
+              from bzfp
+              where bzlx = '13'
+              group by dw_gcode
+              union all
+              select geo_code, 0, sum(zzkbs) zzkbs, sum(zzkbzzs) zzkbzzs
+              from sy
+              where jgsy_states = '1'
+              group by geo_code)
+        where geo_code != #{allCode}
+   and geo_code like #{depCode}
+        group by geo_code
+
+    </select>
+    <select id="getStaffDuty" resultType="com.gxzh.jxvueserver.dto.ZzbzStaffDuty">
+        select sum(zzkbs) zzkbs,sum(qebkbzrs + cebtbzrs+jfzlbzrs) sybz  from sy where jgsy_states = '1' and (hylb like '0102%' or hylb like '0103%') and jgsy_code like #{depCode}
+    </select>
+    <select id="getGeneralUse" resultType="com.gxzh.jxvueserver.dto.ZzbzGeneralUse">
+        select sum(bzzl) bzzl, sum(zzkbs) zzkbs, sum(zzkbzzs) zzkbzzs
+        from (select dw_gcode as geo_code, sum(bzs) bzzl, 0 as zzkbs, 0 as zzkbzzs
+              from bzfp
+              where bzlx = '13'
+              group by dw_gcode
+              union all
+              select geo_code, 0, sum(zzkbs) zzkbs, sum(zzkbzzs) zzkbzzs
+              from sy
+              where jgsy_states = '1'
+              group by geo_code) where geo_code like #{depCode}
+
+    </select>
+    <select id="getRecycle" resultType="com.gxzh.jxvueserver.dto.ZzbzRecycle">
+        select abs(sy.zzkbs) zzkbs, sy.mc, shijian
+        from sy, sy_bd
+        where sy_bd.jgsy_code = sy.jgsy_code
+        and sy.zzkbs &lt; 0
+        and jgsy_states = '1'
+        and sy.jgsy_code like #{depCode}
+        and rownum &lt;=15
+    </select>
+    <select id="getRetire" resultType="com.gxzh.jxvueserver.dto.ZzbzRetire">
+
+
+
+        select nvl(sum((case
+                            when ((t.xb = '1' and to_char(csrq, 'yyyymmdd') &lt;=
+                                                  to_char(add_months(sysdate, 12) - interval '60' year,
+                                                          'yyyymmdd')) or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+                                           'yyyymmdd') and zwjb > '132') or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+                                           'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+                                 (t.zbzt = '01' or t.zbzt like '02%') then
+                                1
+            end)),
+                   0) oneyear,
+               nvl(sum((case
+                            when ((t.xb = '1' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(add_months(sysdate, 12 * 2) - interval '60' year,
+                                           'yyyymmdd')) or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+                                           'yyyymmdd') and zwjb > '132') or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+                                           'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+                                 (t.zbzt = '01' or t.zbzt like '02%') then
+                                1
+                   end)),
+                   0) twoyear,
+               nvl(sum((case
+                            when ((t.xb = '1' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(add_months(sysdate, 12 * 3) - interval '60' year,
+                                           'yyyymmdd')) or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+                                           'yyyymmdd') and zwjb > '132') or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+                                           'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+                                 (t.zbzt = '01' or t.zbzt like '02%') then
+                                1
+                   end)),
+                   0) threeyear,
+               nvl(sum((case
+                            when ((t.xb = '1' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(add_months(sysdate, 12 * 4) - interval '60' year,
+                                           'yyyymmdd')) or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+                                           'yyyymmdd') and zwjb > '132') or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+                                           'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+                                 (t.zbzt = '01' or t.zbzt like '02%') then
+                                1
+                   end)),
+                   0) fouryear,
+               nvl(sum((case
+                            when ((t.xb = '1' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(add_months(sysdate, 12 * 5) - interval '60' year,
+                                           'yyyymmdd')) or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-03-22', 'yyyy-mm-dd') - interval '55' year,
+                                           'yyyymmdd') and zwjb > '132') or
+                                  (xb = '2' and
+                                   to_char(csrq, 'yyyymmdd') &lt;=
+                                   to_char(to_date('2028-01-09', 'yyyy-mm-dd') - interval '60' year,
+                                           'yyyymmdd') and zwjb &lt;= '132')) and t.states = 1 and
+                                 (t.zbzt = '01' or t.zbzt like '02%') then
+                                1
+                   end)),
+                   0) fiveyear
+
+        from t_ry_jbxx t, jgsy_common j
+        where t.jgsy_code = j.jgsy_code and t.if_zzkbs = '1'
+          and (j.jgsy_states = '1' or j.jgsy_states is null)
+          and j.dep_code like #{depCode}
+    </select>
+
+</mapper>
