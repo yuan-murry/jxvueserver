@@ -31,6 +31,20 @@
     </select>
 
 
+    <select id="selectYwtjg" resultType="com.gxzh.jxvueserver.entity.Ywtjg" parameterType="java.lang.String">
+        select
+        (select desp from geocode where code=j.dep_code) as desp,
+        jgsy_name as jgsy_name,
+
+        decode(j.jgsy_chaojg,0,'','超机构 ')||decode(j.jgsy_chaobz,0,'','超编制 ')||decode(j.jgsy_chaozs,0,'','超在职 ')||decode(xxws,'','','其他') as wt
+        from jgsy_common j where jgsy_states='1'  and (j.jgsy_chaojg!=0 or j.jgsy_chaobz!=0 or j.jgsy_chaozs!=0 or j.xxws !='')
+        and
+        to_char(j.update_time, 'yyyy/mm/dd') in (SELECT  to_char (SYSDATE- LEVEL + 1, 'yyyy/mm/dd') today FROM DUAL connect BY LEVEL &lt;= 31 )
+
+        and j.dep_code like #{depcode}
+        AND j.dep_code != #{code}
 
 
+
+    </select>
 </mapper>

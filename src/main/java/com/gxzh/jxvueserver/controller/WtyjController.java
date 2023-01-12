@@ -2,6 +2,7 @@ package com.gxzh.jxvueserver.controller;
 
 import com.gxzh.jxvueserver.dto.Res;
 import com.gxzh.jxvueserver.entity.Cbz;
+import com.gxzh.jxvueserver.entity.Ywtjg;
 import com.gxzh.jxvueserver.service.WtyjService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,19 @@ public class WtyjController {
 
 
 
+    @RequestMapping("/selectYwtjg")
+    public Res<?> selectYwtjg(String depcode){
+        List<Ywtjg> despList=null;
 
+        if(depcode!=null) {
+            despList  = wtyjService.selectYwtjg
+                    (depcode);
+
+        }
+
+
+        return Res.ok(despList);
+    }
 
 
 

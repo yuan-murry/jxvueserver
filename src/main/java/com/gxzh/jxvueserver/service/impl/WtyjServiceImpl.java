@@ -1,7 +1,7 @@
 package com.gxzh.jxvueserver.service.impl;
 
-import com.gxzh.jxvueserver.dto.SydwPie;
 import com.gxzh.jxvueserver.entity.Cbz;
+import com.gxzh.jxvueserver.entity.Ywtjg;
 import com.gxzh.jxvueserver.mapper.WtyjMapper;
 import com.gxzh.jxvueserver.service.WtyjService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +32,24 @@ public class WtyjServiceImpl implements WtyjService {
             }
             despList = wtyjMapper.selectCbz(depcode, code);
             redisTemplate.opsForValue().set(vuejx + "selectCbz:" + depcode, despList);
+        }
+        return despList;
+    }
+
+    public List<Ywtjg> selectYwtjg(String depcode) {
+        String code = "360000";
+        List<Ywtjg> despList = null;
+        Object o = redisTemplate.opsForValue().get(vuejx + "selectYwtjg:" + depcode);
+        if (o != null) {
+            despList = (List<Ywtjg>) o;
+        } else {
+            if (depcode != null && depcode.indexOf("__") != -1) {
+
+            } else {
+                code = depcode.replace("%", "00");
+            }
+            despList = wtyjMapper.selectYwtjg(depcode, code);
+            redisTemplate.opsForValue().set(vuejx + "selectYwtjg:" + depcode, despList);
         }
         return despList;
     }
