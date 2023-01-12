@@ -19,4 +19,6 @@ public interface HomeMapper {
 
     Ldzs selectSyLdzs(@Param("depCode") String depCode);
 
+    String testbase();
+
 }

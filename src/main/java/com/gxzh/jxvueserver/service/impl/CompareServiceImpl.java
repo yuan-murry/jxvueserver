@@ -1,12 +1,14 @@
 package com.gxzh.jxvueserver.service.impl;
 
 
+import com.gxzh.jxvueserver.dto.SydwPie;
 import com.gxzh.jxvueserver.entity.Ldzs;
 import com.gxzh.jxvueserver.entity.Sybzpzbd;
 import com.gxzh.jxvueserver.entity.Xzbzpzbd;
 import com.gxzh.jxvueserver.mapper.CompareMapper;
 import com.gxzh.jxvueserver.service.CompareService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,30 +17,46 @@ import java.util.List;
 public class CompareServiceImpl implements CompareService {
     @Autowired
     private CompareMapper compareMapper;
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    private final String vuejx = "vuejx:compare:";
 
 
     public List<Ldzs> selectLdzs(String depcode){
-        String code ="360000";
         List<Ldzs> despList=null;
-        if(depcode!=null && depcode.indexOf("__")!=-1){
+        Object o = redisTemplate.opsForValue().get(vuejx + "selectLdzs:" + depcode);
+        if (o != null) {
+            despList = (List<Ldzs>) o;
+        } else {
+            String code ="360000";
+            if(depcode!=null && depcode.indexOf("__")!=-1){
 
-        }else{
-            code=depcode.replace("%","00");
+            }else{
+                code=depcode.replace("%","00");
+            }
+            despList= compareMapper.selectLdzs(depcode,code);
+            redisTemplate.opsForValue().set(vuejx + "selectLdzs:" + depcode, despList);
         }
-      despList= compareMapper.selectLdzs(depcode,code);
-
       return despList;
     }
 
     public List<Xzbzpzbd> selectXzbzpzbd(String depcode){
         String code ="360000";
         List<Xzbzpzbd> despList=null;
-        if(depcode!=null && depcode.indexOf("__")!=-1){
+        Object o = redisTemplate.opsForValue().get(vuejx + "selectXzbzpzbd:" + depcode);
+        if (o != null) {
+            despList = (List<Xzbzpzbd>) o;
+        } else {
+            if(depcode!=null && depcode.indexOf("__")!=-1){
 
-        }else{
-            code=depcode.replace("%","00");
+            }else{
+                code=depcode.replace("%","00");
+            }
+            despList= compareMapper.selectXzbzpzbd(depcode,code);
+            redisTemplate.opsForValue().set(vuejx + "selectXzbzpzbd:" + depcode, despList);
         }
-        despList= compareMapper.selectXzbzpzbd(depcode,code);
+
 
         return despList;
     }
@@ -46,13 +64,18 @@ public class CompareServiceImpl implements CompareService {
     public List<Sybzpzbd> selectSybzpzbd(String depcode){
         String code ="360000";
         List<Sybzpzbd> despList=null;
-        if(depcode!=null && depcode.indexOf("__")!=-1){
+        Object o = redisTemplate.opsForValue().get(vuejx + "selectSybzpzbd:" + depcode);
+        if (o != null) {
+            despList = (List<Sybzpzbd>) o;
+        } else {
+            if(depcode!=null && depcode.indexOf("__")!=-1){
 
-        }else{
-            code=depcode.replace("%","00");
+            }else{
+                code=depcode.replace("%","00");
+            }
+            despList= compareMapper.selectSybzpzbd(depcode,code);
+            redisTemplate.opsForValue().set(vuejx + "selectSybzpzbd:" + depcode, despList);
         }
-        despList= compareMapper.selectSybzpzbd(depcode,code);
-
         return despList;
     }
 

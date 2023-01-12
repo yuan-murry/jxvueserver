@@ -158,4 +158,8 @@
 
     </select>
 
+    <select id="testbase" resultType="string">
+        select jgsy_name from jgsy_common where jgsy_code = '150000-01-10001'
+    </select>
+
 </mapper>

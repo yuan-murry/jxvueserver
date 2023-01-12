@@ -12,15 +12,15 @@ import java.util.List;
 @RestController
 @RequestMapping("api/analyze")
 public class AnalyzeController {
-@Autowired
-private AnalyzeService analyzeService;
+    @Autowired
+    private AnalyzeService analyzeService;
 
     @RequestMapping("/selectYwlx")
-    public Res<?> selectYwlx(String depcode){
-        List<Ywlx> despList=null;
+    public Res<?> selectYwlx(String depcode) {
+        List<Ywlx> despList = null;
 
-        if(depcode!=null) {
-            despList  = analyzeService.selectYwlx
+        if (depcode != null) {
+            despList = analyzeService.selectYwlx
                     (depcode);
 
         }
@@ -31,11 +31,11 @@ private AnalyzeService analyzeService;
 
 
     @RequestMapping("/selectNywbl")
-    public Res<?> selectNywbl(String depcode){
-        List<Nywbl> despList=null;
+    public Res<?> selectNywbl(String depcode) {
+        List<Nywbl> despList = null;
 
-        if(depcode!=null) {
-            despList  = analyzeService.selectNywbl
+        if (depcode != null) {
+            despList = analyzeService.selectNywbl
                     (depcode);
 
         }
@@ -45,11 +45,11 @@ private AnalyzeService analyzeService;
     }
 
     @RequestMapping("/selectYywbl")
-    public Res<?> selectYywbl(String depcode){
-        List<Yywbl> despList=null;
+    public Res<?> selectYywbl(String depcode) {
+        List<Yywbl> despList = null;
 
-        if(depcode!=null) {
-            despList  = analyzeService.selectYywbl
+        if (depcode != null) {
+            despList = analyzeService.selectYywbl
                     (depcode);
 
         }
@@ -59,11 +59,11 @@ private AnalyzeService analyzeService;
     }
 
     @RequestMapping("/selectGdyw")
-    public Res<?> selectGdyw(String depcode){
-        List<Gdyw> despList=null;
+    public Res<?> selectGdyw(String depcode) {
+        List<Gdyw> despList = null;
 
-        if(depcode!=null) {
-            despList  = analyzeService.selectGdyw
+        if (depcode != null) {
+            despList = analyzeService.selectGdyw
                     (depcode);
 
         }
@@ -74,11 +74,11 @@ private AnalyzeService analyzeService;
 
 
     @RequestMapping("/selectJryw")
-    public Res<?> selectJryw(String depcode){
-        List<Jryw> despList=null;
+    public Res<?> selectJryw(String depcode) {
+        List<Jryw> despList = null;
 
-        if(depcode!=null) {
-            despList  = analyzeService.selectJryw
+        if (depcode != null) {
+            despList = analyzeService.selectJryw
                     (depcode);
 
         }

@@ -15,4 +15,6 @@ public interface HomeService {
     Ldzs selectXzLdzs(String depCode);
 
     Ldzs selectSyLdzs(String depCode);
+
+    String testbase();
 }

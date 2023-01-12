@@ -287,7 +287,7 @@
                       from jgsy_common jj
                       where jj.jgsy_code = jc.jgsy_code)    jgsy_name,
                      max(t.update_time)                     lasttime,
-                     (select ((local.l_a_xz_st + local.l_a_zf_ga + local.l_a_zf_jcy +
+                     (select sum((local.l_a_xz_st + local.l_a_zf_ga + local.l_a_zf_jcy +
                                local.l_a_zf_fy + local.l_a_zf_sf + local.l_a_qebk +
                                local.l_a_cebt + local.l_a_jfzl) -
                               (local.l_r_xz_st + local.l_r_zf_ga + local.l_r_zf_jcy +
@@ -314,7 +314,7 @@
                       from jgsy_common jj
                       where jj.jgsy_code = jc.jgsy_code) jgsy_name,
                      max(t.update_time)                  lasttime,
-                     (select ((zf_sf_bz + zf_fy_bz + zf_jcy_bz + zf_ga_bz +
+                     (select sum((zf_sf_bz + zf_fy_bz + zf_jcy_bz + zf_ga_bz +
                                qebkbzrs + cebtbzrs + jfzlbzrs) -
                               (zf_sf_zz + zf_fy_zz + zf_jcy_zz + zf_ga_zz +
                                qebksyry + cebtsyry + jfzlsyry)) bzs
@@ -339,7 +339,7 @@
                       from jgsy_common jj
                       where jj.jgsy_code = jc.jgsy_code)   jgsy_name,
                      max(t.update_time)                    lasttime,
-                     (select ((jdxz.xz_bz + jdxz.zf_ga_bz + jdxz.zf_jcy_bz +
+                     (select sum((jdxz.xz_bz + jdxz.zf_ga_bz + jdxz.zf_jcy_bz +
                                jdxz.zf_fy_bz + jdxz.zf_sf_bz + jdxz.qebk_bz +
                                jdxz.cebt_bz + jdxz.jfzl_bz) -
                               (jdxz.xz_zz + jdxz.zf_ga_zz + jdxz.zf_jcy_zz +
