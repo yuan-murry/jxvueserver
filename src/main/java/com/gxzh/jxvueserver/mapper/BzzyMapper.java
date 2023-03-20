@@ -19,7 +19,7 @@ public interface BzzyMapper {
 
     List<BzzyNoUse> getNoUse(String depCode);
 
-    BzzyRetire getRetire(String depCode);
+    List<BzzyRetire> getRetire(String depCode);
 
     List<BzzyIndstry> getInsdstry(String depCode);
 }

@@ -41,7 +41,7 @@ public class BzzyController {
 
     @RequestMapping("/retire")
     public Res<?> getRetire(@RequestParam("depCode") String depCode){
-        BzzyRetire retire = this.bzzyService.getRetire(depCode);
+        List<BzzyRetire> retire = this.bzzyService.getRetire(depCode);
         return Res.ok(retire);
     }
 

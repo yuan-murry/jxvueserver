@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -92,20 +93,20 @@ public class BzzyServiceImpl implements BzzyService {
     }
 
     @Override
-    public BzzyRetire getRetire(String depCode) {
+    public List<BzzyRetire> getRetire(String depCode) {
         String tempdep = depCode;
-        BzzyRetire retire = null;
+        List<BzzyRetire> retire = null;
         Object o = redisTemplate.opsForValue().get(vuejx + "getRetire:" + depCode);
         if (o != null) {
-            retire = (BzzyRetire) o;
+            retire = (List<BzzyRetire>) o;
         } else {
             if (!"36%".equals(depCode)) {
                 depCode = depCode.substring(0, 4) + "%";
             }
             retire = bzzyMapper.getRetire(depCode);
-            redisTemplate.opsForValue().set(vuejx + "getRetire:" + tempdep, retire == null ? new BzzyRetire() : retire);
+            redisTemplate.opsForValue().set(vuejx + "getRetire:" + tempdep, retire == null ? new ArrayList<BzzyRetire>() : retire);
         }
-        return retire == null ? new BzzyRetire() : retire;
+        return retire == null ? new ArrayList<BzzyRetire>() : retire;
     }
 
     @Override
