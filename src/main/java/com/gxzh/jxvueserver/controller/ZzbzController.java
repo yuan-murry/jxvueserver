@@ -48,7 +48,7 @@ public class ZzbzController {
 
     @RequestMapping("/retire")
     public Res<?> getRetire(@RequestParam("depCode") String depCode) {
-        ZzbzRetire retire = this.zzbzService.getRetire(depCode);
+        List<ZzbzRetire> retire = this.zzbzService.getRetire(depCode);
         return Res.ok(retire);
     }
 

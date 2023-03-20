@@ -16,37 +16,26 @@
                (select decode(substr(code,5,2),'00',0,g.dis_order)
                 from geocode g
                 where g.code =geocode ) dis_order,
-               decode( (sum(SBJZZBZ)+ sum(SBJFZBZ)+ sum(TJJZZBZ)+sum(TJJFZBZ)+ sum(XCJZZBZ)+ sum(XCJFZBZ)+ sum(XKJZZBZ)
-                   +sum(XKJFZBZ)+ sum(GJZZBZ)+sum(GJFZBZ)+ sum(WDJBZS)+sum(QTBZS)),null,0,(sum(SBJZZBZ)+ sum(SBJFZBZ)+ sum(TJJZZBZ)+sum(TJJFZBZ)+ sum(XCJZZBZ)+ sum(XCJFZBZ)+ sum(XKJZZBZ)
-                   +sum(XKJFZBZ)+ sum(GJZZBZ)+sum(GJFZBZ)+ sum(WDJBZS)+sum(QTBZS))) xzbz,
+              nvl(sum(DZQ_BZ),0) xzbz,
 
 
 
                case WHEN(NVL(  (sum(SBJZZBZ)+ sum(SBJFZBZ)+ sum(TJJZZBZ)+sum(TJJFZBZ)+ sum(XCJZZBZ)+ sum(XCJFZBZ)+ sum(XKJZZBZ)
-                   +sum(XKJFZBZ)+ sum(GJZZBZ)+sum(GJFZBZ)+ sum(WDJBZS)+sum(QTBZS)), 0))!=0 THEN ceil(round((
-                                                                                                               sum(DZQ_BZ)
-                                                                                                               ) /  (sum(SBJZZBZ)+ sum(SBJFZBZ)+ sum(TJJZZBZ)+sum(TJJFZBZ)+ sum(XCJZZBZ)+ sum(XCJFZBZ)+ sum(XKJZZBZ)
-                   +sum(XKJFZBZ)+ sum(GJZZBZ)+sum(GJFZBZ)+ sum(WDJBZS)+sum(QTBZS)),1)) ELSE 0 END xzpbz,
+                   +sum(XKJFZBZ)+ sum(GJZZBZ)+sum(GJFZBZ)+ sum(WDJBZS)+sum(QTBZS)), 0))!=0 THEN ceil(round(
+                           (sum(SBJZZBZ)+ sum(SBJFZBZ)+ sum(TJJZZBZ)+sum(TJJFZBZ)+ sum(XCJZZBZ)+ sum(XCJFZBZ)+ sum(XKJZZBZ)+sum(XKJFZBZ)+ sum(GJZZBZ)+sum(GJFZBZ)+ sum(WDJBZS)+sum(QTBZS))/
+                           (sum(DZQ_BZ))
+                   ,1)) ELSE 0 END xzpbz,
 
 
-
-
-
-
-
-
-
-               decode( (sum(SYSBJZZBZ)+ sum(SYSBJFZBZ)+ sum(SYTJJZZBZ)+sum(SYTJJFZBZ)+ sum(SYXCJZZBZ)+ sum(SYXCJFZBZ)+ sum(SYXKJZZBZ)
-                   +sum(SYXKJFZBZ)+ sum(SYGJZZBZ)+sum(SYGJFZBZ)+ sum(SYWDJBZS)+sum(SYQTBZS)),null,0,(sum(SYSBJZZBZ)+ sum(SYSBJFZBZ)+ sum(SYTJJZZBZ)+sum(SYTJJFZBZ)+ sum(SYXCJZZBZ)+ sum(SYXCJFZBZ)+ sum(SYXKJZZBZ)
-                   +sum(SYXKJFZBZ)+ sum(SYGJZZBZ)+sum(SYGJFZBZ)+ sum(SYWDJBZS)+sum(SYQTBZS))) sybz,
+              nvl(sum(QEBK_BZ+CEBT_BZ+JFZL_BZ),0)  sybz,
 
 
 
                case WHEN(NVL( (sum(SYSBJZZBZ)+ sum(SYSBJFZBZ)+ sum(SYTJJZZBZ)+sum(SYTJJFZBZ)+ sum(SYXCJZZBZ)+ sum(SYXCJFZBZ)+ sum(SYXKJZZBZ)
-                   +sum(SYXKJFZBZ)+ sum(SYGJZZBZ)+sum(SYGJFZBZ)+ sum(SYWDJBZS)+sum(SYQTBZS)), 0))!=0 THEN ceil(round((
-                                                                                                                         sum(QEBK_BZ+CEBT_BZ+JFZL_BZ)
-                                                                                                                         ) /  (sum(SYSBJZZBZ)+ sum(SYSBJFZBZ)+ sum(SYTJJZZBZ)+sum(SYTJJFZBZ)+ sum(SYXCJZZBZ)+ sum(SYXCJFZBZ)+ sum(SYXKJZZBZ)
-                   +sum(SYXKJFZBZ)+ sum(SYGJZZBZ)+sum(SYGJFZBZ)+ sum(SYWDJBZS)+sum(SYQTBZS)),1)) ELSE 0 END sypbz
+                   +sum(SYXKJFZBZ)+ sum(SYGJZZBZ)+sum(SYGJFZBZ)+ sum(SYWDJBZS)+sum(SYQTBZS)), 0))!=0 THEN ceil(round(
+                           (sum(SYSBJZZBZ)+ sum(SYSBJFZBZ)+ sum(SYTJJZZBZ)+sum(SYTJJFZBZ)+ sum(SYXCJZZBZ)+ sum(SYXCJFZBZ)+ sum(SYXKJZZBZ)+sum(SYXKJFZBZ)+ sum(SYGJZZBZ)+sum(SYGJFZBZ)+sum(SYWDJBZS)+sum(SYQTBZS))/
+                           (sum(QEBK_BZ+CEBT_BZ+JFZL_BZ))
+                   ,1)) ELSE 0 END sypbz
         from(
                 select geocode,a.jgtype,
 
@@ -121,7 +110,9 @@
 
 
                       from geocode d left join V_bzzz t on d.code=t.geocode and t.jgtype != 'sy' where  d.code like #{depcode}
-                                                                                                   AND d.code != #{code}
+
+                  AND d.code != #{code}
+
                      )a left join bmldzs b
 
                                   on a.geocode = substr(b.jgsy_code,0,6)
@@ -202,6 +193,7 @@
 
 
                                                                                                      AND d.code != #{code}
+
 
 
 

@@ -19,5 +19,5 @@ public interface ZzbzMapper {
 
     List<ZzbzRecycle> getRecycle(String depCode);
 
-    ZzbzRetire getRetire(String depCode);
+    List<ZzbzRetire> getRetire(String depCode);
 }

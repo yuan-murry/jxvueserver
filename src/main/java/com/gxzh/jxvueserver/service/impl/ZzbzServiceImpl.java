@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -108,21 +109,21 @@ public class ZzbzServiceImpl implements ZzbzService {
     }
 
     @Override
-    public ZzbzRetire getRetire(String depCode) {
+    public List<ZzbzRetire> getRetire(String depCode) {
         String tempdep = depCode;
-        ZzbzRetire retire = null;
+        List<ZzbzRetire> retire = null;
         Object o = redisTemplate.opsForValue().get(vuejx + "getRetire:" + depCode);
         if (o != null) {
-            retire = (ZzbzRetire) o;
+            retire = (List<ZzbzRetire>) o;
         } else {
             if (!"36%".equals(depCode)) {
                 depCode = depCode.substring(0, 4) + "%";
             }
              retire = zzbzMapper.getRetire(depCode);
-            redisTemplate.opsForValue().set(vuejx + "getRetire:" + tempdep, retire == null ? new ZzbzRetire() : retire);
+            redisTemplate.opsForValue().set(vuejx + "getRetire:" + tempdep, retire == null ? new ArrayList<ZzbzRetire>() : retire);
         }
 
-        return retire == null ? new ZzbzRetire() : retire;
+        return retire == null ? new ArrayList<ZzbzRetire>() : retire;
     }
 
 
