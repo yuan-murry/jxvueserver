@@ -6,11 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.alibaba.druid.pool.DruidDataSource;
 
-/**
- * @author ZhiPengyu
- * @ClassName: [DruidDataSourceUtil.java]
- * @Description: [用于查找并切换数据源]
- */
+
 public class DruidDataSourceUtil {
     private static Logger logger = LoggerFactory.getLogger(DruidDataSourceUtil.class);
 
@@ -46,6 +42,8 @@ public class DruidDataSourceUtil {
             dynamicDataSource.setRemoveAbandoned(true);
             dynamicDataSource.setRemoveAbandonedTimeout(180);
             dynamicDataSource.setLogAbandoned(true);
+            dynamicDataSource.setBreakAfterAcquireFailure(true);
+            dynamicDataSource.setConnectionErrorRetryAttempts(0);
 
             dataSourceMap.put(key + "master", dynamicDataSource);
             DynamicDataSource.getInstance().setTargetDataSources(dataSourceMap);

@@ -1,5 +1,6 @@
 package com.gxzh.jxvueserver.config;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,8 +92,8 @@ public class DruidConfig {
     private String connectionProperties;
 
     // Druid控制台配置：记录慢SQL
-//    @Value("${spring.datasource.logSlowSql}")
-//    private String logSlowSql;
+    @Value("${spring.datasource.logSlowSql}")
+    private String logSlowSql;
 //
 //    @Value("${spring.datasource.removeAbandoned}")
 //    private boolean removeAbandoned;
@@ -105,7 +106,7 @@ public class DruidConfig {
 
     @Bean
     public DynamicDataSource druidDataSource() {
-        Map<Object,Object> map = new HashMap<>();
+        Map<Object, Object> map = new HashMap<>();
         DynamicDataSource dynamicDataSource = DynamicDataSource.getInstance();
         DruidDataSource defaultDataSource = new DruidDataSource();
 
@@ -125,6 +126,13 @@ public class DruidConfig {
         defaultDataSource.setTestOnReturn(testOnReturn);
         defaultDataSource.setPoolPreparedStatements(poolPreparedStatements);
         defaultDataSource.setMaxPoolPreparedStatementPerConnectionSize(maxPoolPreparedStatementPerConnectionSize);
+        defaultDataSource.setBreakAfterAcquireFailure(true);
+        defaultDataSource.setConnectionErrorRetryAttempts(0);
+        try {
+            defaultDataSource.setFilters(filters);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 //        defaultDataSource.setRemoveAbandoned(removeAbandoned);
 //        defaultDataSource.setRemoveAbandonedTimeout(removeAbandonedTimeout);
 //        defaultDataSource.setLogAbandoned(logAbandoned);
@@ -134,12 +142,11 @@ public class DruidConfig {
         dynamicDataSource.setTargetDataSources(map);
         dynamicDataSource.setDefaultTargetDataSource(defaultDataSource);
 
-
         return dynamicDataSource;
     }
 
     @Bean
-    public ServletRegistrationBean<Servlet>  druid(){
+    public ServletRegistrationBean<Servlet> druid() {
         // 现在要进行druid监控的配置处理操作
         ServletRegistrationBean<Servlet> servletRegistrationBean = new ServletRegistrationBean<>(new StatViewServlet(), "/druid/*");
         // 白名单,多个用逗号分割， 如果allow没有配置或者为空，则允许所有访问
@@ -158,15 +165,14 @@ public class DruidConfig {
 
     @Bean
     public FilterRegistrationBean<Filter> filterRegistrationBean() {
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>() ;
+        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(new WebStatFilter());
         //所有请求进行监控处理
         filterRegistrationBean.addUrlPatterns("/*");
         //添加不需要忽略的格式信息
         filterRegistrationBean.addInitParameter("exclusions", "*.js,*.gif,*.jpg,*.css,/druid/*");
-        return filterRegistrationBean ;
+        return filterRegistrationBean;
     }
-
 }
 
 

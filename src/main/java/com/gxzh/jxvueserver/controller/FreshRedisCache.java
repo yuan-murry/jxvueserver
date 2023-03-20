@@ -97,6 +97,7 @@ public class FreshRedisCache {
             reurnMsg.append("compare页面接口刷新完毕<br>");
             for (String dep : depArrAnalyse) {
                 wtyjService.selectCbz(dep);
+                wtyjService.selectYwtjg(dep);
             }
             reurnMsg.append("wtyj页面接口刷新完毕<br>");
             for (String dep : depArrBzzy) {
