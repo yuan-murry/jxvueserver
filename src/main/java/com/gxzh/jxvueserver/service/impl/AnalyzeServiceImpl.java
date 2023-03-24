@@ -1,5 +1,6 @@
 package com.gxzh.jxvueserver.service.impl;
 
+import com.gxzh.jxvueserver.dto.AreaBusinessChild;
 import com.gxzh.jxvueserver.entity.*;
 import com.gxzh.jxvueserver.mapper.AnalyzeMapper;
 import com.gxzh.jxvueserver.service.AnalyzeService;
@@ -17,6 +18,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
     private RedisTemplate redisTemplate;
     private final String vuejx = "vuejx:analyze:";
 
+    @Override
     public List<Ywlx> selectYwlx(String depcode) {
         //先请求redis
         List<Ywlx> despList = null;
@@ -38,6 +40,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
     }
 
 
+    @Override
     public List<Nywbl> selectNywbl(String depcode) {
         List<Nywbl> despList = null;
         Object o = redisTemplate.opsForValue().get(vuejx + "selectNywbl:" + depcode);
@@ -57,6 +60,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
         return despList;
     }
 
+    @Override
     public List<Yywbl> selectYywbl(String depcode) {
         List<Yywbl> despList = null;
         Object o = redisTemplate.opsForValue().get(vuejx + "selectYywbl:" + depcode);
@@ -76,6 +80,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
         return despList;
     }
 
+    @Override
     public List<Gdyw> selectGdyw(String depcode) {
         List<Gdyw> despList = null;
         Object o = redisTemplate.opsForValue().get(vuejx + "selectGdyw:" + depcode);
@@ -97,6 +102,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
         return despList;
     }
 
+    @Override
     public List<Jryw> selectJryw(String depcode) {
         List<Jryw> despList = null;
         Object o = redisTemplate.opsForValue().get(vuejx + "selectJryw:" + depcode);
@@ -114,5 +120,11 @@ public class AnalyzeServiceImpl implements AnalyzeService {
             redisTemplate.opsForValue().set(vuejx + "selectJryw:" + depcode, despList);
         }
         return despList;
+    }
+
+    @Override
+    public AreaBusinessChild getAreaBusinessChild(String depName) {
+        AreaBusinessChild areaBusinessChild = analyzeMapper.getAreaBusinessChild(depName);
+        return areaBusinessChild;
     }
 }

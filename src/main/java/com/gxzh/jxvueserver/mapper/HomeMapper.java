@@ -1,10 +1,7 @@
 package com.gxzh.jxvueserver.mapper;
 
 
-import com.gxzh.jxvueserver.dto.Bzqk;
-import com.gxzh.jxvueserver.dto.Ldzs;
-import com.gxzh.jxvueserver.dto.SydwPie;
-import com.gxzh.jxvueserver.dto.XzjgPie;
+import com.gxzh.jxvueserver.dto.*;
 import org.apache.ibatis.annotations.Param;
 
 public interface HomeMapper {
@@ -20,5 +17,7 @@ public interface HomeMapper {
     Ldzs selectSyLdzs(@Param("depCode") String depCode);
 
     String testbase();
+
+    GeoSituation getGeoSituation(@Param("depCode") String depCode);
 
 }

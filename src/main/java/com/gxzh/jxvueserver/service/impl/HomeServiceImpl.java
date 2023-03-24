@@ -1,9 +1,6 @@
 package com.gxzh.jxvueserver.service.impl;
 
-import com.gxzh.jxvueserver.dto.Bzqk;
-import com.gxzh.jxvueserver.dto.Ldzs;
-import com.gxzh.jxvueserver.dto.SydwPie;
-import com.gxzh.jxvueserver.dto.XzjgPie;
+import com.gxzh.jxvueserver.dto.*;
 import com.gxzh.jxvueserver.mapper.HomeMapper;
 import com.gxzh.jxvueserver.service.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,5 +104,15 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public String testbase() {
         return homeMapper.testbase();
+    }
+
+    @Override
+    public GeoSituation getGeoSituation(String depCode) {
+        if("36%".equals(depCode)){
+            depCode = "36____";
+        }else if(depCode.contains("%")){
+            depCode = depCode.substring(0,depCode.length()-1)+"00";
+        }
+        return homeMapper.getGeoSituation(depCode);
     }
 }

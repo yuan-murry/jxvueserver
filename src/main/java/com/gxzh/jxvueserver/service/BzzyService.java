@@ -18,4 +18,6 @@ public interface BzzyService {
 
     List<BzzyIndstry> getInsdstry(String depCode);
 
+    List<BzzyIndstry> getInsdstryChild(String depCode, String flCode);
+
 }

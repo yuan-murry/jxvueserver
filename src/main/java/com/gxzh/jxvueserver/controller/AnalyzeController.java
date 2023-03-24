@@ -1,5 +1,6 @@
 package com.gxzh.jxvueserver.controller;
 
+import com.gxzh.jxvueserver.dto.AreaBusinessChild;
 import com.gxzh.jxvueserver.dto.Res;
 import com.gxzh.jxvueserver.entity.*;
 import com.gxzh.jxvueserver.service.AnalyzeService;
@@ -61,14 +62,9 @@ public class AnalyzeController {
     @RequestMapping("/selectGdyw")
     public Res<?> selectGdyw(String depcode) {
         List<Gdyw> despList = null;
-
         if (depcode != null) {
-            despList = analyzeService.selectGdyw
-                    (depcode);
-
+            despList = analyzeService.selectGdyw(depcode);
         }
-
-
         return Res.ok(despList);
     }
 
@@ -76,14 +72,16 @@ public class AnalyzeController {
     @RequestMapping("/selectJryw")
     public Res<?> selectJryw(String depcode) {
         List<Jryw> despList = null;
-
         if (depcode != null) {
-            despList = analyzeService.selectJryw
-                    (depcode);
-
+            despList = analyzeService.selectJryw(depcode);
         }
-
-
         return Res.ok(despList);
     }
+
+    @RequestMapping("/getAreaBusinessChild")
+    public Res<?> getAreaBusinessChild(String depName) {
+        AreaBusinessChild areaBusinessChild = analyzeService.getAreaBusinessChild(depName);
+        return Res.ok(areaBusinessChild);
+    }
+
 }

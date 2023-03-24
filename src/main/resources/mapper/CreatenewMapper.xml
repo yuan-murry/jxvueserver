@@ -5,129 +5,124 @@
 <mapper namespace="com.gxzh.jxvueserver.mapper.CreatenewMapper">
 
     <select id="selectCreatenew" resultType="com.gxzh.jxvueserver.entity.Createnew" parameterType="java.lang.String">
-        select decode(count(0),0,0,sum(qe_bz+ce_bz+jf_bz)) as num1,
-               decode(count(0),0,0,0) as num2,
-               decode(count(0),0,0,0) as num3,
-               decode(count(0),0,0,0) as num4
+        select decode(count(0), 0, 0, sum(qe_bz + ce_bz + jf_bz)) as num1,
+               decode(count(0), 0, 0, 0)                          as num2,
+               decode(count(0), 0, 0, 0)                          as num3,
+               decode(count(0), 0, 0, 0)                          as num4
         from (
-                 -----事业单位
-                 select
-
-                     --编制
-                     t.qebk_bz as qe_bz, --全额
-                     t.cebt_bz as ce_bz, --差额
-                     t.jfzl_bz as jf_bz --经费
+                 select t.qebk_bz as qe_bz,
+                        t.cebt_bz as ce_bz,
+                        t.jfzl_bz as jf_bz
 
 
-                 from  v_bzzz t
-                           left join sy s
-                                     on t.jgsy_code = s.jgsy_code
-                 where t.geocode like #{depcode} and  t.geocode !=#{code})
+                 from v_bzzz t
+                          left join sy s
+                                    on t.jgsy_code = s.jgsy_code
+                 where t.geocode like #{depcode}
+                   and t.geocode !=#{code})
         union all
-        select decode(count(0),0,0,sum(qe_dfpbz+ce_dfpbz+jf_dfpbz)) as num1,
-               decode(count(0),0,0,0) as num2,
-               decode(count(0),0,0,0) as num3,
-               decode(count(0),0,0,0) as num4
+        select decode(count(0), 0, 0, sum(qe_dfpbz + ce_dfpbz + jf_dfpbz)) as num1,
+               decode(count(0), 0, 0, 0)                                   as num2,
+               decode(count(0), 0, 0, 0)                                   as num3,
+               decode(count(0), 0, 0, 0)                                   as num4
         from (
-                 select
-                     decode(dfpbzlx_code,
-                            '962',
-                            (DFP_SHENG + DFP_DZM + DFP_FSJS + DFP_DJS + DFP_FSJSQ +
-                             DFP_DJSQ + DFP_XIANJS + DFP_XIAN + DFP_ZHIXS +
-                             DFP_ZHXSQ + DFP_XZ + DFP_JIEDAO)) as qe_dfpbz,
-                     decode(dfpbzlx_code,
-                            '963',
-                            (DFP_SHENG + DFP_DZM + DFP_FSJS + DFP_DJS + DFP_FSJSQ +
-                             DFP_DJSQ + DFP_XIANJS + DFP_XIAN + DFP_ZHIXS +
-                             DFP_ZHXSQ + DFP_XZ + DFP_JIEDAO)) as ce_dfpbz,
-                     decode(dfpbzlx_code,
-                            '964',
-                            (DFP_SHENG + DFP_DZM + DFP_FSJS + DFP_DJS + DFP_FSJSQ +
-                             DFP_DJSQ + DFP_XIANJS + DFP_XIAN + DFP_ZHIXS +
-                             DFP_ZHXSQ + DFP_XZ + DFP_JIEDAO)) as jf_dfpbz
+                 select decode(dfpbzlx_code,
+                               '962',
+                               (DFP_SHENG + DFP_DZM + DFP_FSJS + DFP_DJS + DFP_FSJSQ +
+                                DFP_DJSQ + DFP_XIANJS + DFP_XIAN + DFP_ZHIXS +
+                                DFP_ZHXSQ + DFP_XZ + DFP_JIEDAO)) as qe_dfpbz,
+                        decode(dfpbzlx_code,
+                               '963',
+                               (DFP_SHENG + DFP_DZM + DFP_FSJS + DFP_DJS + DFP_FSJSQ +
+                                DFP_DJSQ + DFP_XIANJS + DFP_XIAN + DFP_ZHIXS +
+                                DFP_ZHXSQ + DFP_XZ + DFP_JIEDAO)) as ce_dfpbz,
+                        decode(dfpbzlx_code,
+                               '964',
+                               (DFP_SHENG + DFP_DZM + DFP_FSJS + DFP_DJS + DFP_FSJSQ +
+                                DFP_DJSQ + DFP_XIANJS + DFP_XIAN + DFP_ZHIXS +
+                                DFP_ZHXSQ + DFP_XZ + DFP_JIEDAO)) as jf_dfpbz
 
                  from dfpbz t
                  where t.dfpbzlx_code in ('962', '963', '964')
-                   and t.dep_code like #{depcode} and  t.dep_code !=#{code})
+                   and t.dep_code like #{depcode}
+                   and t.dep_code !=#{code})
         union all
-        select  decode(count(0),0,0,0) as num1,
-                decode(count(0),0,0,sum(qe_zz+ce_zz+jf_zz)) as num2,
-                decode(count(0),0,0,0) as num3,
-                decode(count(0),0,0,0) as num4
-        from (      -----事业单位
-                 select
-
-                     --在职
-                     t.qebk_zz as qe_zz, --全额
-                     t.cebt_zz as ce_zz, --差额
-                     t.jfzl_zz as jf_zz --经费
-
-                 from  v_bzzz t
-                           left join sy s
-                                     on t.jgsy_code = s.jgsy_code
-                 where t.geocode like #{depcode} and  t.geocode !=#{code})
-        union all
-        select  decode(count(0),0,0,0) as num1,
-                decode(count(0),0,0,sum(bary_zz)) as num2,
-                decode(count(0),0,0,0) as num3,
-                decode(count(0),0,0,0) as num4
-        from (select
-                  t.bary_zz as bary_zz
-              from v_bzzz t
-              where t.jgtype = 'sy'  and t.geocode like #{depcode} and  t.geocode !=#{code}
-             )
-        union all
-        select  decode(count(0),0,0,0) as num1,
-                decode(count(0),0,0,sum(kzry_zz)) as num2,
-                decode(count(0),0,0,0) as num3,
-                decode(count(0),0,0,0) as num4
-        from (select
-                  t.kzry_zz as  kzry_zz
-              from v_bzzz t
-              where t.jgtype = 'sy'  and t.geocode like #{depcode} and  t.geocode !=#{code}
-             )
-        union all
-        select  decode(count(0),0,0,0) as num1,
-                decode(count(0),0,0,0) as num2,
-                decode(count(0),0,0,sum(bary_bz)) as num3,
-                decode(count(0),0,0,0) as num4
-        from (select
-                  t.bary_bz as bary_bz
-              from v_bzzz t
-              where t.jgtype = 'sy'  and t.geocode like #{depcode} and  t.geocode !=#{code}
-             )
-        union all
-        select  decode(count(0),0,0,0) as num1,
-                decode(count(0),0,0,0) as num2,
-                decode(count(0),0,0,sum(kzry_bz)) as num3,
-                decode(count(0),0,0,0) as num4
-        from (select
-                  t.kzry_bz as  kzry_bz
-              from v_bzzz t
-              where t.jgtype = 'sy'  and t.geocode like #{depcode} and  t.geocode !=#{code}
-             )
-        union all
-        select
-            decode(count(0),0,0,0) as num1,
-            decode(count(0),0,0,0) as num2,
-            decode(count(0),0,0,0) as num3,
-            decode(count(0),0,0,sum(qe_bz+ce_bz+jf_bz-qe_zz-ce_zz-jf_zz-sykbs)) as kbs
+        select decode(count(0), 0, 0, 0)                          as num1,
+               decode(count(0), 0, 0, sum(qe_zz + ce_zz + jf_zz)) as num2,
+               decode(count(0), 0, 0, 0)                          as num3,
+               decode(count(0), 0, 0, 0)                          as num4
         from (
-                 -----事业单位
-                 select
+                 select t.qebk_zz as qe_zz,
+                        t.cebt_zz as ce_zz,
+                        t.jfzl_zz as jf_zz
 
-                     --编制
-                     t.qebk_bz as qe_bz, --全额
-                     t.cebt_bz as ce_bz, --差额
-                     t.jfzl_bz as jf_bz, --经费
-                     t.qebk_zz as qe_zz, --全额
-                     t.cebt_zz as ce_zz, --差额
-                     t.jfzl_zz as jf_zz, --经费
-                     0 as sykbs
-                 from  v_bzzz t
-                           left join sy s
-                                     on t.jgsy_code = s.jgsy_code
-                 where t.geocode like #{depcode} and  t.geocode !=#{code}
+                 from v_bzzz t
+                          left join sy s
+                                    on t.jgsy_code = s.jgsy_code
+                 where t.geocode like #{depcode}
+                   and t.geocode !=#{code})
+        union all
+        select decode(count(0), 0, 0, 0)            as num1,
+               decode(count(0), 0, 0, sum(bary_zz)) as num2,
+               decode(count(0), 0, 0, 0)            as num3,
+               decode(count(0), 0, 0, 0)            as num4
+        from (select t.bary_zz as bary_zz
+              from v_bzzz t
+              where t.jgtype = 'sy'
+                and t.geocode like #{depcode}
+                and t.geocode !=#{code}
+             )
+        union all
+        select decode(count(0), 0, 0, 0)            as num1,
+               decode(count(0), 0, 0, sum(kzry_zz)) as num2,
+               decode(count(0), 0, 0, 0)            as num3,
+               decode(count(0), 0, 0, 0)            as num4
+        from (select t.kzry_zz as kzry_zz
+              from v_bzzz t
+              where t.jgtype = 'sy'
+                and t.geocode like #{depcode}
+                and t.geocode !=#{code}
+             )
+        union all
+        select decode(count(0), 0, 0, 0)            as num1,
+               decode(count(0), 0, 0, 0)            as num2,
+               decode(count(0), 0, 0, sum(bary_bz)) as num3,
+               decode(count(0), 0, 0, 0)            as num4
+        from (select t.bary_bz as bary_bz
+              from v_bzzz t
+              where t.jgtype = 'sy'
+                and t.geocode like #{depcode}
+                and t.geocode !=#{code}
+             )
+        union all
+        select decode(count(0), 0, 0, 0)            as num1,
+               decode(count(0), 0, 0, 0)            as num2,
+               decode(count(0), 0, 0, sum(kzry_bz)) as num3,
+               decode(count(0), 0, 0, 0)            as num4
+        from (select t.kzry_bz as kzry_bz
+              from v_bzzz t
+              where t.jgtype = 'sy'
+                and t.geocode like #{depcode}
+                and t.geocode !=#{code}
+             )
+        union all
+        select decode(count(0), 0, 0, 0)                                                          as num1,
+               decode(count(0), 0, 0, 0)                                                          as num2,
+               decode(count(0), 0, 0, 0)                                                          as num3,
+               decode(count(0), 0, 0, sum(qe_bz + ce_bz + jf_bz - qe_zz - ce_zz - jf_zz - sykbs)) as kbs
+        from (
+                 select t.qebk_bz as qe_bz,
+                        t.cebt_bz as ce_bz,
+                        t.jfzl_bz as jf_bz,
+                        t.qebk_zz as qe_zz,
+                        t.cebt_zz as ce_zz,
+                        t.jfzl_zz as jf_zz,
+                        0         as sykbs
+                 from v_bzzz t
+                          left join sy s
+                                    on t.jgsy_code = s.jgsy_code
+                 where t.geocode like #{depcode}
+                   and t.geocode !=#{code}
                  union all
                  select
                      0 as qe_bz,
@@ -136,9 +131,20 @@
                      0 as qe_zz,
                      0 as ce_zz,
                      0 as jf_zz,
-                     sum(bcd.reply_num) - sum(nvl(bcd.used_num,0)) as sykbs from Bill_Check bc,Bill_Check_Detail bcd
-                 where bcd.bz_type in ('11','12','20') and  bc.bill_state='2' and bc.bill_valid='1' and bc.bill_no=bcd.bill_no
-                   and substr(bc.jgsy_code,0,6) like #{depcode} and substr(bc.jgsy_code,0,6) !=#{code}
+                     sum (bcd.reply_num) - sum (nvl(bcd.used_num, 0)) as sykbs
+                 from Bill_Check bc, Bill_Check_Detail bcd
+                 where bcd.bz_type in ('11'
+                     , '12'
+                     , '20')
+                   and bc.bill_state='2'
+                   and bc.bill_valid='1'
+                   and bc.bill_no=bcd.bill_no
+                   and substr(bc.jgsy_code
+                     , 0
+                     , 6) like #{depcode}
+                   and substr(bc.jgsy_code
+                     , 0
+                     , 6) !=#{code}
              )
 
     </select>

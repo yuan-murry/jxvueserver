@@ -15,8 +15,11 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: oracle.jdbc.driver.OracleDriver
-    url: jdbc:oracle:thin:@192.168.100.70:1521:smz
-    username: zzbsmz_2022
+    #url: jdbc:oracle:thin:@192.168.100.70:1521:smz
+    #username: zzbsmz_2022
+    #password: smzSMZ123
+    url: jdbc:oracle:thin:@localhost:1521:orcl
+    username: zbbsmz_v75
     password: smzSMZ123
     initialSize: 5
     minIdle: 5

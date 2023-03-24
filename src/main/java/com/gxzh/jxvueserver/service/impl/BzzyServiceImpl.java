@@ -125,4 +125,21 @@ public class BzzyServiceImpl implements BzzyService {
 
         return insdstry;
     }
+
+    @Override
+    public List<BzzyIndstry> getInsdstryChild(String depCode, String flCode) {
+        List<BzzyIndstry> insdstry = null;
+        Object o = redisTemplate.opsForValue().get(vuejx + "getInsdstryChild:" + depCode + flCode);
+        if (o != null) {
+            insdstry = (List<BzzyIndstry>) o;
+        } else {
+            if (!"36%".equals(depCode)) {
+                depCode = depCode.substring(0, 4) + "%";
+            }
+            insdstry = bzzyMapper.getInsdstryChild(depCode, flCode + "%");
+            redisTemplate.opsForValue().set(vuejx + "getInsdstryChild:" + depCode + flCode, insdstry);
+        }
+
+        return insdstry;
+    }
 }

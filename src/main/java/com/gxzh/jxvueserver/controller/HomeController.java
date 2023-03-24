@@ -45,4 +45,10 @@ public class HomeController {
         return Res.ok(ldzs);
     }
 
+    @RequestMapping("/getGeoSituation")
+    public Res<?> getGeoSituation(@RequestParam("depCode") String depCode) {
+        GeoSituation geoSituation = this.homeService.getGeoSituation(depCode);
+        return Res.ok(geoSituation);
+    }
+
 }

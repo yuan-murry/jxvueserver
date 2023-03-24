@@ -4,47 +4,97 @@
 
 <mapper namespace="com.gxzh.jxvueserver.mapper.WtyjMapper">
     <select id="selectCbz" resultType="com.gxzh.jxvueserver.entity.Cbz" parameterType="java.lang.String">
-        select
-                (select desp from geocode g where g.code =geocode ) desp,
-                (select decode(substr(code,5,2),'00',0,g.dis_order) from geocode g
-                 where g.code =geocode ) dis_order,
-                sum(chaobz) as chaobz,
-                sum(chaozs) as chaozs,
-                sum(chaojg) as chaojg
-        from
-            (select  g.code as geocode,
-                     desp as desp,
-                     nvl(j.jgsy_chaobz,0) as chaobz,
-                     nvl(j.jgsy_chaozs,0) as chaozs,
-                     nvl(j.jgsy_chaojg,0) as chaojg
+        select (select desp from geocode g where g.code = geocode) desp,
+               (select decode(substr(code, 5, 2), '00', 0, g.dis_order)
+                from geocode g
+                where g.code = geocode)                            dis_order,
+               sum(chaobz) as                                      chaobz,
+               sum(chaozs) as                                      chaozs,
+               sum(chaojg) as                                      chaojg
+        from (select g.code                as geocode,
+                     desp                  as desp,
+                     nvl(j.jgsy_chaobz, 0) as chaobz,
+                     nvl(j.jgsy_chaozs, 0) as chaozs,
+                     nvl(j.jgsy_chaojg, 0) as chaojg
 
-             from geocode g
-                      left join jgsy_common j on g.code=j.dep_code and j.jgsy_states='1'
-             where  g.code like #{depcode}
-               AND g.code != #{code}) group by geocode
-
-
-
-
-
+              from geocode g
+                       left join jgsy_common j on g.code = j.dep_code and j.jgsy_states = '1'
+              where g.code like #{depcode}
+                AND g.code != #{code})
+        group by geocode
 
     </select>
 
 
     <select id="selectYwtjg" resultType="com.gxzh.jxvueserver.entity.Ywtjg" parameterType="java.lang.String">
-        select
-        (select desp from geocode where code=j.dep_code) as desp,
-        jgsy_name as jgsy_name,
+        select (select desp from geocode where code = j.dep_code)                 as desp,
+               jgsy_name                                                          as jgsy_name,
 
-        decode(j.jgsy_chaojg,0,'','超机构 ')||decode(j.jgsy_chaobz,0,'','超编制 ')||decode(j.jgsy_chaozs,0,'','超在职 ')||decode(xxws,'','','其他') as wt
-        from jgsy_common j where jgsy_states='1'  and (j.jgsy_chaojg!=0 or j.jgsy_chaobz!=0 or j.jgsy_chaozs!=0 or j.xxws !='')
-        and
-        to_char(j.update_time, 'yyyy/mm/dd') in (SELECT  to_char (SYSDATE- LEVEL + 1, 'yyyy/mm/dd') today FROM DUAL connect BY LEVEL &lt;= 31 )
+               decode(j.jgsy_chaojg, 0, '', '超机构 ') || decode(j.jgsy_chaobz, 0, '', '超编制 ') ||
+               decode(j.jgsy_chaozs, 0, '', '超在职 ') || decode(xxws, '', '', '其他') as wt
+        from jgsy_common j
+        where jgsy_states = '1'
+          and (j.jgsy_chaojg!=0 or j.jgsy_chaobz!=0 or j.jgsy_chaozs!=0 or j.xxws !='')
+          and to_char(j.update_time, 'yyyy/mm/dd') in (SELECT to_char(SYSDATE - LEVEL + 1, 'yyyy/mm/dd') today FROM DUAL
+        connect BY LEVEL &lt;= 31 )
 
-        and j.dep_code like #{depcode}
-        AND j.dep_code != #{code}
-
-
+               and j.dep_code like #{depcode}
+               AND j.dep_code != #{code}
 
     </select>
+
+    <select id="getextraPieChild" resultType="com.gxzh.jxvueserver.dto.WtyjJgsy">
+        select jgsy_name, jgsy_type, dep_name
+        <choose>
+            <when test="jgsyNum == 1">
+                , chaobz problem_num
+            </when>
+            <when test="jgsyNum == 2">
+                , chaozs problem_num
+            </when>
+            <when test="jgsyNum == 3">
+                , chaojg problem_num
+            </when>
+        </choose>
+        from (select jgsy_code,
+        jgsy_name,
+        (select g.desp from geocode g where g.code = geocode) as dep_name,
+        decode(jgtype,
+        'local',
+        '主管部门',
+        'sy',
+        '事业单位',
+        'lo_next',
+        '下设机构',
+        '街道乡镇') as jgsy_type,
+        (synsjgs - pznsjgs) as chaojg,
+        (case
+        when jgtype = 'sy' then
+        (qebk_zz + cebt_zz + jfzl_zz + ga_zz + jcy_zz + fy_zz +
+        sf_zz + aq_zz) - (qebk_bz + cebt_bz + jfzl_bz + ga_bz +
+        jcy_bz + fy_bz + sf_bz + aq_bz)
+        else
+        (qebk_zz + cebt_zz + jfzl_zz + dzq_zz + ga_zz + jcy_zz +
+        fy_zz + sf_zz + aq_zz) -
+        (qebk_bz + cebt_bz + jfzl_bz + dzq_bz + ga_bz + jcy_bz +
+        fy_bz + sf_bz + aq_bz)
+        end) chaobz,
+        (l_r_l1_nu - l_a_l1_nu) as chaozs
+        from v_bzzz)
+        where jgsy_code like #{depCode}
+        <choose>
+            <when test="jgsyNum == 1">
+                and chaobz &gt; 0
+            </when>
+            <when test="jgsyNum == 2">
+                and chaozs &gt; 0
+            </when>
+            <when test="jgsyNum == 3">
+                and chaojg &gt; 0
+            </when>
+        </choose>
+        order by jgsy_code
+    </select>
+
+
 </mapper>

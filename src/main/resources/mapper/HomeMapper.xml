@@ -6,9 +6,10 @@
         select *
         from (select jgsy_system_code, count(*) jgcount
               from jgsy_common jc
-              where jc.jgsy_states = '1' and jc.jgsy_type='12' and jc.dep_code like #{depCode}
-              group by ROLLUP(jc.jgsy_system_code))
-                 pivot(sum(jgcount)
+              where jc.jgsy_states = '1'
+                and jc.jgsy_type = '12'
+                and jc.dep_code like #{depCode}
+              group by ROLLUP (jc.jgsy_system_code)) pivot(sum(jgcount)
     for jgsy_system_code in('' AS zj,
                             '01' AS dw,
                             '02' AS rd,
@@ -24,9 +25,10 @@
         select *
         from (select jgsy_system_code, count(*) jgcount
               from jgsy_common jc
-              where jc.jgsy_states = '1' and jc.jgsy_type in ('04','06','10') and jc.dep_code like #{depCode}
-              group by ROLLUP(jc.jgsy_system_code))
-                 pivot(sum(jgcount)
+              where jc.jgsy_states = '1'
+                and jc.jgsy_type in ('04', '06', '10')
+                and jc.dep_code like #{depCode}
+              group by ROLLUP (jc.jgsy_system_code)) pivot(sum(jgcount)
     for jgsy_system_code in('' AS zj,
                             '01' AS dw,
                             '02' AS rd,
@@ -41,24 +43,24 @@
     <select id="selectBzqk" resultType="com.gxzh.jxvueserver.dto.Bzqk">
         select sum(dzq_bz) dzq_bz,
                sum(dzq_zz) dzq_zz,
-               sum(sy_bz) sy_bz,
-               sum(sy_zz) sy_zz,
+               sum(sy_bz)  sy_bz,
+               sum(sy_zz)  sy_zz,
                sum(xz_dfp) xz_dfp,
                sum(sy_dfp) sy_dfp
-        from (select sum(dzq_bz) dzq_bz,
-                     sum(dzq_zz) dzq_zz,
+        from (select sum(dzq_bz)                      dzq_bz,
+                     sum(dzq_zz)                      dzq_zz,
                      sum(qebk_bz + cebt_bz + jfzl_bz) sy_bz,
                      sum(qebk_zz + cebt_zz + jfzl_zz) sy_zz,
-                     0 as xz_dfp,
-                     0 as sy_dfp
+                     0 as                             xz_dfp,
+                     0 as                             sy_dfp
               from v_bzzz
               where geocode like #{depCode}
               union all
 
-              select 0 as dzq_bz,
-                     0 as dzq_zz,
-                     0 as sy_bz,
-                     0 as sy_zz,
+              select 0 as     dzq_bz,
+                     0 as     dzq_zz,
+                     0 as     sy_bz,
+                     0 as     sy_zz,
                      sum(case
                              when jgsy_system_code = 'xz_dfp' then
                                  bz
@@ -92,7 +94,7 @@
                                 vv.sbjzzbz + vv.sbjfzbz + vv.tjjzzbz + vv.tjjfzbz + vv.xcjzzbz +
                                 vv.xcjfzbz + vv.xkjzzbz + vv.xkjfzbz + vv.gjzzbz + vv.gjfzbz +
                                 vv.wdjbzs + vv.qtbzs
-            end)) ldbz,
+            end))        ldbz,
                sum((case
                         when vv.ldrs + vv.bmldzzzz + vv.bmldfzzz + vv.bmqtldzz +
                              vv.nsldzzzz + vv.nsldfzzz + vv.qtldzz + vv.nsldzzzz2 +
@@ -112,8 +114,9 @@
         from bmldzs vv
                  left join jgsy_common jc
                            on jc.jgsy_code = vv.jgsy_code
-        where jc.jgsy_type in('04','06','10')
-          and jc.jgsy_states = '1' and jc.dep_code like #{depCode}
+        where jc.jgsy_type in ('04', '06', '10')
+          and jc.jgsy_states = '1'
+          and jc.dep_code like #{depCode}
 
     </select>
 
@@ -132,7 +135,7 @@
                                 vv.sbjzzbz + vv.sbjfzbz + vv.tjjzzbz + vv.tjjfzbz + vv.xcjzzbz +
                                 vv.xcjfzbz + vv.xkjzzbz + vv.xkjfzbz + vv.gjzzbz + vv.gjfzbz +
                                 vv.wdjbzs + vv.qtbzs
-            end)) ldbz,
+            end))        ldbz,
                sum((case
                         when vv.bmldzzzz + vv.bmldfzzz + vv.bmqtldzz + vv.nsldzzzz +
                              vv.nsldfzzz + vv.qtldzz + vv.nsldzzzz2 + vv.nsldfzzz2 +
@@ -159,7 +162,14 @@
     </select>
 
     <select id="testbase" resultType="string">
-        select jgsy_name from jgsy_common where jgsy_code = '150000-01-10001'
+        select jgsy_name
+        from jgsy_common
+        where jgsy_code = '150000-01-10001'
+    </select>
+    <select id="getGeoSituation" resultType="com.gxzh.jxvueserver.dto.GeoSituation">
+        select *
+        from geo_situation
+        where depcode = #{depCode}
     </select>
 
 </mapper>

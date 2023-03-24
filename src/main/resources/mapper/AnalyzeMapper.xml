@@ -5,109 +5,156 @@
 <mapper namespace="com.gxzh.jxvueserver.mapper.AnalyzeMapper">
 
     <select id="selectYwlx" resultType="com.gxzh.jxvueserver.entity.Ywlx" parameterType="java.lang.String">
-        select d.code_chin_name as name,count(t.dsh_id) as value from DICT_CODE_LIB d
-            left join t_ry_jbxx_dsh t on  d.code_value =t.auditing_ztbg   and t.geocode like #{depcode}
+        select d.code_chin_name as name, count(t.dsh_id) as value
+        from DICT_CODE_LIB d
+            left join t_ry_jbxx_dsh t
+        on d.code_value =t.auditing_ztbg and t.geocode like #{depcode}
             AND t.geocode != #{code} and t.states='1'
-        where code_type_no ='61' and  code_value !=-1
+        where code_type_no ='61' and code_value !=-1
         group by code_chin_name
     </select>
 
     <select id="selectNywbl" resultType="com.gxzh.jxvueserver.entity.Nywbl" parameterType="java.lang.String">
-        select nowmonth as nowmonth,nvl(c,0) as bls from
-        (select to_char((add_months(sysdate-numtoyminterval(1, 'YEAR'),level)),'yyyy/mm') nowmonth
-        FROM DUAL connect BY LEVEL &lt;= 12) month left join
+        select nowmonth as nowmonth, nvl(c, 0) as bls
+        from (select to_char((add_months(sysdate - numtoyminterval(1, 'YEAR'), level)), 'yyyy/mm') nowmonth
+              FROM DUAL connect BY LEVEL &lt;= 12)
+            month left join
         (select to_char(b.submit_date, 'yyyy/mm') as sd,
         nvl(COUNT(1), 0) as c from
         bill b
         where bill_state='4'
         and substr(b.bill_no,0,6) like #{depcode}
-        and substr(b.bill_no,0,6) !=#{code}
-        group by to_char(b.submit_date, 'yyyy/mm')) m on month.nowmonth = m.sd ORDER BY month.nowmonth
+            and substr(b.bill_no
+           , 0
+           , 6) !=#{code}
+            group by to_char(b.submit_date
+           , 'yyyy/mm')) m
+        on month.nowmonth = m.sd
+        ORDER BY month.nowmonth
 
     </select>
 
     <select id="selectYywbl" resultType="com.gxzh.jxvueserver.entity.Yywbl" parameterType="java.lang.String">
-        select substr(day,6) as day,nvl(c,0) as bls from
-        (SELECT  to_char (SYSDATE- LEVEL + 1, 'yyyy/mm/dd') day FROM DUAL connect BY LEVEL &lt;= 31 ) days
-        left join
-        (select to_char(b.submit_date, 'yyyy/mm/dd') as sd,
-        nvl(COUNT(1), 0) as c from
-        bill b
-        where bill_state='4'
-        and substr(b.bill_no,0,6) like #{depcode}
-        and substr(b.bill_no,0,6) !=#{code}
-        group by to_char(b.submit_date, 'yyyy/mm/dd'))
-
-        m on days.day = m.sd ORDER BY days.day
+        select substr(day,6) as day,nvl(c,0) as bls
+        from
+            (SELECT to_char (SYSDATE- LEVEL + 1, 'yyyy/mm/dd') day FROM DUAL connect BY LEVEL &lt;= 31 ) days
+            left join
+            (select to_char(b.submit_date, 'yyyy/mm/dd') as sd,
+            nvl(COUNT (1), 0) as c from
+            bill b
+            where bill_state='4'
+            and substr(b.bill_no, 0, 6) like #{depcode}
+            and substr(b.bill_no, 0, 6) !=#{code}
+            group by to_char(b.submit_date, 'yyyy/mm/dd'))
+            m
+        on days.day = m.sd
+        ORDER BY days.day
 
     </select>
 
 
     <select id="selectGdyw" resultType="com.gxzh.jxvueserver.entity.Gdyw" parameterType="java.lang.String">
-        select desp,dis_order,count(bill_no) as bls from geocode g
-        left join bill b on g.code=substr(b.jgsy_code,0,6) and bill_state='4'
-        where    g.code like #{depcode}
-          AND g.code != #{code} group by desp,dis_order order by dis_order
+        select desp, dis_order, count(bill_no) as bls
+        from geocode g
+                 left join bill b on g.code = substr(b.jgsy_code, 0, 6) and bill_state = '4'
+        where g.code like #{depcode}
+          AND g.code != #{code}
+        group by desp, dis_order
+        order by dis_order
     </select>
 
 
     <select id="selectJryw" resultType="com.gxzh.jxvueserver.entity.Jryw" parameterType="java.lang.String">
-        select jgsy_name,kbs,to_char(submit_date,'yyyy-mm-dd hh24:mi:ss') as today from
+        select jgsy_name, kbs, to_char(submit_date, 'yyyy-mm-dd hh24:mi:ss') as today
+        from (select jgsy_code, jgsy_name, sum(bz - zz - sykbs) as kbs, submit_date
+              from (select a.jgsy_code,
+                           a.jgsy_name,
+                           nvl((dzq_bz + qebk_bz + cebt_bz + jfzl_bz), 0) bz,
+                           nvl((dzq_zz + qebk_zz + cebt_zz + jfzl_zz), 0) zz,
+                           0 as                                           sykbs,
+                           b.submit_date
 
-            (select jgsy_code,jgsy_name,sum(bz-zz-sykbs) as kbs,submit_date  from
-                (select
-                     a.jgsy_code,
-                     a.jgsy_name ,
-                     nvl((dzq_bz+qebk_bz+cebt_bz+jfzl_bz),0) bz,
-                     nvl((dzq_zz+qebk_zz+cebt_zz+jfzl_zz),0) zz,
-                     0 as sykbs,
-                     b.submit_date
+                    from (select j.jgsy_code      as                  jgsy_code,
+                                 t.jgsy_name      as                  jgsy_name,
+                                 nvl(t.dzq_bz, 0) as                  dzq_bz,
+                                 nvl(t.dzq_zz, 0) as                  dzq_zz,
+                                 decode(t.jgtype, 'sy', t.qebk_bz, 0) qebk_bz,
+                                 decode(t.jgtype, 'sy', t.cebt_bz, 0) cebt_bz,
+                                 decode(t.jgtype, 'sy', t.jfzl_bz, 0) jfzl_bz,
+                                 decode(t.jgtype, 'sy', t.qebk_zz, 0) qebk_zz,
+                                 decode(t.jgtype, 'sy', t.cebt_zz, 0) cebt_zz,
+                                 decode(t.jgtype, 'sy', t.jfzl_zz, 0) jfzl_zz
+                          from jgsy_common j
+                                   left join v_bzzz t on j.jgsy_code = t.jgsy_code
 
-                 from
-                     (select
+                          where substr(j.jgsy_code, 1, 6) like #{depcode}
+                            and substr(j.jgsy_code, 1, 6) != #{code}
+                            and j.jgsy_states='1') a
+                             left join bill b on b.jgsy_code = a.jgsy_code
 
-                          j.jgsy_code as jgsy_code,
-                          t.jgsy_name as jgsy_name,
-                          nvl( t.dzq_bz,0) as dzq_bz,
-                          nvl( t.dzq_zz,0) as dzq_zz,
-                          decode(t.jgtype, 'sy', t.qebk_bz, 0) qebk_bz,
-                          decode(t.jgtype, 'sy', t.cebt_bz, 0) cebt_bz,
-                          decode(t.jgtype, 'sy', t.jfzl_bz, 0) jfzl_bz,
-                          decode(t.jgtype, 'sy', t.qebk_zz, 0) qebk_zz,
-                          decode(t.jgtype, 'sy', t.cebt_zz, 0) cebt_zz,
-                          decode(t.jgtype, 'sy', t.jfzl_zz, 0) jfzl_zz
-                      from  jgsy_common j left join v_bzzz t  on j.jgsy_code=t.jgsy_code
+                    union all
+                    select a.jgsy_code,
+                           a.jgsy_name,
 
-                      where substr(j.jgsy_code,1,6) like #{depcode}
-                        and substr(j.jgsy_code,1,6) != #{code} and j.jgsy_states='1') a left join bill b  on b.jgsy_code=a.jgsy_code
+                           0                             as bz,
+                           0                             as zz,
 
-                 union all
-                 select
-                     a.jgsy_code,
-                     a.jgsy_name,
+                           nvl((sykbs_xz + sykbs_sy), 0) as sykbs,
+                           b.submit_date
 
-                     0 as bz,
-                     0 as zz,
+                    from (select jgsy_code      as jgsy_code,
+                                 jgsy_name      as jgsy_name,
+                                 case
+                                     when bcd.bz_type = 'a' then bcd.reply_num - nvl(bcd.used_num, 0)
+                                     else 0 end as sykbs_xz,
+                                 case
+                                     when bcd.bz_type in ('11', '12', '20') then bcd.reply_num - nvl(bcd.used_num, 0)
+                                     else 0 end as sykbs_sy
+                          from bill_check bc,
+                               bill_check_detail bcd
+                          where bc.bill_state = '2'
+                            and bc.bill_valid = '1'
+                            and bc.bill_no = bcd.bill_no) a
+                             left join bill b on a.jgsy_code = b.jgsy_code
+                    where substr(b.jgsy_code, 1, 6) like #{depcode}
+                      and substr(b.jgsy_code, 1, 6) != #{code}) s
+              group by jgsy_code, jgsy_name, submit_date) dr
 
-                     nvl((sykbs_xz+sykbs_sy),0) as sykbs,
-                     b.submit_date
+        where submit_date = (
+            select max(submit_date)
+            from bill
+            where jgsy_code = dr.jgsy_code)
+          and to_char(submit_date, 'dd') = (select to_char(sysdate, 'dd') from dual)
+    </select>
+    <select id="getAreaBusinessChild" resultType="com.gxzh.jxvueserver.dto.AreaBusinessChild">
+        select sum(rbrs) rbrs, sum(ltxrs) ltxrs, '${depName}' as depName
+        from (select (case
+                          when t.bill_type = '1' then
+                              1
+                          else
+                              0
+            end)              as rbrs,
+                     (case
+                          when t.bill_type = '2' and bd.zbzt in ('04', '05') then
+                              1
+                          else
+                              0
+                         end) as ltxrs
+              from BILL t
+                       left join bill_detail bd
+                                 on t.bill_no = bd.bill_no
+              where t.bill_state = '4'
+                and bd.geocode like (select (case
+                                                 when g.code is null then
+                                                     '360000'
+                                                 when substr(g.code, 5, 2) = '00' then
+                                                     substr(g.code, 0, 4) || '%'
+                                                 else
+                                                     g.code
+                  end) depcode
+                                     from geocode g
+                                     where g.desp = #{depName}))
 
-                 from
 
-                     (select
-                          jgsy_code as jgsy_code,
-                          jgsy_name as jgsy_name,
-                          case when bcd.bz_type = 'a' then bcd.reply_num - nvl(bcd.used_num, 0) else 0 end as sykbs_xz,
-                          case  when bcd.bz_type in ('11', '12', '20') then bcd.reply_num - nvl(bcd.used_num, 0) else 0 end  as   sykbs_sy
-                      from bill_check bc,
-                           bill_check_detail bcd
-                      where bc.bill_state = '2'
-                        and bc.bill_valid = '1'
-                        and bc.bill_no = bcd.bill_no) a left join bill b  on  a.jgsy_code = b.jgsy_code    where substr(b.jgsy_code,1,6) like #{depcode}
-                                                                                                             and substr(b.jgsy_code,1,6) != #{code}) s group by jgsy_code,jgsy_name,submit_date) dr
-
-        where submit_date=(
-
-            select max(submit_date) from bill where jgsy_code=dr.jgsy_code) and to_char(submit_date,'dd')=(select to_char(sysdate,'dd') from dual)
     </select>
 </mapper>

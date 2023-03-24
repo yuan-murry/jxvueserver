@@ -1,5 +1,6 @@
 package com.gxzh.jxvueserver.service.impl;
 
+import com.gxzh.jxvueserver.dto.WtyjJgsy;
 import com.gxzh.jxvueserver.entity.Cbz;
 import com.gxzh.jxvueserver.entity.Ywtjg;
 import com.gxzh.jxvueserver.mapper.WtyjMapper;
@@ -18,6 +19,7 @@ public class WtyjServiceImpl implements WtyjService {
     private RedisTemplate redisTemplate;
     private final String vuejx = "vuejx:wtyj:";
 
+    @Override
     public List<Cbz> selectCbz(String depcode) {
         String code = "360000";
         List<Cbz> despList = null;
@@ -36,6 +38,7 @@ public class WtyjServiceImpl implements WtyjService {
         return despList;
     }
 
+    @Override
     public List<Ywtjg> selectYwtjg(String depcode) {
         String code = "360000";
         List<Ywtjg> despList = null;
@@ -52,5 +55,14 @@ public class WtyjServiceImpl implements WtyjService {
             redisTemplate.opsForValue().set(vuejx + "selectYwtjg:" + depcode, despList);
         }
         return despList;
+    }
+
+    @Override
+    public List<WtyjJgsy> getextraPieChild(String depCode, String jgsyNum) {
+        if (depCode != null && depCode.indexOf("__") != -1) {
+            depCode = "36%";
+        }
+        List<WtyjJgsy> jgsyList = wtyjMapper.getextraPieChild(depCode, jgsyNum);
+        return jgsyList;
     }
 }

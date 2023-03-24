@@ -288,11 +288,11 @@
                       where jj.jgsy_code = jc.jgsy_code)    jgsy_name,
                      max(t.update_time)                     lasttime,
                      (select sum((local.l_a_xz_st + local.l_a_zf_ga + local.l_a_zf_jcy +
-                               local.l_a_zf_fy + local.l_a_zf_sf + local.l_a_qebk +
-                               local.l_a_cebt + local.l_a_jfzl) -
-                              (local.l_r_xz_st + local.l_r_zf_ga + local.l_r_zf_jcy +
-                               local.l_r_zf_fy + local.l_r_zf_sf + local.l_r_qebk +
-                               local.l_r_cebt + local.l_r_jfzl)) bzs
+                                  local.l_a_zf_fy + local.l_a_zf_sf + local.l_a_qebk +
+                                  local.l_a_cebt + local.l_a_jfzl) -
+                                 (local.l_r_xz_st + local.l_r_zf_ga + local.l_r_zf_jcy +
+                                  local.l_r_zf_fy + local.l_r_zf_sf + local.l_r_qebk +
+                                  local.l_r_cebt + local.l_r_jfzl)) bzs
                       from local
                       where local.jgsy_code = jgsy_code) as bzs
               from tt t,
@@ -315,9 +315,9 @@
                       where jj.jgsy_code = jc.jgsy_code) jgsy_name,
                      max(t.update_time)                  lasttime,
                      (select sum((zf_sf_bz + zf_fy_bz + zf_jcy_bz + zf_ga_bz +
-                               qebkbzrs + cebtbzrs + jfzlbzrs) -
-                              (zf_sf_zz + zf_fy_zz + zf_jcy_zz + zf_ga_zz +
-                               qebksyry + cebtsyry + jfzlsyry)) bzs
+                                  qebkbzrs + cebtbzrs + jfzlbzrs) -
+                                 (zf_sf_zz + zf_fy_zz + zf_jcy_zz + zf_ga_zz +
+                                  qebksyry + cebtsyry + jfzlsyry)) bzs
                       from sy
                       where sy.jgsy_code = jgsy_code
                         and rownum = 1) as               bzs
@@ -340,11 +340,11 @@
                       where jj.jgsy_code = jc.jgsy_code)   jgsy_name,
                      max(t.update_time)                    lasttime,
                      (select sum((jdxz.xz_bz + jdxz.zf_ga_bz + jdxz.zf_jcy_bz +
-                               jdxz.zf_fy_bz + jdxz.zf_sf_bz + jdxz.qebk_bz +
-                               jdxz.cebt_bz + jdxz.jfzl_bz) -
-                              (jdxz.xz_zz + jdxz.zf_ga_zz + jdxz.zf_jcy_zz +
-                               jdxz.zf_fy_zz + jdxz.zf_sf_zz + jdxz.qebk_zz +
-                               jdxz.cebt_zz + jdxz.jfzl_zz)) bzs
+                                  jdxz.zf_fy_bz + jdxz.zf_sf_bz + jdxz.qebk_bz +
+                                  jdxz.cebt_bz + jdxz.jfzl_bz) -
+                                 (jdxz.xz_zz + jdxz.zf_ga_zz + jdxz.zf_jcy_zz +
+                                  jdxz.zf_fy_zz + jdxz.zf_sf_zz + jdxz.qebk_zz +
+                                  jdxz.cebt_zz + jdxz.jfzl_zz)) bzs
                       from jdxz
                       where jdxz.jgsy_code = jgsy_code) as bzs
               from tt t,
@@ -451,8 +451,9 @@
              jgsy_common j
         where t.jgsy_code = j.jgsy_code
           and (j.jgsy_states = '1' or j.jgsy_states is null)
-          and j.dep_code like #{depCode} and  t.xb ='1'
-            union all
+          and j.dep_code like #{depCode}
+          and t.xb = '1'
+        union all
         select nvl(sum((case
                             when ((t.xb = '1' and to_char(csrq, 'yyyymmdd') &lt;=
                                                   to_char(add_months(sysdate, 12) - interval '60' year,
@@ -542,10 +543,11 @@
              jgsy_common j
         where t.jgsy_code = j.jgsy_code
           and (j.jgsy_states = '1' or j.jgsy_states is null)
-          and j.dep_code like #{depCode} and  t.xb ='2'
+          and j.dep_code like #{depCode}
+          and t.xb = '2'
     </select>
     <select id="getInsdstry" resultType="com.gxzh.jxvueserver.dto.BzzyIndstry">
-        select (select substr(hyfl_name, 0, 2) from hyfl where hyfl_code = hylb) hyname,
+        select (select substr(hyfl_name, 0, 2) || substr(hyfl_code, 0, 2) from hyfl where hyfl_code = hylb) hyname,
                bzs,
                zzs
         from (select substr(hylb, 0, 2) || '0000'           hylb,
@@ -559,6 +561,18 @@
         order by bzs desc
 
 
+    </select>
+    <select id="getInsdstryChild" resultType="com.gxzh.jxvueserver.dto.BzzyIndstry">
+        select (select hyfl_name from hyfl where hyfl_code = hylb) hyname, bzs, zzs
+        from (select substr(hylb, 0, 4) || '00'             hylb,
+                     sum(qebkbzrs + cebtbzrs + jfzlbzrs) as bzs,
+                     sum(qebksyry + cebtsyry + jfzlsyry) as zzs
+              from sy
+              where jgsy_states = '1'
+                and jgsy_code like #{depCode}
+                and hylb like #{flCode}
+              group by substr(hylb, 0, 4))
+        order by bzs desc
     </select>
 
 

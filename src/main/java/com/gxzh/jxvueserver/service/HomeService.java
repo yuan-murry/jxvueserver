@@ -1,9 +1,6 @@
 package com.gxzh.jxvueserver.service;
 
-import com.gxzh.jxvueserver.dto.Bzqk;
-import com.gxzh.jxvueserver.dto.Ldzs;
-import com.gxzh.jxvueserver.dto.SydwPie;
-import com.gxzh.jxvueserver.dto.XzjgPie;
+import com.gxzh.jxvueserver.dto.*;
 
 public interface HomeService {
     SydwPie selectSydwpie(String depCode);
@@ -17,4 +14,8 @@ public interface HomeService {
     Ldzs selectSyLdzs(String depCode);
 
     String testbase();
+
+    GeoSituation getGeoSituation(String depCode);
+
+
 }
