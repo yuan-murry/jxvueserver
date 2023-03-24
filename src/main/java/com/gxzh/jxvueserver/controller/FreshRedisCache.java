@@ -28,6 +28,8 @@ public class FreshRedisCache {
     @Autowired
     private ZzbzService zzbzService;
     @Autowired
+    private CreatenewService createnewService;
+    @Autowired
     private RedisTemplate redisTemplate;
     private final String[] depArr = {"36%", "360000", "3601%", "3602%", "3603%", "3604%", "3605%", "3606%", "3607%", "3608%", "3609%", "3610%", "3611%", "360100", "360200", "360300", "360400", "360500", "360600", "360700", "360800", "360900", "361000", "361100"};
 
@@ -62,6 +64,8 @@ public class FreshRedisCache {
         redisTemplate.delete(keys4);
         Set<String> keys5 = redisTemplate.keys("vuejx:wtyj:" + "*");
         redisTemplate.delete(keys5);
+        Set<String> keys6 = redisTemplate.keys("vuejx:createnew:" + "*");
+        redisTemplate.delete(keys6);
         //home添加缓存
         try {
             for (String dep : depArr) {
@@ -109,6 +113,10 @@ public class FreshRedisCache {
                 zzbzService.getUseCondition(dep);
             }
             reurnMsg.append("zzbz页面接口刷新完毕<br>");
+            for (String dep : depArrAnalyse) {
+                createnewService.selectCreatenew(dep);
+            }
+            reurnMsg.append("createnew页面接口刷新完毕<br>");
         }catch (Exception e){
             System.out.println("刷新数据错误：" + e);
             reurnMsg.append("刷新数据错误：" + e);
