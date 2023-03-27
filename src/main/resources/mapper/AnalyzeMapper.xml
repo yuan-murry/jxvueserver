@@ -9,7 +9,7 @@
         from DICT_CODE_LIB d
             left join t_ry_jbxx_dsh t
         on d.code_value =t.auditing_ztbg and t.geocode like #{depcode}
-            AND t.geocode != #{code} and t.states='1'
+            and t.states='1'
         where code_type_no ='61' and code_value !=-1
         group by code_chin_name
     </select>
@@ -24,9 +24,7 @@
         bill b
         where bill_state='4'
         and substr(b.bill_no,0,6) like #{depcode}
-            and substr(b.bill_no
-           , 0
-           , 6) !=#{code}
+
             group by to_char(b.submit_date
            , 'yyyy/mm')) m
         on month.nowmonth = m.sd
@@ -44,7 +42,7 @@
             bill b
             where bill_state='4'
             and substr(b.bill_no, 0, 6) like #{depcode}
-            and substr(b.bill_no, 0, 6) !=#{code}
+
             group by to_char(b.submit_date, 'yyyy/mm/dd'))
             m
         on days.day = m.sd
@@ -54,13 +52,40 @@
 
 
     <select id="selectGdyw" resultType="com.gxzh.jxvueserver.entity.Gdyw" parameterType="java.lang.String">
-        select desp, dis_order, count(bill_no) as bls
-        from geocode g
-                 left join bill b on g.code = substr(b.jgsy_code, 0, 6) and bill_state = '4'
-        where g.code like #{depcode}
-          AND g.code != #{code}
-        group by desp, dis_order
-        order by dis_order
+        <choose>
+            <when test="depcode.length()==3">
+                select decode((substr(g.code,0,4)||'00'),#{code},(select desp from geocode e where e.code = (substr(g.code,0,4)||'00'))||'(本级)',(select desp from geocode e where e.code = (substr(g.code,0,4)||'00'))) as desp,
+                (select decode(substr(e.code, 5, 2), '00', 0, e.dis_order)
+                from geocode e
+                where e.code = substr(g.code,0,4)||'00')    dis_order,
+                count(bill_no) as bls
+                from geocode g
+                left join bill b on g.code = substr(b.jgsy_code, 0, 6) and bill_state = '4'
+                where g.code like #{depcode}
+
+                group by substr(g.code,0,4)
+
+                order by substr(g.code,0,4)
+
+
+            </when>
+            <otherwise>
+                select  decode(g.code,#{code},(select desp from geocode e where e.code = g.code)||'(本级)',(select desp from geocode e where e.code = g.code)) as desp,
+                (select decode(substr(e.code, 5, 2), '00', 0, e.dis_order)
+                from geocode e
+                where e.code = g.code) dis_order,
+                count(bill_no) as bls
+                from geocode g
+                left join bill b on g.code = substr(b.jgsy_code, 0, 6) and bill_state = '4'
+                where g.code like #{depcode}
+
+                group by g.code
+
+                order by g.code
+
+            </otherwise>
+        </choose>
+
     </select>
 
 
@@ -88,7 +113,7 @@
                                    left join v_bzzz t on j.jgsy_code = t.jgsy_code
 
                           where substr(j.jgsy_code, 1, 6) like #{depcode}
-                            and substr(j.jgsy_code, 1, 6) != #{code}
+
                             and j.jgsy_states='1') a
                              left join bill b on b.jgsy_code = a.jgsy_code
 
@@ -117,7 +142,7 @@
                             and bc.bill_no = bcd.bill_no) a
                              left join bill b on a.jgsy_code = b.jgsy_code
                     where substr(b.jgsy_code, 1, 6) like #{depcode}
-                      and substr(b.jgsy_code, 1, 6) != #{code}) s
+                   ) s
               group by jgsy_code, jgsy_name, submit_date) dr
 
         where submit_date = (

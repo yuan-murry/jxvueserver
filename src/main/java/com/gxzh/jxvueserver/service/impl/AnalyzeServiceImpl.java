@@ -29,7 +29,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
             String code = "360000";
 
             if (depcode != null && depcode.indexOf("__") != -1) {
-
+            depcode="36%";
             } else {
                 code = depcode.replace("%", "00");
             }
@@ -50,7 +50,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
             String code = "360000";
 
             if (depcode != null && depcode.indexOf("__") != -1) {
-
+                depcode="36%";
             } else {
                 code = depcode.replace("%", "00");
             }
@@ -70,7 +70,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
             String code = "360000";
 
             if (depcode != null && depcode.indexOf("__") != -1) {
-
+            depcode="36%";
             } else {
                 code = depcode.replace("%", "00");
             }
@@ -90,7 +90,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
             String code = "360000";
 
             if (depcode != null && depcode.indexOf("__") != -1) {
-
+            depcode="36%";
             } else {
                 code = depcode.replace("%", "00");
             }
@@ -112,7 +112,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
             String code = "360000";
 
             if (depcode != null && depcode.indexOf("__") != -1) {
-
+            depcode="36%";
             } else {
                 code = depcode.replace("%", "00");
             }

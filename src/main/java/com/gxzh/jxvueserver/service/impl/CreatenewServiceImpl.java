@@ -29,7 +29,7 @@ public class CreatenewServiceImpl implements CreatenewService {
         } else {
             String code ="360000";
             if(depcode!=null && depcode.indexOf("__")!=-1){
-
+                depcode="36%";
             }else{
                 code=depcode.replace("%","00");
             }

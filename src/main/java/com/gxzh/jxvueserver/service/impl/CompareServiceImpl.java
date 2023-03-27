@@ -1,7 +1,6 @@
 package com.gxzh.jxvueserver.service.impl;
 
 
-import com.gxzh.jxvueserver.dto.SydwPie;
 import com.gxzh.jxvueserver.entity.Ldzs;
 import com.gxzh.jxvueserver.entity.Sybzpzbd;
 import com.gxzh.jxvueserver.entity.Xzbzpzbd;
@@ -31,7 +30,7 @@ public class CompareServiceImpl implements CompareService {
         } else {
             String code ="360000";
             if(depcode!=null && depcode.indexOf("__")!=-1){
-
+                depcode="36%";
             }else{
                 code=depcode.replace("%","00");
             }
@@ -49,7 +48,7 @@ public class CompareServiceImpl implements CompareService {
             despList = (List<Xzbzpzbd>) o;
         } else {
             if(depcode!=null && depcode.indexOf("__")!=-1){
-
+            depcode="36%";
             }else{
                 code=depcode.replace("%","00");
             }
@@ -69,7 +68,7 @@ public class CompareServiceImpl implements CompareService {
             despList = (List<Sybzpzbd>) o;
         } else {
             if(depcode!=null && depcode.indexOf("__")!=-1){
-
+            depcode="36%";
             }else{
                 code=depcode.replace("%","00");
             }

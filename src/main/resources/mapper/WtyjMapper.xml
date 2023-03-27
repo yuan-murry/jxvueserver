@@ -4,42 +4,88 @@
 
 <mapper namespace="com.gxzh.jxvueserver.mapper.WtyjMapper">
     <select id="selectCbz" resultType="com.gxzh.jxvueserver.entity.Cbz" parameterType="java.lang.String">
-        select (select desp from geocode g where g.code = (substr(geocode,0,4)||'00')) as desp,
-               (select decode(substr(code, 5, 2), '00', 0, g.dis_order)
+        <choose>
+            <when test="depcode.length()==3">
+                select
+
+                decode((substr(geocode,0,4)||'00'),#{code},(select desp from geocode g where g.code = (substr(geocode,0,4)||'00'))||'(本级)',(select desp from geocode g where g.code = (substr(geocode,0,4)||'00'))) as desp,
+                (select decode(substr(code, 5, 2), '00', 0, g.dis_order)
                 from geocode g
                 where g.code = (substr(geocode,0,4)||'00'))  as dis_order
                 ,
-               sum(case when chaobz&gt; 0 then chaobz else 0 end) as chaobz,
-               sum(case when chaozs&gt; 0 then chaozs else 0 end) as chaozs,
-               sum(case when chaojg&gt; 0 then chaojg else 0 end)  as chaojg
+                sum(case when chaobz&gt; 0 then chaobz else 0 end) as chaobz,
+                sum(case when chaozs&gt; 0 then chaozs else 0 end) as chaozs,
+                sum(case when chaojg&gt; 0 then chaojg else 0 end)  as chaojg
 
 
-        from (select
-                  g.code as  geocode,
-                  decode(jgtype,
-                         'local',
-                         '主管部门',
-                         'sy',
-                         '事业单位',
-                         'lo_next',
-                         '下设机构',
-                         '街道乡镇') as jgsy_type,
-                  (synsjgs - pznsjgs) as chaojg,
-                  (case
-                       when jgtype = 'sy' then
-                               (qebk_zz + cebt_zz + jfzl_zz + ga_zz + jcy_zz + fy_zz +
-                                sf_zz + aq_zz) - (qebk_bz + cebt_bz + jfzl_bz + ga_bz +
-                                                  jcy_bz + fy_bz + sf_bz + aq_bz)
-                       else
-                               (qebk_zz + cebt_zz + jfzl_zz + dzq_zz + ga_zz + jcy_zz +
-                                fy_zz + sf_zz + aq_zz) -
-                               (qebk_bz + cebt_bz + jfzl_bz + dzq_bz + ga_bz + jcy_bz +
-                                fy_bz + sf_bz + aq_bz)
-                      end) chaobz,
-                  (l_r_l1_nu - l_a_l1_nu) as chaozs
-              from geocode g left join v_bzzz v  on g.code= v.geocode where geocode like #{depcode}  ) where  chaobz!=0 or chaozs!=0 or chaojg!=0
-        group by substr(geocode,0,4)
-        order by substr(geocode,0,4)
+                from (select
+                g.code as  geocode,
+                decode(jgtype,
+                'local',
+                '主管部门',
+                'sy',
+                '事业单位',
+                'lo_next',
+                '下设机构',
+                '街道乡镇') as jgsy_type,
+                (synsjgs - pznsjgs) as chaojg,
+                (case
+                when jgtype = 'sy' then
+                (qebk_zz + cebt_zz + jfzl_zz + ga_zz + jcy_zz + fy_zz +
+                sf_zz + aq_zz) - (qebk_bz + cebt_bz + jfzl_bz + ga_bz +
+                jcy_bz + fy_bz + sf_bz + aq_bz)
+                else
+                (qebk_zz + cebt_zz + jfzl_zz + dzq_zz + ga_zz + jcy_zz +
+                fy_zz + sf_zz + aq_zz) -
+                (qebk_bz + cebt_bz + jfzl_bz + dzq_bz + ga_bz + jcy_bz +
+                fy_bz + sf_bz + aq_bz)
+                end) chaobz,
+                (l_r_l1_nu - l_a_l1_nu) as chaozs
+                from geocode g left join v_bzzz v  on g.code= v.geocode where geocode like #{depcode}  ) where  chaobz!=0 or chaozs!=0 or chaojg!=0
+                group by substr(geocode,0,4)
+                order by substr(geocode,0,4)
+            </when>
+            <otherwise>
+                select
+                decode(geocode,'360100',(select desp from geocode g where g.code = geocode)||'(本级)',(select desp from geocode g where g.code = geocode)) as desp,
+                (select decode(substr(code, 5, 2), '00', 0, g.dis_order)
+                from geocode g
+                where g.code = geocode)  as dis_order
+                ,
+                sum(case when chaobz&gt; 0 then chaobz else 0 end) as chaobz,
+                sum(case when chaozs&gt; 0 then chaozs else 0 end) as chaozs,
+                sum(case when chaojg&gt; 0 then chaojg else 0 end)  as chaojg
+
+
+                from (select
+                g.code as  geocode,
+                decode(jgtype,
+                'local',
+                '主管部门',
+                'sy',
+                '事业单位',
+                'lo_next',
+                '下设机构',
+                '街道乡镇') as jgsy_type,
+                (synsjgs - pznsjgs) as chaojg,
+                (case
+                when jgtype = 'sy' then
+                (qebk_zz + cebt_zz + jfzl_zz + ga_zz + jcy_zz + fy_zz +
+                sf_zz + aq_zz) - (qebk_bz + cebt_bz + jfzl_bz + ga_bz +
+                jcy_bz + fy_bz + sf_bz + aq_bz)
+                else
+                (qebk_zz + cebt_zz + jfzl_zz + dzq_zz + ga_zz + jcy_zz +
+                fy_zz + sf_zz + aq_zz) -
+                (qebk_bz + cebt_bz + jfzl_bz + dzq_bz + ga_bz + jcy_bz +
+                fy_bz + sf_bz + aq_bz)
+                end) chaobz,
+                (l_r_l1_nu - l_a_l1_nu) as chaozs
+                from geocode g left join v_bzzz v  on g.code= v.geocode where geocode like #{depcode}  ) where  chaobz!=0 or chaozs!=0 or chaojg!=0
+                group by geocode
+                order by geocode
+            </otherwise>
+        </choose>
+
 
     </select>
 
@@ -57,7 +103,7 @@
         connect BY LEVEL &lt;= 31 )
 
                and j.dep_code like #{depcode}
-               AND j.dep_code != #{code}
+
 
     </select>
 

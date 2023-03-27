@@ -47,7 +47,7 @@ public class WtyjServiceImpl implements WtyjService {
             despList = (List<Ywtjg>) o;
         } else {
             if (depcode != null && depcode.indexOf("__") != -1) {
-
+            depcode="36%";
             } else {
                 code = depcode.replace("%", "00");
             }
