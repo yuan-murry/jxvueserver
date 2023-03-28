@@ -17,9 +17,8 @@
 
 
             case
-            WHEN (NVL((sum(SBJZZBZ) + sum(SBJFZBZ) + sum(TJJZZBZ) + sum(TJJFZBZ) + sum(XCJZZBZ) + sum(XCJFZBZ) +
-            sum(XKJZZBZ)
-            + sum(XKJFZBZ) + sum(GJZZBZ) + sum(GJFZBZ) + sum(WDJBZS) + sum(QTBZS)), 0))!=0 THEN ceil(round(
+            WHEN (NVL(sum(DZQ_BZ),
+            0))!=0 THEN ceil(round(
             (sum(SBJZZBZ) + sum(SBJFZBZ) + sum(TJJZZBZ) + sum(TJJFZBZ) + sum(XCJZZBZ) +
             sum(XCJFZBZ) + sum(XKJZZBZ) + sum(XKJFZBZ) + sum(GJZZBZ) + sum(GJFZBZ) + sum(WDJBZS) +
             sum(QTBZS)) /
@@ -32,9 +31,7 @@
 
 
             case
-            WHEN (NVL((sum(SYSBJZZBZ) + sum(SYSBJFZBZ) + sum(SYTJJZZBZ) + sum(SYTJJFZBZ) + sum(SYXCJZZBZ) +
-            sum(SYXCJFZBZ) + sum(SYXKJZZBZ)
-            + sum(SYXKJFZBZ) + sum(SYGJZZBZ) + sum(SYGJFZBZ) + sum(SYWDJBZS) + sum(SYQTBZS)),
+            WHEN (NVL(sum(QEBK_BZ + CEBT_BZ + JFZL_BZ),
             0))!=0 THEN ceil(round(
             (sum(SYSBJZZBZ) + sum(SYSBJFZBZ) + sum(SYTJJZZBZ) + sum(SYTJJFZBZ) + sum(SYXCJZZBZ) +
             sum(SYXCJFZBZ) + sum(SYXKJZZBZ) + sum(SYXKJFZBZ) + sum(SYGJZZBZ) + sum(SYGJFZBZ) +
