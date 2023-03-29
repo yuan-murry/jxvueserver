@@ -97,11 +97,15 @@ public class FreshRedisCache {
                 compareService.selectSybzpzbd(dep);
                 compareService.selectLdzs(dep);
                 compareService.selectXzbzpzbd(dep);
+                compareService.selectRkBzZb(dep);
             }
             reurnMsg.append("compare页面接口刷新完毕<br>");
             for (String dep : depArrAnalyse) {
                 wtyjService.selectCbz(dep);
                 wtyjService.selectYwtjg(dep);
+                wtyjService.selectAzwtlx(dep);
+                wtyjService.selectAzzgfs(dep);
+                wtyjService.selectYwttz(dep);
             }
             reurnMsg.append("wtyj页面接口刷新完毕<br>");
             for (String dep : depArrBzzy) {

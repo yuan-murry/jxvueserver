@@ -692,4 +692,155 @@
         </choose>
 
     </select>
+
+
+    <select id="selectRkBzZb" resultType="com.gxzh.jxvueserver.entity.Rkbz" parameterType="java.lang.String">
+        <choose>
+        <when test="depcode.length()==3">
+            select substr(geocode,0,4)||'00'   code,
+            decode((substr(geocode,0,4)||'00'),#{code},(select desp from geocode g where g.code = (substr(geocode,0,4)||'00'))||'(本级)',(select desp from geocode g where g.code = (substr(geocode,0,4)||'00'))) as desp,
+            (select decode(substr(code, 5, 2), '00', 0, g.dis_order)
+            from geocode g
+            where g.code = substr(geocode,0,4)||'00')                 dis_order,
+            nvl(sum(population), 0)                population,
+            nvl(sum(xz_bz), 0)                      xzbz,
+            nvl(sum(QEBK_BZ + CEBT_BZ + JFZL_BZ), 0) sybz
+
+            from
+
+            (
+
+            select rs.geocode as geocode,rs.jgtype as jgtype,geo.population as population, rs.xz_bz as xz_bz,rs.QEBK_BZ as QEBK_BZ,
+            rs.CEBT_BZ as CEBT_BZ,rs.JFZL_BZ as JFZL_BZ
+
+
+            from  (
+            select geocode,
+            a.jgtype as jgtype,
+            xz_bz    as xz_bz,
+            qebk_bz   as QEBK_BZ,
+            cebt_bz   as CEBT_BZ,
+            jfzl_bz   as JFZL_BZ
+
+
+            from (select d.code   as                               geocode,
+            decode(t.jgtype, 'jdxz', 'local', jgtype) jgtype,
+            t.dzq_bz+t.ga_bz+t.jcy_bz+t.fy_bz+t.sf_bz  as   xz_bz,
+
+            decode(t.jgtype, 'sy', t.qebk_bz, 0)      qebk_bz,
+            decode(t.jgtype, 'sy', t.cebt_bz, 0)      cebt_bz,
+            decode(t.jgtype, 'sy', t.jfzl_bz, 0)      jfzl_bz
+
+
+            from geocode d
+            left join V_bzzz t on d.code = t.geocode and t.jgtype != 'sy'
+            where d.code like #{depcode}
+
+            ) a
+
+
+            union all
+            select geocode,
+            a.jgtype as jgtype,
+            xz_bz    as DZQ_BZ,
+            qebk_bz   as QEBK_BZ,
+            cebt_bz   as CEBT_BZ,
+            jfzl_bz   as JFZL_BZ
+            from (
+            select d.code as                            geocode,
+            t.jgtype,
+            0      as                            xz_bz,
+
+            decode(t.jgtype, 'sy', t.qebk_bz, 0) qebk_bz,
+            decode(t.jgtype, 'sy', t.cebt_bz, 0) cebt_bz,
+            decode(t.jgtype, 'sy', t.jfzl_bz, 0) jfzl_bz
+
+
+            from geocode d
+            left join V_bzzz t on d.code = t.geocode and t.jgtype = 'sy'
+            where d.code like #{depcode}
+
+            ) a
+            ) rs  left join geo_situation geo on geo.depcode=rs.geocode) res
+            group by substr(geocode,0,4)
+
+            order by substr(geocode,0,4)
+
+        </when>
+        <otherwise>
+            select geocode   code,
+            decode(geocode,#{code},(select desp from geocode g where g.code = geocode)||'(本级)',(select desp from geocode g where g.code = geocode)) as desp,
+            (select decode(substr(code, 5, 2), '00', 0, g.dis_order)
+            from geocode g
+            where g.code = geocode )              dis_order,
+            nvl(sum(population), 0)                population,
+            nvl(sum(xz_bz), 0)                      xzbz,
+            nvl(sum(QEBK_BZ + CEBT_BZ + JFZL_BZ), 0) sybz
+
+            from
+
+            (
+
+            select rs.geocode as geocode,rs.jgtype as jgtype,geo.population as population, rs.xz_bz as xz_bz,rs.QEBK_BZ as QEBK_BZ,
+            rs.CEBT_BZ as CEBT_BZ,rs.JFZL_BZ as JFZL_BZ
+
+
+            from  (
+            select geocode,
+            a.jgtype as jgtype,
+            xz_bz    as xz_bz,
+            qebk_bz   as QEBK_BZ,
+            cebt_bz   as CEBT_BZ,
+            jfzl_bz   as JFZL_BZ
+
+
+            from (select d.code   as                               geocode,
+            decode(t.jgtype, 'jdxz', 'local', jgtype) jgtype,
+            t.dzq_bz+t.ga_bz+t.jcy_bz+t.fy_bz+t.sf_bz  as   xz_bz,
+
+            decode(t.jgtype, 'sy', t.qebk_bz, 0)      qebk_bz,
+            decode(t.jgtype, 'sy', t.cebt_bz, 0)      cebt_bz,
+            decode(t.jgtype, 'sy', t.jfzl_bz, 0)      jfzl_bz
+
+
+            from geocode d
+            left join V_bzzz t on d.code = t.geocode and t.jgtype != 'sy'
+            where d.code like #{depcode}
+
+            ) a
+
+
+            union all
+            select geocode,
+            a.jgtype as jgtype,
+            xz_bz    as DZQ_BZ,
+            qebk_bz   as QEBK_BZ,
+            cebt_bz   as CEBT_BZ,
+            jfzl_bz   as JFZL_BZ
+            from (
+            select d.code as                            geocode,
+            t.jgtype,
+            0      as                            xz_bz,
+
+            decode(t.jgtype, 'sy', t.qebk_bz, 0) qebk_bz,
+            decode(t.jgtype, 'sy', t.cebt_bz, 0) cebt_bz,
+            decode(t.jgtype, 'sy', t.jfzl_bz, 0) jfzl_bz
+
+
+            from geocode d
+            left join V_bzzz t on d.code = t.geocode and t.jgtype = 'sy'
+            where d.code like #{depcode}
+
+            ) a
+            ) rs  left join geo_situation geo on geo.depcode=rs.geocode) res
+            group by geocode
+            order by geocode
+
+
+        </otherwise>
+        </choose>
+
+
+    </select>
+
 </mapper>

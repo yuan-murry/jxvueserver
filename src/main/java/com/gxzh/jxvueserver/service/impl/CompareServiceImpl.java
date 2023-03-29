@@ -2,6 +2,7 @@ package com.gxzh.jxvueserver.service.impl;
 
 
 import com.gxzh.jxvueserver.entity.Ldzs;
+import com.gxzh.jxvueserver.entity.Rkbz;
 import com.gxzh.jxvueserver.entity.Sybzpzbd;
 import com.gxzh.jxvueserver.entity.Xzbzpzbd;
 import com.gxzh.jxvueserver.mapper.CompareMapper;
@@ -74,6 +75,25 @@ public class CompareServiceImpl implements CompareService {
             }
             despList= compareMapper.selectSybzpzbd(depcode,code);
             redisTemplate.opsForValue().set(vuejx + "selectSybzpzbd:" + depcode, despList);
+        }
+        return despList;
+    }
+
+
+    public List<Rkbz> selectRkBzZb(String depcode){
+        String code ="360000";
+        List<Rkbz> despList=null;
+        Object o = redisTemplate.opsForValue().get(vuejx + "selectRkBzZb:" + depcode);
+        if (o != null) {
+            despList = (List<Rkbz>) o;
+        } else {
+            if(depcode!=null && depcode.indexOf("__")!=-1){
+                depcode="36%";
+            }else{
+                code=depcode.replace("%","00");
+            }
+            despList= compareMapper.selectRkBzZb(depcode,code);
+            redisTemplate.opsForValue().set(vuejx + "selectRkBzZb:" + depcode, despList);
         }
         return despList;
     }

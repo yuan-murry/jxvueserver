@@ -1,8 +1,7 @@
 package com.gxzh.jxvueserver.service.impl;
 
 import com.gxzh.jxvueserver.dto.WtyjJgsy;
-import com.gxzh.jxvueserver.entity.Cbz;
-import com.gxzh.jxvueserver.entity.Ywtjg;
+import com.gxzh.jxvueserver.entity.*;
 import com.gxzh.jxvueserver.mapper.WtyjMapper;
 import com.gxzh.jxvueserver.service.WtyjService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +52,63 @@ public class WtyjServiceImpl implements WtyjService {
             }
             despList = wtyjMapper.selectYwtjg(depcode, code);
             redisTemplate.opsForValue().set(vuejx + "selectYwtjg:" + depcode, despList);
+        }
+        return despList;
+    }
+
+    @Override
+    public List<Azwtlx> selectAzwtlx(String depcode) {
+        String code = "360000";
+        List<Azwtlx> despList = null;
+        Object o = redisTemplate.opsForValue().get(vuejx + "selectAzwtlx:" + depcode);
+        if (o != null) {
+            despList = (List<Azwtlx>) o;
+        } else {
+            if (depcode != null && depcode.indexOf("__") != -1) {
+                depcode="36%";
+            } else {
+                code = depcode.replace("%", "00");
+            }
+            despList = wtyjMapper.selectAzwtlx(depcode, code);
+            redisTemplate.opsForValue().set(vuejx + "selectAzwtlx:" + depcode, despList);
+        }
+        return despList;
+    }
+
+    @Override
+    public List<Azzgfs> selectAzzgfs(String depcode) {
+        String code = "360000";
+        List<Azzgfs> despList = null;
+        Object o = redisTemplate.opsForValue().get(vuejx + "selectAzzgfs:" + depcode);
+        if (o != null) {
+            despList = (List<Azzgfs>) o;
+        } else {
+            if (depcode != null && depcode.indexOf("__") != -1) {
+                depcode="36%";
+            } else {
+                code = depcode.replace("%", "00");
+            }
+            despList = wtyjMapper.selectAzzgfs(depcode, code);
+            redisTemplate.opsForValue().set(vuejx + "selectAzzgfs:" + depcode, despList);
+        }
+        return despList;
+    }
+
+    @Override
+    public List<Ywttz> selectYwttz(String depcode) {
+        String code = "360000";
+        List<Ywttz> despList = null;
+        Object o = redisTemplate.opsForValue().get(vuejx + "selectYwttz:" + depcode);
+        if (o != null) {
+            despList = (List<Ywttz>) o;
+        } else {
+            if (depcode != null && depcode.indexOf("__") != -1) {
+                depcode="36%";
+            } else {
+                code = depcode.replace("%", "00");
+            }
+            despList = wtyjMapper.selectYwttz(depcode, code);
+            redisTemplate.opsForValue().set(vuejx + "selectYwttz:" + depcode, despList);
         }
         return despList;
     }

@@ -107,6 +107,43 @@
 
     </select>
 
+
+    <select id="selectAzwtlx" resultType="com.gxzh.jxvueserver.entity.Azwtlx" parameterType="java.lang.String">
+        select
+            sum(jgsz) as jgsz,sum(rybz) as rybz,sum(ldzspb) as ldzspb,sum(bzfals) as bzfals,sum(qt) as qt from GEO_AZWTLX t
+        where depcode like #{depcode}
+
+    </select>
+
+
+    <select id="selectAzzgfs" resultType="com.gxzh.jxvueserver.entity.Azzgfs" parameterType="java.lang.String">
+
+        select sum(zdzg) as zdzg,sum(bbzg) as bbzg,sum(zzzg) as zzzg from geo_azzgfs where depcode like #{depcode}
+
+    </select>
+
+    <select id="selectYwttz" resultType="com.gxzh.jxvueserver.entity.Ywttz" parameterType="java.lang.String">
+        select nowmonth as nowmonth,nvl(m.xzqk,0) as xzqk,nvl(m.xhqk,0) as xhqk
+        from (select to_char((add_months(sysdate - numtoyminterval(1, 'YEAR'), level)), 'yyyy/mm') nowmonth
+              FROM DUAL connect BY LEVEL &lt;= 12)
+            month left join
+        (select to_char(y.time, 'yyyy/mm') as time,
+       sum(y.xzqk) as xzqk,
+       sum(y.xhqk) as xhqk
+        from
+        geo_ywttz y
+        where  depcode like #{depcode}
+
+            group by to_char(y.time
+           , 'yyyy/mm')) m
+        on month.nowmonth = m.time
+        ORDER BY month.nowmonth
+
+
+
+    </select>
+
+
     <select id="getextraPieChild" resultType="com.gxzh.jxvueserver.dto.WtyjJgsy">
         select jgsy_name, jgsy_type, dep_name
         <choose>

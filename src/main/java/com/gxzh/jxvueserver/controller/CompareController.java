@@ -2,6 +2,7 @@ package com.gxzh.jxvueserver.controller;
 
 import com.gxzh.jxvueserver.dto.Res;
 import com.gxzh.jxvueserver.entity.Ldzs;
+import com.gxzh.jxvueserver.entity.Rkbz;
 import com.gxzh.jxvueserver.entity.Sybzpzbd;
 import com.gxzh.jxvueserver.entity.Xzbzpzbd;
 import com.gxzh.jxvueserver.service.CompareService;
@@ -63,5 +64,16 @@ public class CompareController {
         return Res.ok(despList);
     }
 
+    @RequestMapping("/selectRkBzZb")
+    public Res<?> selectRkBzZb(String depcode){
+        List<Rkbz> despList=null;
+
+        if(depcode!=null) {
+            despList  = compareService.selectRkBzZb
+                    (depcode);
+
+        }
+        return Res.ok(despList);
+    }
 
 }

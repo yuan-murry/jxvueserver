@@ -62,7 +62,7 @@
                    bill_check_detail bcd
               where bc.bill_state = '2'
                 and bc.bill_valid = '1'
-                and bc.bill_no = bcd.bill_no
+                and bc.bill_no = bcd.bill_no and bc.jgsy_code like '36%'
               group by substr(bc.jgsy_code, 1, 4)
 
               union all
@@ -91,7 +91,7 @@
                              else
                                  0
                          end) sy_dfp
-              from V_TONGJI_DFPBZ_tjb t
+              from V_TONGJI_DFPBZ_tjb t where t.dep_code like '36%'
               group by t.dep_code)
         group by substr(geocode, 1, 4)
         order by dis_order
