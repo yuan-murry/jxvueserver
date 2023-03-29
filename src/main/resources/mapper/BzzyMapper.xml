@@ -4,7 +4,7 @@
 <mapper namespace="com.gxzh.jxvueserver.mapper.BzzyMapper">
     <select id="getXzbzpie_sheng" resultType="com.gxzh.jxvueserver.dto.Gdbz">
         select substr(geocode, 1, 4) || '00'                  code,
-               (select desp
+               (select decode(g.code, '360000', '江西省（本级）', g.desp)
                 from geocode g
                 where g.code = substr(geocode, 1, 4) || '00') desp,
                (select decode(substr(code, 3, 4), '0000', 0, g.dis_order)
@@ -93,14 +93,13 @@
                          end) sy_dfp
               from V_TONGJI_DFPBZ_tjb t
               group by t.dep_code)
-        where geocode != '360000'
         group by substr(geocode, 1, 4)
         order by dis_order
     </select>
 
     <select id="getXzbzpie_shi" resultType="com.gxzh.jxvueserver.dto.Gdbz">
         select geocode                                        code,
-               (select desp
+               (select decode(substr(g.code, 5, 2), '00', g.desp || '（本级）', g.desp)
                 from geocode g
                 where g.code = geocode)                       desp,
                (select decode(substr(code, 3, 4), '0000', 0, g.dis_order)
@@ -190,7 +189,6 @@
               from V_TONGJI_DFPBZ_tjb t
               group by t.dep_code)
         where geocode like #{depCode}
-          and geocode != #{allCode}
         group by geocode
         order by dis_order
 
@@ -198,7 +196,7 @@
     </select>
 
     <select id="getLdzspie_sheng" resultType="com.gxzh.jxvueserver.dto.BzzyLdzs">
-        select g.desp                                                     desp,
+        select decode(g.code, '360000', g.desp || '（本级）', g.desp)         desp,
                decode(length(substr(ageocode, 1, 4)),
                       4,
                       decode(substr(ageocode, 3, 4), '0000', 0, dis_order),
@@ -221,7 +219,6 @@
                    v_bzzz j
               where b.jgsy_code = j.jgsy_code
                 and j.geocode like '36%'
-                and j.geocode!='360000'
               group by substr(geocode, 1, 4)) a
                  left join geocode g
                            on a.ageocode = g.code
@@ -229,11 +226,11 @@
     </select>
 
     <select id="getLdzspie_shi" resultType="com.gxzh.jxvueserver.dto.BzzyLdzs">
-        select g.desp                                                     desp,
+        select decode(substr(g.code, 5, 2), '00', g.desp || '（本级）', g.desp) desp,
                decode(length(substr(ageocode, 1, 6)),
                       4,
                       decode(substr(ageocode, 3, 4), '0000', 0, dis_order),
-                      decode(substr(ageocode, 5, 2), '00', 0, dis_order)) dis_order,
+                      decode(substr(ageocode, 5, 2), '00', 0, dis_order))   dis_order,
                a.*
         from (select decode(length(substr(geocode, 1, 6)),
                             4,
@@ -250,7 +247,6 @@
                    v_bzzz j
               where b.jgsy_code = j.jgsy_code
                 and j.geocode like #{depCode}
-                and j.geocode!=#{allCode}
               group by substr(geocode, 1, 6)) a
                  left join geocode g
                            on a.ageocode = g.code

@@ -8,7 +8,9 @@
         select sum(zzkbs) zzkbs,sum(zzkbzzs) zzkbzzs from sy where jgsy_code like #{depCode} and jgsy_states='1'
     </select>
     <select id="getZzbzAllot_sheng" resultType="com.gxzh.jxvueserver.dto.ZzbzAllot">
-        select (select desp from geocode where code = substr(geo_code, 0, 4) || '00') desp,
+        select (select decode(code, '360000', '江西省（本级）', desp) desp
+                from geocode
+                where code = substr(geo_code, 0, 4) || '00') desp,
                sum(bzzl) bzzl,
                sum(zzkbs) zzkbs,
                sum(zzkbzzs) zzkbzzs
@@ -21,11 +23,10 @@
               from sy
               where jgsy_states = '1'
               group by geo_code)
-        where geo_code != '360000'
         group by substr(geo_code, 0, 4)
     </select>
     <select id="getZzbzAllot_shi" resultType="com.gxzh.jxvueserver.dto.ZzbzAllot">
-        select (select desp from geocode where code = geo_code) desp,
+        select (select decode(substr(code, 5, 2), '00', desp || '（本级）', desp) from geocode where code = geo_code) desp,
                sum(bzzl) bzzl,
                sum(zzkbs) zzkbs,
                sum(zzkbzzs) zzkbzzs
@@ -38,8 +39,7 @@
               from sy
               where jgsy_states = '1'
               group by geo_code)
-        where geo_code != #{allCode}
-   and geo_code like #{depCode}
+        where geo_code like #{depCode}
         group by geo_code
 
     </select>
