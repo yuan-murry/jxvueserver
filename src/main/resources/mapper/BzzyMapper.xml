@@ -94,7 +94,7 @@
               from V_TONGJI_DFPBZ_tjb t where t.dep_code like '36%'
               group by t.dep_code)
         group by substr(geocode, 1, 4)
-        order by dis_order
+        order by substr(geocode, 1, 4)
     </select>
 
     <select id="getXzbzpie_shi" resultType="com.gxzh.jxvueserver.dto.Gdbz">
@@ -190,7 +190,7 @@
               group by t.dep_code)
         where geocode like #{depCode}
         group by geocode
-        order by dis_order
+        order by geocode
 
 
     </select>
@@ -222,7 +222,7 @@
               group by substr(geocode, 1, 4)) a
                  left join geocode g
                            on a.ageocode = g.code
-        order by dis_order nulls first
+        order by substr(geocode, 1, 4) nulls first
     </select>
 
     <select id="getLdzspie_shi" resultType="com.gxzh.jxvueserver.dto.BzzyLdzs">
@@ -250,7 +250,7 @@
               group by substr(geocode, 1, 6)) a
                  left join geocode g
                            on a.ageocode = g.code
-        order by dis_order nulls first
+        order by ageocode nulls first
 
     </select>
 
