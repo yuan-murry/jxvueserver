@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gxzh.jxvueserver.mapper.HyflMapper">
+
+
+    <select id="getInsdstry" resultType="com.gxzh.jxvueserver.dto.BzzyIndstry">
+        select (select substr(hyfl_name, 0, 2) || substr(hyfl_code, 0, 2) from hyfl where hyfl_code = hylb) hyname,
+               bzs,
+               zzs
+        from (select substr(h.hyfl_code, 0, 2) || '0000'   hylb,
+                     nvl(sum(qebkbzrs + cebtbzrs + jfzlbzrs),0) as bzs,
+                     nvl(sum(qebksyry + cebtsyry + jfzlsyry),0) as zzs
+              from hyfl h left join sy s on h.hyfl_code = s.hylb
+                  and s.jgsy_states = '1'
+                  and s.jgsy_code like #{depCode} where h.hyfl_code!='000000'
+              group by substr(h.hyfl_code, 0, 2)
+             )
+        order by hylb asc
+
+    </select>
+
+
+    <select id="getInsdstryChild" resultType="com.gxzh.jxvueserver.dto.BzzyIndstry">
+        select (select hyfl_name from hyfl where hyfl_code = hylb) hyname, bzs, zzs
+        from (select substr(hylb, 0, 4) || '00'             hylb,
+                     sum(qebkbzrs + cebtbzrs + jfzlbzrs) as bzs,
+                     sum(qebksyry + cebtsyry + jfzlsyry) as zzs
+              from sy
+              where jgsy_states = '1'
+                and jgsy_code like #{depCode}
+                and hylb like #{flCode}
+              group by substr(hylb, 0, 4))
+        order by bzs desc
+    </select>
+
+</mapper>

@@ -15,8 +15,8 @@
                 ,
                 sum(case when chaobz&gt; 0 then chaobz else 0 end) as chaobz,
                 sum(case when chaozs&gt; 0 then chaozs else 0 end) as chaozs,
-                sum(case when chaojg&gt; 0 then chaojg else 0 end)  as chaojg
-
+                sum(case when chaojg&gt; 0 then chaojg else 0 end)  as chaojg,
+                (select sum(wttzjgs) from geo_wttzjg where depcode like substr(geocode,0,4)||'%') as wttz
 
                 from (select
                 g.code as  geocode,
@@ -47,15 +47,15 @@
             </when>
             <otherwise>
                 select
-                decode(geocode,'360100',(select desp from geocode g where g.code = geocode)||'(本级)',(select desp from geocode g where g.code = geocode)) as desp,
+                decode(geocode,#{code},(select desp from geocode g where g.code = geocode)||'(本级)',(select desp from geocode g where g.code = geocode)) as desp,
                 (select decode(substr(code, 5, 2), '00', 0, g.dis_order)
                 from geocode g
                 where g.code = geocode)  as dis_order
                 ,
                 sum(case when chaobz&gt; 0 then chaobz else 0 end) as chaobz,
                 sum(case when chaozs&gt; 0 then chaozs else 0 end) as chaozs,
-                sum(case when chaojg&gt; 0 then chaojg else 0 end)  as chaojg
-
+                sum(case when chaojg&gt; 0 then chaojg else 0 end)  as chaojg,
+                (select sum(wttzjgs) from geo_wttzjg where depcode = geocode) as wttz
 
                 from (select
                 g.code as  geocode,
