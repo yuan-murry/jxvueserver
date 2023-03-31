@@ -16,7 +16,7 @@
                 sum(case when chaobz&gt; 0 then chaobz else 0 end) as chaobz,
                 sum(case when chaozs&gt; 0 then chaozs else 0 end) as chaozs,
                 sum(case when chaojg&gt; 0 then chaojg else 0 end)  as chaojg,
-                (select sum(wttzjgs) from geo_wttzjg where depcode like substr(geocode,0,4)||'%') as wttz
+                (select nvl(sum(wttzjgs),0) from geo_wttzjg where depcode like substr(geocode,0,4)||'%') as wttz
 
                 from (select
                 g.code as  geocode,
@@ -110,7 +110,7 @@
 
     <select id="selectAzwtlx" resultType="com.gxzh.jxvueserver.entity.Azwtlx" parameterType="java.lang.String">
         select
-            sum(jgsz) as jgsz,sum(rybz) as rybz,sum(ldzspb) as ldzspb,sum(bzfals) as bzfals,sum(qt) as qt from GEO_AZWTLX t
+            nvl(sum(jgsz),0) as jgsz,nvl(sum(rybz),0) as rybz,nvl(sum(ldzspb),0) as ldzspb,nvl(sum(bzfals),0) as bzfals,nvl(sum(qt),0) as qt from GEO_AZWTLX t
         where depcode like #{depcode}
 
     </select>
@@ -118,7 +118,7 @@
 
     <select id="selectAzzgfs" resultType="com.gxzh.jxvueserver.entity.Azzgfs" parameterType="java.lang.String">
 
-        select sum(zdzg) as zdzg,sum(bbzg) as bbzg,sum(zzzg) as zzzg from geo_azzgfs where depcode like #{depcode}
+        select nvl(sum(zdzg),0) as zdzg,nvl(sum(bbzg),0) as bbzg,nvl(sum(zzzg),0) as zzzg from geo_azzgfs where depcode like #{depcode}
 
     </select>
 
