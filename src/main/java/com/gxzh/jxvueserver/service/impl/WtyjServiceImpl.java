@@ -22,15 +22,16 @@ public class WtyjServiceImpl implements WtyjService {
     public List<Cbz> selectCbz(String depcode) {
         String code = "360000";
         List<Cbz> despList = null;
+        if (depcode != null && depcode.indexOf("__") != -1) {
+            depcode = "36%";
+        } else {
+            code = depcode.replace("%", "00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectCbz:" + depcode);
         if (o != null) {
             despList = (List<Cbz>) o;
         } else {
-            if (depcode != null && depcode.indexOf("__") != -1) {
-                depcode = "36%";
-            } else {
-                code = depcode.replace("%", "00");
-            }
+
             despList = wtyjMapper.selectCbz(depcode, code);
             redisTemplate.opsForValue().set(vuejx + "selectCbz:" + depcode, despList);
         }
@@ -41,15 +42,16 @@ public class WtyjServiceImpl implements WtyjService {
     public List<Ywtjg> selectYwtjg(String depcode) {
         String code = "360000";
         List<Ywtjg> despList = null;
+        if (depcode != null && depcode.indexOf("__") != -1) {
+            depcode="36%";
+        } else {
+            code = depcode.replace("%", "00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectYwtjg:" + depcode);
         if (o != null) {
             despList = (List<Ywtjg>) o;
         } else {
-            if (depcode != null && depcode.indexOf("__") != -1) {
-            depcode="36%";
-            } else {
-                code = depcode.replace("%", "00");
-            }
+
             despList = wtyjMapper.selectYwtjg(depcode, code);
             redisTemplate.opsForValue().set(vuejx + "selectYwtjg:" + depcode, despList);
         }
@@ -60,15 +62,16 @@ public class WtyjServiceImpl implements WtyjService {
     public List<Azwtlx> selectAzwtlx(String depcode) {
         String code = "360000";
         List<Azwtlx> despList = null;
+        if (depcode != null && depcode.indexOf("__") != -1) {
+            depcode="36%";
+        } else {
+            code = depcode.replace("%", "00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectAzwtlx:" + depcode);
         if (o != null) {
             despList = (List<Azwtlx>) o;
         } else {
-            if (depcode != null && depcode.indexOf("__") != -1) {
-                depcode="36%";
-            } else {
-                code = depcode.replace("%", "00");
-            }
+
             despList = wtyjMapper.selectAzwtlx(depcode, code);
             redisTemplate.opsForValue().set(vuejx + "selectAzwtlx:" + depcode, despList);
         }
@@ -79,15 +82,16 @@ public class WtyjServiceImpl implements WtyjService {
     public List<Azzgfs> selectAzzgfs(String depcode) {
         String code = "360000";
         List<Azzgfs> despList = null;
+        if (depcode != null && depcode.indexOf("__") != -1) {
+            depcode="36%";
+        } else {
+            code = depcode.replace("%", "00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectAzzgfs:" + depcode);
         if (o != null) {
             despList = (List<Azzgfs>) o;
         } else {
-            if (depcode != null && depcode.indexOf("__") != -1) {
-                depcode="36%";
-            } else {
-                code = depcode.replace("%", "00");
-            }
+
             despList = wtyjMapper.selectAzzgfs(depcode, code);
             redisTemplate.opsForValue().set(vuejx + "selectAzzgfs:" + depcode, despList);
         }
@@ -98,15 +102,16 @@ public class WtyjServiceImpl implements WtyjService {
     public List<Ywttz> selectYwttz(String depcode) {
         String code = "360000";
         List<Ywttz> despList = null;
+        if (depcode != null && depcode.indexOf("__") != -1) {
+            depcode="36%";
+        } else {
+            code = depcode.replace("%", "00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectYwttz:" + depcode);
         if (o != null) {
             despList = (List<Ywttz>) o;
         } else {
-            if (depcode != null && depcode.indexOf("__") != -1) {
-                depcode="36%";
-            } else {
-                code = depcode.replace("%", "00");
-            }
+
             despList = wtyjMapper.selectYwttz(depcode, code);
             redisTemplate.opsForValue().set(vuejx + "selectYwttz:" + depcode, despList);
         }

@@ -22,17 +22,17 @@ public class CreatenewServiceImpl implements CreatenewService {
 
     @Override
     public List<Createnew> selectCreatenew(String depcode) {
+        String code ="360000";
         List<Createnew> despList=null;
+        if(depcode!=null && depcode.indexOf("__")!=-1){
+            depcode="36%";
+        }else{
+            code=depcode.replace("%","00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectCreatenew:" + depcode);
         if (o != null) {
             despList = (List<Createnew>) o;
         } else {
-            String code ="360000";
-            if(depcode!=null && depcode.indexOf("__")!=-1){
-                depcode="36%";
-            }else{
-                code=depcode.replace("%","00");
-            }
             despList= createnewMapper.selectCreatenew(depcode,code);
             redisTemplate.opsForValue().set(vuejx + "selectCreatenew:" + depcode, despList);
         }

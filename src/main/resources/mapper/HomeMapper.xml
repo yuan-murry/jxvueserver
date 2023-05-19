@@ -80,36 +80,16 @@
     </select>
 
     <select id="selectXzLdzs" resultType="com.gxzh.jxvueserver.dto.Ldzs">
-        select sum((case
-                        when vv.ldzs + vv.bmldzzbz + vv.bmldfzbz + vv.bmqtldbz +
-                             vv.nsldzzbz + vv.nsldfzbz + vv.qtldzs + vv.nsldzzbz2 +
-                             vv.nsldfzbz2 + vv.nsldzzbz3 + vv.nsldfzbz3 >
-                             vv.sbjzzbz + vv.sbjfzbz + vv.tjjzzbz + vv.tjjfzbz + vv.xcjzzbz +
-                             vv.xcjfzbz + vv.xkjzzbz + vv.xkjfzbz + vv.gjzzbz + vv.gjfzbz +
-                             vv.wdjbzs + vv.qtbzs then
-                                vv.ldzs + vv.bmldzzbz + vv.bmldfzbz + vv.bmqtldbz + vv.nsldzzbz +
-                                vv.nsldfzbz + vv.qtldzs + vv.nsldzzbz2 + vv.nsldfzbz2 +
-                                vv.nsldzzbz3 + vv.nsldfzbz3
-                        else
+        select sum(
                                 vv.sbjzzbz + vv.sbjfzbz + vv.tjjzzbz + vv.tjjfzbz + vv.xcjzzbz +
                                 vv.xcjfzbz + vv.xkjzzbz + vv.xkjfzbz + vv.gjzzbz + vv.gjfzbz +
                                 vv.wdjbzs + vv.qtbzs
-            end))        ldbz,
-               sum((case
-                        when vv.ldrs + vv.bmldzzzz + vv.bmldfzzz + vv.bmqtldzz +
-                             vv.nsldzzzz + vv.nsldfzzz + vv.qtldzz + vv.nsldzzzz2 +
-                             vv.nsldfzzz2 + vv.nsldzzzz3 + vv.nsldfzzz3 >
-                             vv.sbjzzzz + vv.sbjfzzz + vv.tjjzzzz + vv.tjjfzzz + vv.xcjzzzz +
-                             vv.xcjfzzz + vv.xkjzzzz + vv.xkjfzzz + vv.gjzzzz + vv.gjfzzz +
-                             vv.wdjzzs + vv.qtzzs then
-                                vv.ldrs + vv.bmldzzzz + vv.bmldfzzz + vv.bmqtldzz + vv.nsldzzzz +
-                                vv.nsldfzzz + vv.qtldzz + vv.nsldzzzz2 + vv.nsldfzzz2 +
-                                vv.nsldzzzz3 + vv.nsldfzzz3
-                        else
+            )        ldbz,
+               sum(
                                 vv.sbjzzzz + vv.sbjfzzz + vv.tjjzzzz + vv.tjjfzzz + vv.xcjzzzz +
                                 vv.xcjfzzz + vv.xkjzzzz + vv.xkjfzzz + vv.gjzzzz + vv.gjfzzz +
                                 vv.wdjzzs + vv.qtzzs
-                   end)) ldzz
+                   ) ldzz
 
         from bmldzs vv
                  left join jgsy_common jc
@@ -121,36 +101,16 @@
     </select>
 
     <select id="selectSyLdzs" resultType="com.gxzh.jxvueserver.dto.Ldzs">
-        select sum((case
-                        when vv.bmldzzbz + vv.bmldfzbz + vv.bmqtldbz + vv.nsldzzbz +
-                             vv.nsldfzbz + vv.qtldzs + vv.nsldzzbz2 + vv.nsldfzbz2 +
-                             vv.nsldzzbz3 + vv.nsldfzbz3 >
-                             vv.sbjzzbz + vv.sbjfzbz + vv.tjjzzbz + vv.tjjfzbz + vv.xcjzzbz +
-                             vv.xcjfzbz + vv.xkjzzbz + vv.xkjfzbz + vv.gjzzbz + vv.gjfzbz +
-                             vv.wdjbzs + vv.qtbzs then
-                                vv.bmldzzbz + vv.bmldfzbz + vv.bmqtldbz + vv.nsldzzbz +
-                                vv.nsldfzbz + vv.qtldzs + vv.nsldzzbz2 + vv.nsldfzbz2 +
-                                vv.nsldzzbz3 + vv.nsldfzbz3
-                        else
+        select sum(
                                 vv.sbjzzbz + vv.sbjfzbz + vv.tjjzzbz + vv.tjjfzbz + vv.xcjzzbz +
                                 vv.xcjfzbz + vv.xkjzzbz + vv.xkjfzbz + vv.gjzzbz + vv.gjfzbz +
                                 vv.wdjbzs + vv.qtbzs
-            end))        ldbz,
-               sum((case
-                        when vv.bmldzzzz + vv.bmldfzzz + vv.bmqtldzz + vv.nsldzzzz +
-                             vv.nsldfzzz + vv.qtldzz + vv.nsldzzzz2 + vv.nsldfzzz2 +
-                             vv.nsldzzzz3 + vv.nsldfzzz3 >
-                             vv.sbjzzzz + vv.sbjfzzz + vv.tjjzzzz + vv.tjjfzzz + vv.xcjzzzz +
-                             vv.xcjfzzz + vv.xkjzzzz + vv.xkjfzzz + vv.gjzzzz + vv.gjfzzz +
-                             vv.wdjzzs + vv.qtzzs then
-                                vv.bmldzzzz + vv.bmldfzzz + vv.bmqtldzz + vv.nsldzzzz +
-                                vv.nsldfzzz + vv.qtldzz + vv.nsldzzzz2 + vv.nsldfzzz2 +
-                                vv.nsldzzzz3 + vv.nsldfzzz3
-                        else
+            )        ldbz,
+               sum(
                                 vv.sbjzzzz + vv.sbjfzzz + vv.tjjzzzz + vv.tjjfzzz + vv.xcjzzzz +
                                 vv.xcjfzzz + vv.xkjzzzz + vv.xkjfzzz + vv.gjzzzz + vv.gjfzzz +
                                 vv.wdjzzs + vv.qtzzs
-                   end)) ldzz
+                   ) ldzz
 
         from bmldzs vv
                  left join jgsy_common jc
@@ -170,6 +130,552 @@
         select *
         from geo_situation
         where depcode = #{depCode}
+    </select>
+
+    <select id="selectXzjgLdzsChild" resultType="com.gxzh.jxvueserver.dto.XzjgLdzsChild">
+        <choose>
+        <when test="ldzstype=='bz'">
+            select
+
+            '省部级正职数' as ldzsname,
+            sum(vv.sbjzzbz) as ldzscount
+            from bmldzs vv
+            left join jgsy_common jc
+            on jc.jgsy_code = vv.jgsy_code
+            where jc.jgsy_type in ('04', '06', '10')
+            and jc.jgsy_states = '1'
+            and jc.dep_code like #{depCode}
+            union all
+            select
+
+            '省部级副职数' as ldzsname,
+            sum(vv.sbjfzbz) as ldzscount
+            from bmldzs vv
+            left join jgsy_common jc
+            on jc.jgsy_code = vv.jgsy_code
+            where jc.jgsy_type in ('04', '06', '10')
+            and jc.jgsy_states = '1'
+            and jc.dep_code like #{depCode}
+            union all
+            select
+
+            '厅局级正职数' as ldzsname,
+            sum(vv.tjjzzbz) as ldzscount
+            from bmldzs vv
+            left join jgsy_common jc
+            on jc.jgsy_code = vv.jgsy_code
+            where jc.jgsy_type in ('04', '06', '10')
+            and jc.jgsy_states = '1'
+            and jc.dep_code like #{depCode}
+            union all
+            select
+
+            '厅局级副职数' as ldzsname,
+            sum(vv.tjjfzbz) as ldzscount
+            from bmldzs vv
+            left join jgsy_common jc
+            on jc.jgsy_code = vv.jgsy_code
+            where jc.jgsy_type in ('04', '06', '10')
+            and jc.jgsy_states = '1'
+            and jc.dep_code like #{depCode}
+            union all
+            select
+
+            '县处级正职数' as ldzsname,
+            sum(vv.xcjzzbz) as ldzscount
+            from bmldzs vv
+            left join jgsy_common jc
+            on jc.jgsy_code = vv.jgsy_code
+            where jc.jgsy_type in ('04', '06', '10')
+            and jc.jgsy_states = '1'
+            and jc.dep_code like #{depCode}
+            union all
+            select
+
+            '县处级副职数' as ldzsname,
+            sum(vv.xcjfzbz) as ldzscount
+            from bmldzs vv
+            left join jgsy_common jc
+            on jc.jgsy_code = vv.jgsy_code
+            where jc.jgsy_type in ('04', '06', '10')
+            and jc.jgsy_states = '1'
+            and jc.dep_code like #{depCode}
+            union all
+            select
+
+            '乡科级正职数' as ldzsname,
+            sum(vv.xkjzzbz) as ldzscount
+            from bmldzs vv
+            left join jgsy_common jc
+            on jc.jgsy_code = vv.jgsy_code
+            where jc.jgsy_type in ('04', '06', '10')
+            and jc.jgsy_states = '1'
+            and jc.dep_code like #{depCode}
+            union all
+            select
+
+            '乡科级副职数' as ldzsname,
+            sum(vv.xkjfzbz) as ldzscount
+            from bmldzs vv
+            left join jgsy_common jc
+            on jc.jgsy_code = vv.jgsy_code
+            where jc.jgsy_type in ('04', '06', '10')
+            and jc.jgsy_states = '1'
+            and jc.dep_code like #{depCode}
+            union all
+            select
+
+            '股级正职数' as ldzsname,
+            sum(vv.gjzzbz) as ldzscount
+            from bmldzs vv
+            left join jgsy_common jc
+            on jc.jgsy_code = vv.jgsy_code
+            where jc.jgsy_type in ('04', '06', '10')
+            and jc.jgsy_states = '1'
+            and jc.dep_code like #{depCode}
+            union all
+            select
+
+            '股级副职数' as ldzsname,
+            sum(vv.gjfzbz) as ldzscount
+            from bmldzs vv
+            left join jgsy_common jc
+            on jc.jgsy_code = vv.jgsy_code
+            where jc.jgsy_type in ('04', '06', '10')
+            and jc.jgsy_states = '1'
+            and jc.dep_code like #{depCode}
+            union all
+            select
+
+            '未定级领导职数' as ldzsname,
+            sum(vv.wdjbzs) as ldzscount
+            from bmldzs vv
+            left join jgsy_common jc
+            on jc.jgsy_code = vv.jgsy_code
+            where jc.jgsy_type in ('04', '06', '10')
+            and jc.jgsy_states = '1'
+            and jc.dep_code like #{depCode}
+            union all
+            select
+
+            '其他领导职数' as ldzsname,
+            sum(vv.qtbzs) as ldzscount
+            from bmldzs vv
+            left join jgsy_common jc
+            on jc.jgsy_code = vv.jgsy_code
+            where jc.jgsy_type in ('04', '06', '10')
+            and jc.jgsy_states = '1'
+            and jc.dep_code like #{depCode}
+        </when>
+<otherwise>
+    select
+
+    '省部级正职在职数' as ldzsname,
+    sum(vv.sbjzzzz) as ldzscount
+    from bmldzs vv
+    left join jgsy_common jc
+    on jc.jgsy_code = vv.jgsy_code
+    where jc.jgsy_type in ('04', '06', '10')
+    and jc.jgsy_states = '1'
+    and jc.dep_code like #{depCode}
+    union all
+    select
+
+    '省部级副职在职数' as ldzsname,
+    sum(vv.sbjfzzz) as ldzscount
+    from bmldzs vv
+    left join jgsy_common jc
+    on jc.jgsy_code = vv.jgsy_code
+    where jc.jgsy_type in ('04', '06', '10')
+    and jc.jgsy_states = '1'
+    and jc.dep_code like #{depCode}
+    union all
+    select
+
+    '厅局级正职在职数' as ldzsname,
+    sum(vv.tjjzzzz) as ldzscount
+    from bmldzs vv
+    left join jgsy_common jc
+    on jc.jgsy_code = vv.jgsy_code
+    where jc.jgsy_type in ('04', '06', '10')
+    and jc.jgsy_states = '1'
+    and jc.dep_code like #{depCode}
+    union all
+    select
+
+    '厅局级副职在职数' as ldzsname,
+    sum(vv.tjjfzzz) as ldzscount
+    from bmldzs vv
+    left join jgsy_common jc
+    on jc.jgsy_code = vv.jgsy_code
+    where jc.jgsy_type in ('04', '06', '10')
+    and jc.jgsy_states = '1'
+    and jc.dep_code like #{depCode}
+    union all
+    select
+
+    '县处级正职在职数' as ldzsname,
+    sum(vv.xcjzzzz) as ldzscount
+    from bmldzs vv
+    left join jgsy_common jc
+    on jc.jgsy_code = vv.jgsy_code
+    where jc.jgsy_type in ('04', '06', '10')
+    and jc.jgsy_states = '1'
+    and jc.dep_code like #{depCode}
+    union all
+    select
+
+    '县处级副职在职数' as ldzsname,
+    sum(vv.xcjfzzz) as ldzscount
+    from bmldzs vv
+    left join jgsy_common jc
+    on jc.jgsy_code = vv.jgsy_code
+    where jc.jgsy_type in ('04', '06', '10')
+    and jc.jgsy_states = '1'
+    and jc.dep_code like #{depCode}
+    union all
+    select
+
+    '乡科级正职在职数' as ldzsname,
+    sum(vv.xkjzzzz) as ldzscount
+    from bmldzs vv
+    left join jgsy_common jc
+    on jc.jgsy_code = vv.jgsy_code
+    where jc.jgsy_type in ('04', '06', '10')
+    and jc.jgsy_states = '1'
+    and jc.dep_code like #{depCode}
+    union all
+    select
+
+    '乡科级副职在职数' as ldzsname,
+    sum(vv.xkjfzzz) as ldzscount
+    from bmldzs vv
+    left join jgsy_common jc
+    on jc.jgsy_code = vv.jgsy_code
+    where jc.jgsy_type in ('04', '06', '10')
+    and jc.jgsy_states = '1'
+    and jc.dep_code like #{depCode}
+    union all
+    select
+
+    '股级正职在职数' as ldzsname,
+    sum(vv.gjzzzz) as ldzscount
+    from bmldzs vv
+    left join jgsy_common jc
+    on jc.jgsy_code = vv.jgsy_code
+    where jc.jgsy_type in ('04', '06', '10')
+    and jc.jgsy_states = '1'
+    and jc.dep_code like #{depCode}
+    union all
+    select
+
+    '股级副职在职数' as ldzsname,
+    sum(vv.gjfzzz) as ldzscount
+    from bmldzs vv
+    left join jgsy_common jc
+    on jc.jgsy_code = vv.jgsy_code
+    where jc.jgsy_type in ('04', '06', '10')
+    and jc.jgsy_states = '1'
+    and jc.dep_code like #{depCode}
+    union all
+    select
+
+    '未定级在职数' as ldzsname,
+    sum(vv.wdjzzs) as ldzscount
+    from bmldzs vv
+    left join jgsy_common jc
+    on jc.jgsy_code = vv.jgsy_code
+    where jc.jgsy_type in ('04', '06', '10')
+    and jc.jgsy_states = '1'
+    and jc.dep_code like #{depCode}
+    union all
+    select
+
+    '其他在职数' as ldzsname,
+    sum(vv.qtzzs) as ldzscount
+    from bmldzs vv
+    left join jgsy_common jc
+    on jc.jgsy_code = vv.jgsy_code
+    where jc.jgsy_type in ('04', '06', '10')
+    and jc.jgsy_states = '1'
+    and jc.dep_code like #{depCode}
+
+</otherwise>
+        </choose>
+
+    </select>
+
+    <select id="selectSyjgLdzsChild" resultType="com.gxzh.jxvueserver.dto.SyjgLdzsChild">
+        <choose>
+            <when test="ldzstype=='bz'">
+                select
+
+                '省部级正职数' as ldzsname,
+                sum(vv.sbjzzbz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '省部级副职数' as ldzsname,
+                sum(vv.sbjfzbz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '厅局级正职数' as ldzsname,
+                sum(vv.tjjzzbz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '厅局级副职数' as ldzsname,
+                sum(vv.tjjfzbz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '县处级正职数' as ldzsname,
+                sum(vv.xcjzzbz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '县处级副职数' as ldzsname,
+                sum(vv.xcjfzbz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '乡科级正职数' as ldzsname,
+                sum(vv.xkjzzbz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '乡科级副职数' as ldzsname,
+                sum(vv.xkjfzbz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '股级正职数' as ldzsname,
+                sum(vv.gjzzbz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '股级副职数' as ldzsname,
+                sum(vv.gjfzbz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '未定级领导职数' as ldzsname,
+                sum(vv.wdjbzs) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '其他领导职数' as ldzsname,
+                sum(vv.qtbzs) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+            </when>
+            <otherwise>
+                select
+
+                '省部级正职在职数' as ldzsname,
+                sum(vv.sbjzzzz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '省部级副职在职数' as ldzsname,
+                sum(vv.sbjfzzz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '厅局级正职在职数' as ldzsname,
+                sum(vv.tjjzzzz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '厅局级副职在职数' as ldzsname,
+                sum(vv.tjjfzzz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '县处级正职在职数' as ldzsname,
+                sum(vv.xcjzzzz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '县处级副职在职数' as ldzsname,
+                sum(vv.xcjfzzz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '乡科级正职在职数' as ldzsname,
+                sum(vv.xkjzzzz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '乡科级副职在职数' as ldzsname,
+                sum(vv.xkjfzzz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '股级正职在职数' as ldzsname,
+                sum(vv.gjzzzz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '股级副职在职数' as ldzsname,
+                sum(vv.gjfzzz) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '未定级在职数' as ldzsname,
+                sum(vv.wdjzzs) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+                union all
+                select
+
+                '其他在职数' as ldzsname,
+                sum(vv.qtzzs) as ldzscount
+                from bmldzs vv
+                left join jgsy_common jc
+                on jc.jgsy_code = vv.jgsy_code
+                where jc.jgsy_type = '12'
+                and jc.jgsy_states = '1'
+                and jc.dep_code like #{depCode}
+
+            </otherwise>
+        </choose>
+
     </select>
 
 </mapper>

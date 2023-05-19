@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/home")
@@ -49,6 +49,20 @@ public class HomeController {
     public Res<?> getGeoSituation(@RequestParam("depCode") String depCode) {
         GeoSituation geoSituation = this.homeService.getGeoSituation(depCode);
         return Res.ok(geoSituation);
+    }
+
+
+    @RequestMapping("/selectXzjgLdzsChild")
+    public Res<?> selectXzjgLdzsChild(@RequestParam("depCode") String depCode,@RequestParam("ldzstype") String ldzstype) {
+        List<XzjgLdzsChild> xzjgLdzsChildList = this.homeService.selectXzjgLdzsChild(depCode,ldzstype);
+        return Res.ok(xzjgLdzsChildList);
+    }
+
+
+    @RequestMapping("/selectSyjgLdzsChild")
+    public Res<?> selectSyjgLdzsChild(@RequestParam("depCode") String depCode,@RequestParam("ldzstype") String ldzstype) {
+        List<SyjgLdzsChild> syjgLdzsChildList = this.homeService.selectSyjgLdzsChild(depCode,ldzstype);
+        return Res.ok(syjgLdzsChildList);
     }
 
 }

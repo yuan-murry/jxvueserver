@@ -21,18 +21,18 @@ public class AnalyzeServiceImpl implements AnalyzeService {
     @Override
     public List<Ywlx> selectYwlx(String depcode) {
         //先请求redis
+        String code = "360000";
         List<Ywlx> despList = null;
+        if (depcode != null && depcode.indexOf("__") != -1) {
+            depcode="36%";
+        } else {
+            code = depcode.replace("%", "00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectYwlx:" + depcode);
         if (o != null) {
             despList = (List<Ywlx>) o;
         } else {
-            String code = "360000";
 
-            if (depcode != null && depcode.indexOf("__") != -1) {
-            depcode="36%";
-            } else {
-                code = depcode.replace("%", "00");
-            }
             despList = analyzeMapper.selectYwlx(depcode, code);
             redisTemplate.opsForValue().set(vuejx + "selectYwlx:" + depcode, despList);
         }
@@ -42,18 +42,20 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 
     @Override
     public List<Nywbl> selectNywbl(String depcode) {
+        String code = "360000";
         List<Nywbl> despList = null;
+        if (depcode != null && depcode.indexOf("__") != -1) {
+            depcode="36%";
+        } else {
+            code = depcode.replace("%", "00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectNywbl:" + depcode);
         if (o != null) {
             despList = (List<Nywbl>) o;
         } else {
-            String code = "360000";
 
-            if (depcode != null && depcode.indexOf("__") != -1) {
-                depcode="36%";
-            } else {
-                code = depcode.replace("%", "00");
-            }
+
+
             despList = analyzeMapper.selectNywbl(depcode, code);
             redisTemplate.opsForValue().set(vuejx + "selectNywbl:" + depcode, despList);
         }
@@ -62,18 +64,17 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 
     @Override
     public List<Yywbl> selectYywbl(String depcode) {
+        String code = "360000";
         List<Yywbl> despList = null;
+        if (depcode != null && depcode.indexOf("__") != -1) {
+            depcode="36%";
+        } else {
+            code = depcode.replace("%", "00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectYywbl:" + depcode);
         if (o != null) {
             despList = (List<Yywbl>) o;
         } else {
-            String code = "360000";
-
-            if (depcode != null && depcode.indexOf("__") != -1) {
-            depcode="36%";
-            } else {
-                code = depcode.replace("%", "00");
-            }
             despList = analyzeMapper.selectYywbl(depcode, code);
             redisTemplate.opsForValue().set(vuejx + "selectYywbl:" + depcode, despList);
         }
@@ -82,18 +83,18 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 
     @Override
     public List<Gdyw> selectGdyw(String depcode) {
+        String code = "360000";
         List<Gdyw> despList = null;
+
+        if (depcode != null && depcode.indexOf("__") != -1) {
+            depcode="36%";
+        } else {
+            code = depcode.replace("%", "00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectGdyw:" + depcode);
         if (o != null) {
             despList = (List<Gdyw>) o;
         } else {
-            String code = "360000";
-
-            if (depcode != null && depcode.indexOf("__") != -1) {
-            depcode="36%";
-            } else {
-                code = depcode.replace("%", "00");
-            }
             despList = analyzeMapper.selectGdyw(depcode, code);
             redisTemplate.opsForValue().set(vuejx + "selectGdyw:" + depcode, despList);
         }
@@ -104,18 +105,17 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 
     @Override
     public List<Jryw> selectJryw(String depcode) {
+        String code = "360000";
         List<Jryw> despList = null;
+        if (depcode != null && depcode.indexOf("__") != -1) {
+            depcode="36%";
+        } else {
+            code = depcode.replace("%", "00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectJryw:" + depcode);
         if (o != null) {
             despList = (List<Jryw>) o;
         } else {
-            String code = "360000";
-
-            if (depcode != null && depcode.indexOf("__") != -1) {
-            depcode="36%";
-            } else {
-                code = depcode.replace("%", "00");
-            }
             despList = analyzeMapper.selectJryw(depcode, code);
             redisTemplate.opsForValue().set(vuejx + "selectJryw:" + depcode, despList);
         }

@@ -78,6 +78,7 @@ public class FreshRedisCache {
                 homeService.selectXzjgpie(dep);
                 homeService.selectXzLdzs(dep);
                 homeService.selectSyLdzs(dep);
+
             }
             reurnMsg.append("home页面接口刷新完毕<br>");
             for (String dep : depArrAnalyse) {

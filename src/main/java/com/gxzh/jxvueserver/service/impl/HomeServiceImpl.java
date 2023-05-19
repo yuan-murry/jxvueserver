@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 public class HomeServiceImpl implements HomeService {
@@ -27,8 +30,9 @@ public class HomeServiceImpl implements HomeService {
             sydwPie = homeMapper.selectSydwpie(depCode);
             if (sydwPie == null) {
                 sydwPie = new SydwPie();
-                redisTemplate.opsForValue().set(vuejx + "sydwpie:" + depCode, sydwPie);
+
             }
+            redisTemplate.opsForValue().set(vuejx + "sydwpie:" + depCode, sydwPie);
         }
         return sydwPie;
     }
@@ -114,5 +118,41 @@ public class HomeServiceImpl implements HomeService {
             depCode = depCode.substring(0,depCode.length()-1)+"00";
         }
         return homeMapper.getGeoSituation(depCode);
+    }
+
+
+
+
+
+   public List<XzjgLdzsChild> selectXzjgLdzsChild(String depCode, String ldzstype){
+       Object o = redisTemplate.opsForValue().get(vuejx + "xzjgLdzsChild:" + depCode+ldzstype);
+       List<XzjgLdzsChild> xzjgLdzsChildList = null;
+       if (o != null) {
+           xzjgLdzsChildList = (List<XzjgLdzsChild>) o;
+       } else {
+
+           xzjgLdzsChildList = homeMapper.selectXzjgLdzsChild(depCode,ldzstype);
+           if (xzjgLdzsChildList == null) {
+               xzjgLdzsChildList = new ArrayList<>();
+           }
+           redisTemplate.opsForValue().set(vuejx + "xzjgLdzsChild:" + depCode+ldzstype, xzjgLdzsChildList);
+       }
+       return xzjgLdzsChildList;
+   }
+
+    public List<SyjgLdzsChild> selectSyjgLdzsChild(String depCode, String ldzstype){
+        Object o = redisTemplate.opsForValue().get(vuejx + "syjgLdzsChild:" + depCode+ldzstype);
+        List<SyjgLdzsChild> syjgLdzsChildList = null;
+        if (o != null) {
+            syjgLdzsChildList = (List<SyjgLdzsChild>) o;
+        } else {
+
+            syjgLdzsChildList = homeMapper.selectSyjgLdzsChild(depCode,ldzstype);
+            if (syjgLdzsChildList == null) {
+                syjgLdzsChildList = new ArrayList<>();
+            }
+            redisTemplate.opsForValue().set(vuejx + "syjgLdzsChild:" + depCode+ldzstype, syjgLdzsChildList);
+        }
+        return syjgLdzsChildList;
     }
 }

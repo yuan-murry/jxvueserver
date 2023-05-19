@@ -24,17 +24,17 @@ public class CompareServiceImpl implements CompareService {
 
 
     public List<Ldzs> selectLdzs(String depcode){
+        String code ="360000";
         List<Ldzs> despList=null;
+        if(depcode!=null && depcode.indexOf("__")!=-1){
+            depcode="36%";
+        }else{
+            code=depcode.replace("%","00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectLdzs:" + depcode);
         if (o != null) {
             despList = (List<Ldzs>) o;
         } else {
-            String code ="360000";
-            if(depcode!=null && depcode.indexOf("__")!=-1){
-                depcode="36%";
-            }else{
-                code=depcode.replace("%","00");
-            }
             despList= compareMapper.selectLdzs(depcode,code);
             redisTemplate.opsForValue().set(vuejx + "selectLdzs:" + depcode, despList);
         }
@@ -44,15 +44,16 @@ public class CompareServiceImpl implements CompareService {
     public List<Xzbzpzbd> selectXzbzpzbd(String depcode){
         String code ="360000";
         List<Xzbzpzbd> despList=null;
+        if(depcode!=null && depcode.indexOf("__")!=-1){
+            depcode="36%";
+        }else{
+            code=depcode.replace("%","00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectXzbzpzbd:" + depcode);
         if (o != null) {
             despList = (List<Xzbzpzbd>) o;
         } else {
-            if(depcode!=null && depcode.indexOf("__")!=-1){
-            depcode="36%";
-            }else{
-                code=depcode.replace("%","00");
-            }
+
             despList= compareMapper.selectXzbzpzbd(depcode,code);
             redisTemplate.opsForValue().set(vuejx + "selectXzbzpzbd:" + depcode, despList);
         }
@@ -64,15 +65,16 @@ public class CompareServiceImpl implements CompareService {
     public List<Sybzpzbd> selectSybzpzbd(String depcode){
         String code ="360000";
         List<Sybzpzbd> despList=null;
+        if(depcode!=null && depcode.indexOf("__")!=-1){
+            depcode="36%";
+        }else{
+            code=depcode.replace("%","00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectSybzpzbd:" + depcode);
         if (o != null) {
             despList = (List<Sybzpzbd>) o;
         } else {
-            if(depcode!=null && depcode.indexOf("__")!=-1){
-            depcode="36%";
-            }else{
-                code=depcode.replace("%","00");
-            }
+
             despList= compareMapper.selectSybzpzbd(depcode,code);
             redisTemplate.opsForValue().set(vuejx + "selectSybzpzbd:" + depcode, despList);
         }
@@ -83,15 +85,16 @@ public class CompareServiceImpl implements CompareService {
     public List<Rkbz> selectRkBzZb(String depcode){
         String code ="360000";
         List<Rkbz> despList=null;
+        if(depcode!=null && depcode.indexOf("__")!=-1){
+            depcode="36%";
+        }else{
+            code=depcode.replace("%","00");
+        }
         Object o = redisTemplate.opsForValue().get(vuejx + "selectRkBzZb:" + depcode);
         if (o != null) {
             despList = (List<Rkbz>) o;
         } else {
-            if(depcode!=null && depcode.indexOf("__")!=-1){
-                depcode="36%";
-            }else{
-                code=depcode.replace("%","00");
-            }
+
             despList= compareMapper.selectRkBzZb(depcode,code);
             redisTemplate.opsForValue().set(vuejx + "selectRkBzZb:" + depcode, despList);
         }
