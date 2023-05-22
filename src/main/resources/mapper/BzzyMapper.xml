@@ -19,8 +19,8 @@
                sum(xz_dfp)                                    xz_dfp,
                sum(sy_dfp)                                    sy_dfp
         from (select geocode,
-                     t.dzq_bz,
-                     t.dzq_zz,
+                     t.dzq_bz+t.ga_bz+t.jcy_bz+t.fy_bz+t.sf_bz  as dzq_bz,
+                     t.dzq_zz+t.ga_zz+t.jcy_zz+t.fy_zz+t.sf_zz  as dzq_zz,
                      decode(t.jgtype, 'sy', t.qebk_bz, 0) qebk_bz,
                      decode(t.jgtype, 'sy', t.cebt_bz, 0) cebt_bz,
                      decode(t.jgtype, 'sy', t.jfzl_bz, 0) jfzl_bz,
@@ -114,8 +114,8 @@
                sum(xz_dfp)                                    xz_dfp,
                sum(sy_dfp)                                    sy_dfp
         from (select geocode,
-                     t.dzq_bz,
-                     t.dzq_zz,
+                     t.dzq_bz+t.ga_bz+t.jcy_bz+t.fy_bz+t.sf_bz  as dzq_bz,
+                     t.dzq_zz+t.ga_zz+t.jcy_zz+t.fy_zz+t.sf_zz  as dzq_zz,
                      decode(t.jgtype, 'sy', t.qebk_bz, 0) qebk_bz,
                      decode(t.jgtype, 'sy', t.cebt_bz, 0) cebt_bz,
                      decode(t.jgtype, 'sy', t.jfzl_bz, 0) jfzl_bz,

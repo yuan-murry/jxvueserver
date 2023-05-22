@@ -47,8 +47,8 @@
                sum(sy_zz)  sy_zz,
                sum(xz_dfp) xz_dfp,
                sum(sy_dfp) sy_dfp
-        from (select sum(dzq_bz)                      dzq_bz,
-                     sum(dzq_zz)                      dzq_zz,
+        from (select sum(dzq_bz+ga_bz+jcy_bz+fy_bz+sf_bz)                      dzq_bz,
+                     sum(dzq_zz+ga_zz+jcy_zz+fy_zz+sf_zz)                      dzq_zz,
                      sum(qebk_bz + cebt_bz + jfzl_bz) sy_bz,
                      sum(qebk_zz + cebt_zz + jfzl_zz) sy_zz,
                      0 as                             xz_dfp,
@@ -62,7 +62,7 @@
                      0 as     sy_bz,
                      0 as     sy_zz,
                      sum(case
-                             when jgsy_system_code = 'xz_dfp' then
+                             when jgsy_system_code in ('xz_dfp','ga_dfp','jcy_dfp','fy_dfp','sf_dfp','jy_dfp','qj_dfp') then
                                  bz
                              else
                                  0

@@ -104,7 +104,7 @@
 
             from (select d.code   as                               geocode,
             decode(t.jgtype, 'jdxz', 'local','lo_next','local', jgtype) jgtype,
-            t.dzq_bz as                               dzq_bz,
+            t.dzq_bz+t.ga_bz+t.jcy_bz+t.fy_bz+t.sf_bz as                               dzq_bz,
 
             t.qebk_bz,
             t.cebt_bz,
@@ -390,7 +390,7 @@
 
             from (select d.code   as                               geocode,
             decode(t.jgtype, 'jdxz', 'local','lo_next','local', jgtype) jgtype,
-            t.dzq_bz as                               dzq_bz,
+            t.dzq_bz+t.ga_bz+t.jcy_bz+t.fy_bz+t.sf_bz as                               dzq_bz,
 
             t.qebk_bz,
             t.cebt_bz,
