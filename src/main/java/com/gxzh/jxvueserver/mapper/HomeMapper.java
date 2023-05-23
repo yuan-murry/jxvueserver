@@ -24,4 +24,12 @@ public interface HomeMapper {
 
     List<XzjgLdzsChild> selectXzjgLdzsChild(@Param("depCode") String depCode, @Param("ldzstype") String ldzstype);
     List<SyjgLdzsChild> selectSyjgLdzsChild(@Param("depCode") String depCode, @Param("ldzstype") String ldzstype);
+
+    List<XzjgPieChild> selectXzjgPieChild(@Param("depCode") String depCode, @Param("depName") String depName);
+
+    List<SydwPieChild> selectSydwPieChild(@Param("depCode") String depCode, @Param("depName") String depName);
+
+    List<XzjgLdzsChildDetail> selectXzjgLdzsChildDetail(@Param("depCode") String depCode, @Param("doquery") String doquery);
+
+    List<SydwLdzsChildDetail> selectSydwLdzsChildDetail(@Param("depCode") String depCode, @Param("doquery") String doquery);
 }

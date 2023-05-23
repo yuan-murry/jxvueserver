@@ -677,5 +677,54 @@
         </choose>
 
     </select>
+    <select id="selectXzjgPieChild" resultType="com.gxzh.jxvueserver.dto.XzjgPieChild">
+        select jc.jgsy_name as jgname
+        from jgsy_common jc
+        where jc.jgsy_states = '1'
+          and jc.jgsy_type in ('04', '06', '10')
+          and jc.dep_code like #{depCode}
+          and jgsy_system_code = #{depName}
 
+
+    </select>
+
+    <select id="selectSydwPieChild" resultType="com.gxzh.jxvueserver.dto.SydwPieChild">
+        select jc.jgsy_name as jgname
+        from jgsy_common jc
+        where jc.jgsy_states = '1'
+          and jc.jgsy_type = '12'
+          and jc.dep_code like #{depCode}
+          and jgsy_system_code = #{depName}
+
+
+    </select>
+
+    <select id="selectXzjgLdzsChildDetail" resultType="com.gxzh.jxvueserver.dto.XzjgLdzsChildDetail" parameterType="String">
+
+                 select jc.jgsy_name as ldzsname,
+                        ${doquery}   as ldzscount
+                 from bmldzs vv
+                          left join jgsy_common jc
+                                    on jc.jgsy_code = vv.jgsy_code
+                 where jc.jgsy_type in ('04', '06', '10')
+                   and jc.jgsy_states = '1'
+                   and jc.dep_code like #{depCode}
+                   and ${doquery} !=0
+
+    </select>
+
+
+    <select id="selectSydwLdzsChildDetail" resultType="com.gxzh.jxvueserver.dto.SydwLdzsChildDetail" parameterType="String">
+
+        select jc.jgsy_name as ldzsname,
+               ${doquery}   as ldzscount
+        from bmldzs vv
+                 left join jgsy_common jc
+                           on jc.jgsy_code = vv.jgsy_code
+        where jc.jgsy_type = '12'
+          and jc.jgsy_states = '1'
+          and jc.dep_code like #{depCode}
+          and ${doquery} !=0
+
+    </select>
 </mapper>

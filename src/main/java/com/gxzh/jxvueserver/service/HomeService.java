@@ -22,4 +22,11 @@ public interface HomeService {
     List<XzjgLdzsChild>  selectXzjgLdzsChild(String depCode,String ldzstype);
 
     List<SyjgLdzsChild>  selectSyjgLdzsChild(String depCode,String ldzstype);
+
+    List<XzjgPieChild>  selectXzjgPieChild(String depCode,String depName);
+    List<SydwPieChild>  selectSydwPieChild(String depCode,String depName);
+
+    List<XzjgLdzsChildDetail>  selectXzjgLdzsChildDetail(String depCode,String doquery);
+
+    List<SydwLdzsChildDetail>  selectSydwLdzsChildDetail(String depCode,String doquery);
 }

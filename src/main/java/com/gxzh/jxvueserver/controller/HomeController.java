@@ -65,4 +65,29 @@ public class HomeController {
         return Res.ok(syjgLdzsChildList);
     }
 
+    @RequestMapping("/selectXzjgPieChild")
+    public Res<?> selectXzjgPieChild(@RequestParam("depCode") String depCode,@RequestParam("depName") String depName) {
+        List<XzjgPieChild> xzjgPieChildList = this.homeService.selectXzjgPieChild(depCode,depName);
+        return Res.ok(xzjgPieChildList);
+    }
+
+    @RequestMapping("/selectSydwPieChild")
+    public Res<?> selectSydwPieChild(@RequestParam("depCode") String depCode,@RequestParam("depName") String depName) {
+        List<SydwPieChild> sydwPieChildList = this.homeService.selectSydwPieChild(depCode,depName);
+        return Res.ok(sydwPieChildList);
+    }
+
+
+    @RequestMapping("/selectXzjgLdzsChildDetail")
+    public Res<?> selectXzjgLdzsChildDetail(@RequestParam("depCode") String depCode,@RequestParam("doquery") String doquery) {
+        List<XzjgLdzsChildDetail> xzjgLdzsChildDetailList = this.homeService.selectXzjgLdzsChildDetail(depCode,doquery);
+        return Res.ok(xzjgLdzsChildDetailList);
+    }
+
+    @RequestMapping("/selectSydwLdzsChildDetail")
+    public Res<?> selectSydwLdzsChildDetail(@RequestParam("depCode") String depCode,@RequestParam("doquery") String doquery) {
+        List<SydwLdzsChildDetail> sydwLdzsChildDetailList = this.homeService.selectSydwLdzsChildDetail(depCode,doquery);
+        return Res.ok(sydwLdzsChildDetailList);
+    }
+
 }

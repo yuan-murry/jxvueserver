@@ -155,4 +155,112 @@ public class HomeServiceImpl implements HomeService {
         }
         return syjgLdzsChildList;
     }
+
+
+    public List<XzjgPieChild> selectXzjgPieChild(String depCode, String depName){
+        if(depName.equals("dw")){
+            depName="01";
+        }else if(depName.equals("rd")){
+            depName="02";
+        }else if(depName.equals("zf")){
+            depName="03";
+        }else if(depName.equals("zx")){
+            depName="04";
+        }else if(depName.equals("fy")){
+            depName="07";
+        }else if(depName.equals("jcy")){
+            depName="08";
+        }else if(depName.equals("qt")){
+            depName="06";
+        }else if(depName.equals("mzdp")){
+            depName="05";
+        }
+
+
+
+
+        Object o = redisTemplate.opsForValue().get(vuejx + "xzjgPieChild:" + depCode+depName);
+        List<XzjgPieChild> xzjgPieChildList = null;
+        if (o != null) {
+            xzjgPieChildList = (List<XzjgPieChild>) o;
+        } else {
+
+            xzjgPieChildList = homeMapper.selectXzjgPieChild(depCode,depName);
+            if (xzjgPieChildList == null) {
+                xzjgPieChildList = new ArrayList<>();
+            }
+            redisTemplate.opsForValue().set(vuejx + "xzjgPieChild:" + depCode+depName, xzjgPieChildList);
+        }
+        return xzjgPieChildList;
+    }
+
+    public List<SydwPieChild> selectSydwPieChild(String depCode, String depName){
+        if(depName.equals("dw")){
+            depName="01";
+        }else if(depName.equals("rd")){
+            depName="02";
+        }else if(depName.equals("zf")){
+            depName="03";
+        }else if(depName.equals("zx")){
+            depName="04";
+        }else if(depName.equals("fy")){
+            depName="07";
+        }else if(depName.equals("jcy")){
+            depName="08";
+        }else if(depName.equals("qt")){
+            depName="06";
+        }else if(depName.equals("mzdp")){
+            depName="05";
+        }
+
+
+
+
+        Object o = redisTemplate.opsForValue().get(vuejx + "sydwPieChild:" + depCode+depName);
+        List<SydwPieChild> sydwPieChildList = null;
+        if (o != null) {
+            sydwPieChildList = (List<SydwPieChild>) o;
+        } else {
+
+            sydwPieChildList = homeMapper.selectSydwPieChild(depCode,depName);
+            if (sydwPieChildList == null) {
+                sydwPieChildList = new ArrayList<>();
+            }
+            redisTemplate.opsForValue().set(vuejx + "sydwPieChild:" + depCode+depName, sydwPieChildList);
+        }
+        return sydwPieChildList;
+    }
+
+
+    public List<XzjgLdzsChildDetail> selectXzjgLdzsChildDetail(String depCode, String doquery){
+        Object o = redisTemplate.opsForValue().get(vuejx + "xzjgLdzsChildDetail:" + depCode+doquery);
+        List<XzjgLdzsChildDetail> xzjgLdzsChildDetailList = null;
+        if (o != null) {
+            xzjgLdzsChildDetailList = (List<XzjgLdzsChildDetail>) o;
+        } else {
+
+            xzjgLdzsChildDetailList = homeMapper.selectXzjgLdzsChildDetail(depCode,doquery);
+            if (xzjgLdzsChildDetailList == null) {
+                xzjgLdzsChildDetailList = new ArrayList<>();
+            }
+            redisTemplate.opsForValue().set(vuejx + "xzjgLdzsChildDetail:" + depCode+doquery, xzjgLdzsChildDetailList);
+        }
+        return xzjgLdzsChildDetailList;
+    }
+
+    public List<SydwLdzsChildDetail> selectSydwLdzsChildDetail(String depCode, String doquery){
+        Object o = redisTemplate.opsForValue().get(vuejx + "sydwLdzsChildDetail:" + depCode+doquery);
+        List<SydwLdzsChildDetail> sydwLdzsChildDetailList = null;
+        if (o != null) {
+            sydwLdzsChildDetailList = (List<SydwLdzsChildDetail>) o;
+        } else {
+
+            sydwLdzsChildDetailList = homeMapper.selectSydwLdzsChildDetail(depCode,doquery);
+            if (sydwLdzsChildDetailList == null) {
+                sydwLdzsChildDetailList = new ArrayList<>();
+            }
+            redisTemplate.opsForValue().set(vuejx + "sydwLdzsChildDetail:" + depCode+doquery, sydwLdzsChildDetailList);
+        }
+        return sydwLdzsChildDetailList;
+    }
 }
