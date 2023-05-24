@@ -268,21 +268,13 @@
     </select>
 
     <select id="getNoUse" resultType="com.gxzh.jxvueserver.dto.BzzyNoUse">
-        with tt as
-                 (SELECT update_time, jgsy_code
-                  FROM (SELECT ROW_NUMBER() OVER(PARTITION BY jgsy_code ORDER BY update_time DESC NULLS LAST) mtime,
-                               update_time,
-                               jgsy_code
-                        FROM t_ry_jbxx
-                        WHERE states = '1'
-                          and jgsy_code like #{depCode})
-                  WHERE mtime = 1)
+
 
         select *
         from (select (select jj.jgsy_name
                       from jgsy_common jj
                       where jj.jgsy_code = jc.jgsy_code)    jgsy_name,
-                     max(t.update_time)                     lasttime,
+
                      (select sum((local.l_a_xz_st + local.l_a_zf_ga + local.l_a_zf_jcy +
                                   local.l_a_zf_fy + local.l_a_zf_sf + local.l_a_qebk +
                                   local.l_a_cebt + local.l_a_jfzl) -
@@ -291,13 +283,10 @@
                                   local.l_r_cebt + local.l_r_jfzl)) bzs
                       from local
                       where local.jgsy_code = jgsy_code) as bzs
-              from tt t,
-                   jgsy_common jc
-              where jc.jgsy_code = t.jgsy_code
-                and floor(to_number(sysdate -
-                                    to_date(to_char(t.update_time,
-                                                    'yyyy-mm-dd hh24:mi:ss'),
-                                            'yyyy-mm-dd hh24:mi:ss')) / 365) > 3
+              from
+                  jgsy_common jc
+              where
+                  jc.dep_code like #{depCode}
                 and jc.jgsy_chaobz = '0'
                 and jc.jgsy_type = '04'
                 and jc.jgsy_states = '1'
@@ -309,7 +298,7 @@
               select (select jj.jgsy_name
                       from jgsy_common jj
                       where jj.jgsy_code = jc.jgsy_code) jgsy_name,
-                     max(t.update_time)                  lasttime,
+
                      (select sum((zf_sf_bz + zf_fy_bz + zf_jcy_bz + zf_ga_bz +
                                   qebkbzrs + cebtbzrs + jfzlbzrs) -
                                  (zf_sf_zz + zf_fy_zz + zf_jcy_zz + zf_ga_zz +
@@ -317,13 +306,10 @@
                       from sy
                       where sy.jgsy_code = jgsy_code
                         and rownum = 1) as               bzs
-              from tt t,
-                   jgsy_common jc
-              where jc.jgsy_code = t.jgsy_code
-                and floor(to_number(sysdate -
-                                    to_date(to_char(t.update_time,
-                                                    'yyyy-mm-dd hh24:mi:ss'),
-                                            'yyyy-mm-dd hh24:mi:ss')) / 365) > 3
+              from
+                  jgsy_common jc
+              where
+                  jc.dep_code like #{depCode}
                 and jc.jgsy_chaobz = '0'
                 and jc.jgsy_type = '12'
                 and jc.jgsy_states = '1'
@@ -334,7 +320,7 @@
               select (select jj.jgsy_name
                       from jgsy_common jj
                       where jj.jgsy_code = jc.jgsy_code)   jgsy_name,
-                     max(t.update_time)                    lasttime,
+
                      (select sum((jdxz.xz_bz + jdxz.zf_ga_bz + jdxz.zf_jcy_bz +
                                   jdxz.zf_fy_bz + jdxz.zf_sf_bz + jdxz.qebk_bz +
                                   jdxz.cebt_bz + jdxz.jfzl_bz) -
@@ -343,18 +329,15 @@
                                   jdxz.cebt_zz + jdxz.jfzl_zz)) bzs
                       from jdxz
                       where jdxz.jgsy_code = jgsy_code) as bzs
-              from tt t,
-                   jgsy_common jc
-              where jc.jgsy_code = t.jgsy_code
-                and floor(to_number(sysdate -
-                                    to_date(to_char(t.update_time,
-                                                    'yyyy-mm-dd hh24:mi:ss'),
-                                            'yyyy-mm-dd hh24:mi:ss')) / 365) > 3
+              from
+                  jgsy_common jc
+              where
+                  jc.dep_code like #{depCode}
                 and jc.jgsy_chaobz = '0'
                 and jc.jgsy_type = '10'
                 and jc.jgsy_states = '1'
               group by jc.jgsy_code)
-        where rownum &lt;= 15
+        where bzs >30
     </select>
     <select id="getRetire" resultType="com.gxzh.jxvueserver.dto.BzzyRetire">
 

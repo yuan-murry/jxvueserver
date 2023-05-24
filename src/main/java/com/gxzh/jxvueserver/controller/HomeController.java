@@ -90,4 +90,11 @@ public class HomeController {
         return Res.ok(sydwLdzsChildDetailList);
     }
 
+
+    @RequestMapping("/bzqk_fc")
+    public Res<?> selectBzqk(@RequestParam("depCode") String depCode,@RequestParam("type") String type) {
+        List<Bzqk_fc> bzqk_fc = this.homeService.selectBzqk_fc(depCode,type);
+        return Res.ok(bzqk_fc);
+    }
+
 }

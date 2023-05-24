@@ -29,4 +29,6 @@ public interface HomeService {
     List<XzjgLdzsChildDetail>  selectXzjgLdzsChildDetail(String depCode,String doquery);
 
     List<SydwLdzsChildDetail>  selectSydwLdzsChildDetail(String depCode,String doquery);
+
+    List<Bzqk_fc> selectBzqk_fc(String depCode ,String type);
 }

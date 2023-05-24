@@ -8,6 +8,6 @@ import java.io.Serializable;
 public class BzzyNoUse implements Serializable {
     private static final long serialVersionUID = -722752209897577939L;
     private String jgsyName;
-    private String lasttime;
+
     private Integer bzs = 0;
 }

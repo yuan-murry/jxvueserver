@@ -727,4 +727,57 @@
           and ${doquery} !=0
 
     </select>
+
+
+    <select id="selectBzqk_fc" resultType="com.gxzh.jxvueserver.dto.Bzqk_fc" >
+        <choose>
+            <when test="type=='xzbz'">
+                select jgsy_name as jgname , dzq_bz+ga_bz+jcy_bz+fy_bz+sf_bz as bzsy from v_bzzz where jgtype in ('local','lo_next','jdxz') and geocode like #{depCode} and dzq_bz+ga_bz+jcy_bz+fy_bz+sf_bz !=0
+            </when>
+            <when test="type=='xzzz'">
+                select jgsy_name as jgname, dzq_zz+ga_zz+jcy_zz+fy_zz+sf_zz as bzsy from v_bzzz where jgtype in ('local','lo_next','jdxz') and geocode like #{depCode} and dzq_zz+ga_zz+jcy_zz+fy_zz+sf_zz !=0
+            </when>
+            <when test="type=='xzdfp'">
+                select
+                decode(zhxsh,
+                '100', '    直辖市','101','    直辖市属区','101201','    直辖市街道','000','省、自治区',
+                '001','地州盟合计', '002','    副省级市','004','    副省级市属区','004201','    副省级市街道',
+                '003','    地级市', '005','    地级市属区','005201','    地级市街道','006','    县级市','006201','    县级市街道',
+                '007', '    县', '007201', '    县街道','111','乡镇合计','008','省以下垂管（省级统一管理）'
+                ) as jgname
+
+
+
+
+                ,sum(bz)  as bzsy   from V_TONGJI_DFPBZ_tjb t where dep_code like #{depCode} and  jgsy_system_code in ('xz_dfp','ga_dfp','jcy_dfp','fy_dfp','sf_dfp','jy_dfp','qj_dfp')
+                group by zhxsh order by zhxsh
+            </when>
+
+
+
+            <when test="type=='sybz'">
+                select jgsy_name as jgname, qebk_bz + cebt_bz + jfzl_bz as bzsy from v_bzzz where  geocode like #{depCode} and qebk_bz + cebt_bz + jfzl_bz !=0
+
+            </when>
+            <when test="type=='syzz'">
+                select jgsy_name as jgname, qebk_zz + cebt_zz + jfzl_zz as bzsy from v_bzzz where   geocode like #{depCode} and qebk_zz + cebt_zz + jfzl_zz !=0
+
+            </when>
+            <when test="type=='sydfp'">
+                select
+
+
+                decode(zhxsh,
+                '100', '    直辖市','101','    直辖市属区','101201','    直辖市街道','000','省、自治区',
+                '001','地州盟合计', '002','    副省级市','004','    副省级市属区','004201','    副省级市街道',
+                '003','    地级市', '005','    地级市属区','005201','    地级市街道','006','    县级市','006201','    县级市街道',
+                '007', '    县', '007201', '    县街道','111','乡镇合计','008','省以下垂管（省级统一管理）'
+                ) as jgname
+                ,sum(bz) as bzsy    from V_TONGJI_DFPBZ_tjb t where dep_code like #{depCode} and  jgsy_system_code in  ('qebk_dfp', 'jfzl_dfp', 'cebt_dfp')
+
+
+                group by zhxsh order by zhxsh
+            </when>
+        </choose>
+    </select>
 </mapper>

@@ -263,4 +263,22 @@ public class HomeServiceImpl implements HomeService {
         }
         return sydwLdzsChildDetailList;
     }
+
+
+    @Override
+    public List<Bzqk_fc> selectBzqk_fc(String depCode,String type) {
+        Object o = redisTemplate.opsForValue().get(vuejx + "fzqk_fc:" + depCode+type);
+        List<Bzqk_fc> fzqk_fc = null;
+        if (o != null) {
+            fzqk_fc = (List<Bzqk_fc>) o;
+        } else {
+
+            fzqk_fc = homeMapper.selectBzqk_fc(depCode,type);
+            if (fzqk_fc == null) {
+                fzqk_fc = new ArrayList<>();
+            }
+            redisTemplate.opsForValue().set(vuejx + "fzqk_fc:" + depCode+type, fzqk_fc);
+        }
+        return fzqk_fc;
+    }
 }
