@@ -145,11 +145,7 @@
                    ) s
               group by jgsy_code, jgsy_name, submit_date) dr
 
-        where submit_date = (
-            select max(submit_date)
-            from bill
-            where jgsy_code = dr.jgsy_code)
-          and to_char(submit_date, 'dd') = (select to_char(sysdate, 'dd') from dual)
+        where  to_char(submit_date, 'YYYY-MM-DD') = (select to_char(sysdate, 'YYYY-MM-DD') from dual)
     </select>
     <select id="getAreaBusinessChild" resultType="com.gxzh.jxvueserver.dto.AreaBusinessChild">
         select sum(rbrs) rbrs, sum(ltxrs) ltxrs, '${depName}' as depName
@@ -169,17 +165,37 @@
                        left join bill_detail bd
                                  on t.bill_no = bd.bill_no
               where t.bill_state = '4'
-                and bd.geocode like (select (case
-                                                 when g.code is null then
-                                                     '360000'
-                                                 when substr(g.code, 5, 2) = '00' then
-                                                     substr(g.code, 0, 4) || '%'
-                                                 else
-                                                     g.code
-                  end) depcode
-                                     from geocode g
-                                     where g.desp = #{depName}))
+                and bd.geocode
+                    <choose>
+                        <when test='depName.contains("本级")'>
+                            = (select g.code as  depcode
+                            from geocode g
+                            where g.desp = replace(#{depName},'(本级)')))
 
+
+
+
+
+
+                        </when>
+<otherwise>
+
+    like (select (case
+    when substr(g.code, 3, 4) = '0000' then
+    substr(g.code, 0, 2) || '%'
+    when substr(g.code, 5, 2) = '00' then
+    substr(g.code, 0, 4) || '%'
+    else
+    g.code
+    end) depcode
+    from geocode g
+    where g.desp = #{depName}))
+
+</otherwise>
+
+
+
+    </choose>
 
     </select>
 </mapper>

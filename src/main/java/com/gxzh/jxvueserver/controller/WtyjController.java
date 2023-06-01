@@ -1,6 +1,7 @@
 package com.gxzh.jxvueserver.controller;
 
 import com.gxzh.jxvueserver.dto.Res;
+import com.gxzh.jxvueserver.dto.VtxPie;
 import com.gxzh.jxvueserver.dto.WtyjJgsy;
 import com.gxzh.jxvueserver.entity.*;
 import com.gxzh.jxvueserver.service.WtyjService;
@@ -50,6 +51,22 @@ public class WtyjController {
 
 
 
+    @RequestMapping("/selectextraPieChildDetail")
+    public Res<?> selectextraPieChildDetail(String depName,String classNum){
+        List<WtyjJgsy> jgsyList = null;
+        if (depName != null) {
+            jgsyList = wtyjService.selectextraPieChildDetail(depName,classNum);
+        }
+        return Res.ok(jgsyList);
+    }
+
+
+
+
+
+
+
+
 
     @RequestMapping("/selectAzwtlx")
     public Res<?> selectAzwtlx(String depcode) {
@@ -77,6 +94,18 @@ public class WtyjController {
 
         if (depcode != null) {
             despList = wtyjService.selectYwttz(depcode);
+        }
+        return Res.ok(despList);
+    }
+
+
+
+    @RequestMapping("/getVtxPie")
+    public Res<?> selectLTX(String depcode) {
+        List<VtxPie> despList = null;
+
+        if (depcode != null) {
+            despList = wtyjService.selectLTX(depcode);
         }
         return Res.ok(despList);
     }

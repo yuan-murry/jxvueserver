@@ -5,7 +5,7 @@
 <mapper namespace="com.gxzh.jxvueserver.mapper.CreatenewMapper">
 
     <select id="selectCreatenew" resultType="com.gxzh.jxvueserver.entity.Createnew" parameterType="java.lang.String">
-        select decode(count(0), 0, 0, sum(qe_bz + ce_bz + jf_bz)) as num1,
+        select decode(count(0), 0, 0, sum(nvl(qe_bz,0) + nvl(ce_bz,0) + nvl(jf_bz,0))) as num1,
                decode(count(0), 0, 0, 0)                          as num2,
                decode(count(0), 0, 0, 0)                          as num3,
                decode(count(0), 0, 0, 0)                          as num4
@@ -21,7 +21,7 @@
                  where t.geocode like #{depcode}
              )
         union all
-        select decode(count(0), 0, 0, sum(qe_dfpbz + ce_dfpbz + jf_dfpbz)) as num1,
+        select decode(count(0), 0, 0, sum(nvl(qe_dfpbz,0) + nvl(ce_dfpbz,0) + nvl(jf_dfpbz,0))) as num1,
                decode(count(0), 0, 0, 0)                                   as num2,
                decode(count(0), 0, 0, 0)                                   as num3,
                decode(count(0), 0, 0, 0)                                   as num4

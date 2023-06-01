@@ -1,5 +1,6 @@
 package com.gxzh.jxvueserver.service;
 
+import com.gxzh.jxvueserver.dto.VtxPie;
 import com.gxzh.jxvueserver.dto.WtyjJgsy;
 import com.gxzh.jxvueserver.entity.*;
 
@@ -18,4 +19,9 @@ public interface WtyjService {
     List<Ywttz> selectYwttz(String depcode);
 
     List<WtyjJgsy> getextraPieChild(String depCode,String jgsyNum);
+
+    List<WtyjJgsy> selectextraPieChildDetail(String depName,String classNum);
+
+    List<VtxPie> selectLTX(String depcode);
+
 }

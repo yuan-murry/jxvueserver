@@ -1,5 +1,6 @@
 package com.gxzh.jxvueserver.service.impl;
 
+import com.gxzh.jxvueserver.dto.VtxPie;
 import com.gxzh.jxvueserver.dto.WtyjJgsy;
 import com.gxzh.jxvueserver.entity.*;
 import com.gxzh.jxvueserver.mapper.WtyjMapper;
@@ -126,4 +127,46 @@ public class WtyjServiceImpl implements WtyjService {
         List<WtyjJgsy> jgsyList = wtyjMapper.getextraPieChild(depCode, jgsyNum);
         return jgsyList;
     }
+
+
+
+    @Override
+    public List<WtyjJgsy> selectextraPieChildDetail(String depName,String classNum) {
+
+        List<WtyjJgsy> jgsyList = null;
+
+        Object o = redisTemplate.opsForValue().get(vuejx + "selectextraPieChildDetail:" + depName+classNum);
+        if (o != null) {
+            jgsyList = (List<WtyjJgsy>) o;
+        } else {
+
+            jgsyList = wtyjMapper.selectextraPieChildDetail(depName, classNum);
+            redisTemplate.opsForValue().set(vuejx + "selectextraPieChildDetail:" + depName+classNum, jgsyList);
+        }
+        return jgsyList;
+    }
+
+    @Override
+    public List<VtxPie> selectLTX(String depcode) {
+          String code = "360000";
+        List<VtxPie> despList = null;
+       if (depcode != null && depcode.indexOf("__") != -1) {
+            depcode="36%";
+        } else {
+            code = depcode.replace("%", "00");
+        }
+        Object o = redisTemplate.opsForValue().get(vuejx + "selectLTX:" + depcode);
+        if (o != null) {
+            despList = (List<VtxPie>) o;
+        } else {
+
+            despList = wtyjMapper.selectLTX(depcode,code);
+            redisTemplate.opsForValue().set(vuejx + "selectLTX:" + depcode, despList);
+        }
+        return despList;
+    }
+
 }
+
+
+

@@ -1,5 +1,6 @@
 package com.gxzh.jxvueserver.mapper;
 
+import com.gxzh.jxvueserver.dto.VtxPie;
 import com.gxzh.jxvueserver.dto.WtyjJgsy;
 import com.gxzh.jxvueserver.entity.*;
 import org.apache.ibatis.annotations.Param;
@@ -19,4 +20,9 @@ public interface WtyjMapper {
     List<Ywttz> selectYwttz(String depcode, String code);
 
     List<WtyjJgsy> getextraPieChild(@Param("depCode") String depCode,@Param("jgsyNum") String jgsyNum);
+
+    List<WtyjJgsy> selectextraPieChildDetail(@Param("depName") String depName,@Param("classNum") String classNum);
+
+
+    List<VtxPie> selectLTX(@Param("depCode")String depCode, @Param("code") String code);
 }

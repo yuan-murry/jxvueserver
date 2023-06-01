@@ -15,8 +15,8 @@
                 ,
                 sum(case when chaobz&gt; 0 then chaobz else 0 end) as chaobz,
                 sum(case when chaozs&gt; 0 then chaozs else 0 end) as chaozs,
-                sum(case when chaojg&gt; 0 then chaojg else 0 end)  as chaojg,
-                (select nvl(sum(wttzjgs),0) from geo_wttzjg where depcode like substr(geocode,0,4)||'%') as wttz
+                sum(case when chaojg&gt; 0 then chaojg else 0 end)  as chaojg
+
 
                 from (select
                 g.code as  geocode,
@@ -54,8 +54,8 @@
                 ,
                 sum(case when chaobz&gt; 0 then chaobz else 0 end) as chaobz,
                 sum(case when chaozs&gt; 0 then chaozs else 0 end) as chaozs,
-                sum(case when chaojg&gt; 0 then chaojg else 0 end)  as chaojg,
-                (select sum(wttzjgs) from geo_wttzjg where depcode = geocode) as wttz
+                sum(case when chaojg&gt; 0 then chaojg else 0 end)  as chaojg
+
 
                 from (select
                 g.code as  geocode,
@@ -198,4 +198,173 @@
     </select>
 
 
+    <select id="selectextraPieChildDetail" resultType="com.gxzh.jxvueserver.dto.WtyjJgsy">
+        select jgsy_name, jgsy_type, dep_name
+        <choose>
+            <when test="classNum == 0">
+                , chaobz problem_num
+            </when>
+            <when test="classNum == 1">
+                , chaozs problem_num
+            </when>
+            <when test="classNum == 2">
+                , chaojg problem_num
+            </when>
+        </choose>
+        from (select jgsy_code,
+        jgsy_name,
+        (select g.desp from geocode g where g.code = geocode) as dep_name,
+        decode(jgtype,
+        'local',
+        '主管部门',
+        'sy',
+        '事业单位',
+        'lo_next',
+        '下设机构',
+        '街道乡镇') as jgsy_type,
+        (synsjgs - pznsjgs) as chaojg,
+        (case
+        when jgtype = 'sy' then
+        (qebk_zz + cebt_zz + jfzl_zz + ga_zz + jcy_zz + fy_zz +
+        sf_zz + aq_zz) - (qebk_bz + cebt_bz + jfzl_bz + ga_bz +
+        jcy_bz + fy_bz + sf_bz + aq_bz)
+        else
+        (qebk_zz + cebt_zz + jfzl_zz + dzq_zz + ga_zz + jcy_zz +
+        fy_zz + sf_zz + aq_zz) -
+        (qebk_bz + cebt_bz + jfzl_bz + dzq_bz + ga_bz + jcy_bz +
+        fy_bz + sf_bz + aq_bz)
+        end) chaobz,
+        (l_r_l1_nu - l_a_l1_nu) as chaozs
+        from v_bzzz)
+        where jgsy_code
+        <choose>
+        <when test='depName.contains("本级")'>
+            like (select g.code||'%' as  depcode
+            from geocode g
+            where g.desp = replace(#{depName},'(本级)'))
+
+        </when>
+        <otherwise>
+
+            like (select (case
+            when substr(g.code, 3, 4) = '0000' then
+            substr(g.code, 0, 2) || '%'
+            when substr(g.code, 5, 2) = '00' then
+            substr(g.code, 0, 4) || '%'
+            else
+            g.code||'%'
+            end) depcode
+            from geocode g
+            where g.desp = #{depName})
+
+        </otherwise>
+        </choose>
+
+
+        <choose>
+            <when test="classNum == 0">
+                and chaobz &gt; 0
+            </when>
+            <when test="classNum == 1">
+                and chaozs &gt; 0
+            </when>
+            <when test="classNum == 2">
+                and chaojg &gt; 0
+            </when>
+        </choose>
+        order by jgsy_code
+    </select>
+
+
+    <select id="selectLTX" resultType="com.gxzh.jxvueserver.dto.VtxPie" parameterType="java.lang.String">
+        <choose>
+            <when test="depCode.length()==3">
+                select decode((substr(geocode, 0, 4) || '00'),
+                #{code},
+                (select desp
+                from geocode g
+                where g.code = (substr(geocode, 0, 4) || '00')) || '(本级)',
+                (select desp
+                from geocode g
+                where g.code = (substr(geocode, 0, 4) || '00'))) as desp,
+                (select decode(substr(code, 5, 2), '00', 0, g.dis_order)
+                from geocode g
+                where g.code = substr(geocode, 0, 4) || '00') dis_order,
+                sum(vtxdata) as vtxdata
+
+                from (select g.code as geocode,
+                nvl(sum((case
+                when ((t.xb = '1' and
+                to_char(csrq, 'yyyymmdd') &lt;=
+                to_char(add_months(sysdate, 12) - interval '60' year,
+                'yyyymmdd'))
+                or (xb = '2' and
+                to_char(csrq, 'yyyymmdd') &lt;=
+                to_char(add_months(sysdate, 12) - interval '55' year,
+                'yyyymmdd') and zwjb > '132')
+
+                or (xb = '2' and
+                to_char(csrq, 'yyyymmdd') &lt;=
+                to_char(add_months(sysdate, 12) - interval '60' year,
+                'yyyymmdd') and zwjb &lt;= '132')) and
+                t.states = 1 and (t.zbzt = '01' or t.zbzt like '02%') and
+                zwjb not in ('111', '112', '121', '122') then
+                1
+                end)),
+                0) vtxdata
+
+                from geocode g
+                left join t_ry_jbxx t
+                on t.geocode = g.code
+                left join jgsy_common j
+                on t.jgsy_code = j.jgsy_code
+                where g.code like #{depCode}
+                group by g.code
+                ) a
+                group by substr(geocode, 0, 4)
+                order by substr(geocode, 0, 4)
+            </when>
+            <otherwise>
+                select decode(geocode, #{code},(select desp from geocode g where g.code = geocode)||'(本级)',(select desp from geocode g where g.code = geocode))  as desp,
+                (select decode(substr(code, 5, 2), '00', 0, g.dis_order)
+                from geocode g
+                where g.code = substr(geocode, 0, 4) || '00') dis_order,
+                sum(vtxdata) as vtxdata
+                from (select g.code as geocode,
+                nvl(sum((case
+                when ((t.xb = '1' and
+                to_char(csrq, 'yyyymmdd') &lt;=
+                to_char(add_months(sysdate, 12) - interval '60' year,
+                'yyyymmdd'))
+
+                or (xb = '2' and
+                to_char(csrq, 'yyyymmdd') &lt;=
+                to_char(add_months(sysdate, 12) - interval '55' year,
+                'yyyymmdd') and zwjb > '132')
+
+                or (xb = '2' and
+                to_char(csrq, 'yyyymmdd') &lt;=
+                to_char(add_months(sysdate, 12) - interval '60' year,
+                'yyyymmdd') and zwjb &lt;= '132')) and
+                t.states = 1 and (t.zbzt = '01' or t.zbzt like '02%') and
+                zwjb not in ('111', '112', '121', '122') then
+                1
+                end)),
+                0) vtxdata
+
+                from geocode g
+                left join t_ry_jbxx t
+                on t.geocode = g.code
+                left join jgsy_common j
+                on t.jgsy_code = j.jgsy_code
+                where g.code like #{depCode}
+                group by g.code
+
+                ) a
+                group by geocode
+                order by geocode
+
+            </otherwise>
+        </choose>
+    </select>
 </mapper>

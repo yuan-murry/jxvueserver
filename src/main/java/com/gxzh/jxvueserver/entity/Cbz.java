@@ -16,5 +16,5 @@ public class Cbz implements Serializable {
     private int chaobz;
     private int chaozs;
     private int chaojg;
-    private int wttz;
+
 }
