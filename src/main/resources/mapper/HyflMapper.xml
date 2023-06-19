@@ -5,7 +5,7 @@
 
 
     <select id="getInsdstry" resultType="com.gxzh.jxvueserver.dto.BzzyIndstry">
-        select (select substr(hyfl_name, 0, 2) || substr(hyfl_code, 0, 2) from hyfl where hyfl_code = hylb) hyname,
+        select (select decode(substr(hyfl_name, 0, 2),'质量','质安','机关','后勤',substr(hyfl_name, 0, 2)) || substr(hyfl_code, 0, 2) from hyfl where hyfl_code = hylb) hyname,
                bzs,
                zzs
         from (select substr(h.hyfl_code, 0, 2) || '0000'   hylb,

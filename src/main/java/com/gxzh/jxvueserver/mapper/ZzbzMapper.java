@@ -20,4 +20,6 @@ public interface ZzbzMapper {
     List<ZzbzRecycle> getRecycle(String depCode);
 
     List<ZzbzRetire> getRetire(String depCode);
+
+    List<ZzbzDetail> selectZzbzDetail(@Param("depCode")String depCode);
 }

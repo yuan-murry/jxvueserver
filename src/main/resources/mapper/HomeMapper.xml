@@ -41,24 +41,37 @@
     </select>
 
     <select id="selectBzqk" resultType="com.gxzh.jxvueserver.dto.Bzqk">
-        select sum(dzq_bz) dzq_bz,
-               sum(dzq_zz) dzq_zz,
+        select sum(xz_bz) xz_bz,
+               sum(xz_zz) xz_zz,
                sum(sy_bz)  sy_bz,
                sum(sy_zz)  sy_zz,
                sum(xz_dfp) xz_dfp,
-               sum(sy_dfp) sy_dfp
-        from (select sum(dzq_bz+ga_bz+jcy_bz+fy_bz+sf_bz)                      dzq_bz,
-                     sum(dzq_zz+ga_zz+jcy_zz+fy_zz+sf_zz)                      dzq_zz,
+               sum(sy_dfp) sy_dfp,
+               sum(dzq_bz) dzq_bz,
+               sum(dzq_zz) dzq_zz,
+               sum(zf_bz)  zf_bz,
+               sum(zf_zz)  zf_zz,
+               sum(dzq_dfp) dzq_dfp,
+               sum(zf_dfp) zf_dfp
+        from (select sum(dzq_bz+ga_bz+jcy_bz+fy_bz+sf_bz)                      xz_bz,
+                     sum(dzq_zz+ga_zz+jcy_zz+fy_zz+sf_zz)                      xz_zz,
                      sum(qebk_bz + cebt_bz + jfzl_bz) sy_bz,
                      sum(qebk_zz + cebt_zz + jfzl_zz) sy_zz,
                      0 as                             xz_dfp,
-                     0 as                             sy_dfp
+                     0 as                             sy_dfp,
+
+                     sum(dzq_bz)         dzq_bz,
+                     sum(dzq_zz)         dzq_zz,
+                     sum(ga_bz+jcy_bz+fy_bz+sf_bz)         zf_bz,
+                     sum(ga_zz+jcy_zz+fy_zz+sf_zz)         zf_zz,
+                     0 as                             dzq_dfp,
+                     0 as                             zf_dfp
               from v_bzzz
               where geocode like #{depCode}
               union all
 
-              select 0 as     dzq_bz,
-                     0 as     dzq_zz,
+              select 0 as     xz_bz,
+                     0 as     xz_zz,
                      0 as     sy_bz,
                      0 as     sy_zz,
                      sum(case
@@ -73,7 +86,23 @@
                                  bz
                              else
                                  0
-                         end) sy_dfp
+                         end) sy_dfp,
+                     0        dzq_bz,
+                    0         dzq_zz,
+                     0        zf_bz,
+                     0         zf_zz,
+                     sum(case
+                             when jgsy_system_code = 'xz_dfp' then
+                                 bz
+                             else
+                                 0
+                         end) as                             dzq_dfp,
+                     sum(case
+                             when jgsy_system_code in ('ga_dfp','jcy_dfp','fy_dfp','sf_dfp','jy_dfp','qj_dfp') then
+                                 bz
+                             else
+                                 0
+                         end) as                             zf_dfp
               from V_TONGJI_DFPBZ_tjb t
               where dep_code like #{depCode})
 
@@ -732,52 +761,283 @@
     <select id="selectBzqk_fc" resultType="com.gxzh.jxvueserver.dto.Bzqk_fc" >
         <choose>
             <when test="type=='xzbz'">
-                select jgsy_name as jgname , dzq_bz+ga_bz+jcy_bz+fy_bz+sf_bz as bzsy from v_bzzz where jgtype in ('local','lo_next','jdxz') and geocode like #{depCode} and dzq_bz+ga_bz+jcy_bz+fy_bz+sf_bz !=0
+                select
+                (select desp
+                from geocode g
+                where g.code = geocode) desp,
+                jgsy_name as jgname ,
+                (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jgsy_system_code and dcl.code_type_no = '40') jgsy_system_code,
+                decode(jgtype,
+                'local',
+                '行政',
+                'lo_next',
+                '下设',
+                'sy',
+                '事业',
+                'jdxz',
+                '街道乡镇')jgtype,
+                dzq_bz+ga_bz+jcy_bz+fy_bz+sf_bz as bzsy
+                from v_bzzz where
+                jgtype in ('local','lo_next','jdxz')
+                and geocode like #{depCode}
+                and dzq_bz+ga_bz+jcy_bz+fy_bz+sf_bz !=0  order by geocode
             </when>
             <when test="type=='xzzz'">
-                select jgsy_name as jgname, dzq_zz+ga_zz+jcy_zz+fy_zz+sf_zz as bzsy from v_bzzz where jgtype in ('local','lo_next','jdxz') and geocode like #{depCode} and dzq_zz+ga_zz+jcy_zz+fy_zz+sf_zz !=0
-            </when>
-            <when test="type=='xzdfp'">
                 select
-                decode(zhxsh,
-                '100', '    直辖市','101','    直辖市属区','101201','    直辖市街道','000','省、自治区',
-                '001','地州盟合计', '002','    副省级市','004','    副省级市属区','004201','    副省级市街道',
-                '003','    地级市', '005','    地级市属区','005201','    地级市街道','006','    县级市','006201','    县级市街道',
-                '007', '    县', '007201', '    县街道','111','乡镇合计','008','省以下垂管（省级统一管理）'
-                ) as jgname
-
-
-
-
-                ,sum(bz)  as bzsy   from V_TONGJI_DFPBZ_tjb t where dep_code like #{depCode} and  jgsy_system_code in ('xz_dfp','ga_dfp','jcy_dfp','fy_dfp','sf_dfp','jy_dfp','qj_dfp')
-                group by zhxsh order by zhxsh
+                (select desp
+                from geocode g
+                where g.code = geocode) desp,
+                jgsy_name as jgname,
+                (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jgsy_system_code and dcl.code_type_no = '40') jgsy_system_code,
+                decode(jgtype,
+                'local',
+                '行政',
+                'lo_next',
+                '下设',
+                'sy',
+                '事业',
+                'jdxz',
+                '街道乡镇')jgtype,
+                dzq_zz+ga_zz+jcy_zz+fy_zz+sf_zz as bzsy
+                from v_bzzz where
+                jgtype in ('local','lo_next','jdxz')
+                and geocode like #{depCode} and dzq_zz+ga_zz+jcy_zz+fy_zz+sf_zz !=0  order by geocode
             </when>
 
+        </choose>
+    </select>
 
 
+    <select id="getXzjgBzsChildDfp" resultType="com.gxzh.jxvueserver.dto.XzjgBzsChildDfp" >
+        select
+            decode(zhxsh,
+                   '100', '    直辖市','101','    直辖市属区','101201','    直辖市街道','000','省、自治区',
+                   '001','地州盟合计', '002','    副省级市','004','    副省级市属区','004201','    副省级市街道',
+                   '003','    地级市', '005','    地级市属区','005201','    地级市街道','006','    县级市','006201','    县级市街道',
+                   '007', '    县', '007201', '    县街道','111','乡镇合计','008','省以下垂管（省级统一管理）'
+                ) as cj
+
+
+
+
+             ,sum(bz)  as num   from V_TONGJI_DFPBZ_tjb t where dep_code like #{depCode} and  jgsy_system_code in ('xz_dfp','ga_dfp','jcy_dfp','fy_dfp','sf_dfp','jy_dfp','qj_dfp')
+        group by zhxsh order by zhxsh
+    </select>
+
+
+    <select id="selectBzqk_sy" resultType="com.gxzh.jxvueserver.dto.Bzqk_fc_sy" >
+        <choose>
             <when test="type=='sybz'">
-                select jgsy_name as jgname, qebk_bz + cebt_bz + jfzl_bz as bzsy from v_bzzz where  geocode like #{depCode} and qebk_bz + cebt_bz + jfzl_bz !=0
-
+                select
+                (select desp
+                from geocode g
+                where g.code = geocode) desp,
+                jgsy_name as jgname,
+                (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jgsy_system_code and dcl.code_type_no = '40') jgsy_system_code,
+                (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jfxs and dcl.code_type_no = 'z6') jfxs,
+                (select h.hyfl_name from HYFL h where h.hyfl_code = sydwhyfl) sydwhyfl,
+                (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = SYDWLX and dcl.code_type_no = 'z3') sydwlx,
+                qebk_bz + cebt_bz + jfzl_bz as bzsy
+                from v_bzzz t left join sy s on t.jgsy_code=s.jgsy_code
+                where  geocode like #{depCode} and qebk_bz + cebt_bz + jfzl_bz !=0
+                order by geocode
             </when>
             <when test="type=='syzz'">
-                select jgsy_name as jgname, qebk_zz + cebt_zz + jfzl_zz as bzsy from v_bzzz where   geocode like #{depCode} and qebk_zz + cebt_zz + jfzl_zz !=0
-
-            </when>
-            <when test="type=='sydfp'">
                 select
-
-
-                decode(zhxsh,
-                '100', '    直辖市','101','    直辖市属区','101201','    直辖市街道','000','省、自治区',
-                '001','地州盟合计', '002','    副省级市','004','    副省级市属区','004201','    副省级市街道',
-                '003','    地级市', '005','    地级市属区','005201','    地级市街道','006','    县级市','006201','    县级市街道',
-                '007', '    县', '007201', '    县街道','111','乡镇合计','008','省以下垂管（省级统一管理）'
-                ) as jgname
-                ,sum(bz) as bzsy    from V_TONGJI_DFPBZ_tjb t where dep_code like #{depCode} and  jgsy_system_code in  ('qebk_dfp', 'jfzl_dfp', 'cebt_dfp')
-
-
-                group by zhxsh order by zhxsh
+                (select desp
+                from geocode g
+                where g.code = geocode) desp,
+                jgsy_name as jgname,
+                (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jgsy_system_code and dcl.code_type_no = '40') jgsy_system_code,
+                (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jfxs and dcl.code_type_no = 'z6') jfxs,
+                (select h.hyfl_name from HYFL h where h.hyfl_code = sydwhyfl) sydwhyfl,
+                (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = SYDWLX and dcl.code_type_no = 'z3') sydwlx,
+                qebk_zz + cebt_zz + jfzl_zz as bzsy
+                from v_bzzz t left join sy s on t.jgsy_code=s.jgsy_code
+                where  geocode like #{depCode} and qebk_zz + cebt_zz + jfzl_zz !=0
+                order by geocode
             </when>
+
         </choose>
+    </select>
+
+
+    <select id="getSydwBzsChildDfp" resultType="com.gxzh.jxvueserver.dto.SydwBzsChildDfp" >
+        select
+
+
+            decode(zhxsh,
+                   '100', '    直辖市','101','    直辖市属区','101201','    直辖市街道','000','省、自治区',
+                   '001','地州盟合计', '002','    副省级市','004','    副省级市属区','004201','    副省级市街道',
+                   '003','    地级市', '005','    地级市属区','005201','    地级市街道','006','    县级市','006201','    县级市街道',
+                   '007', '    县', '007201', '    县街道','111','乡镇合计','008','省以下垂管（省级统一管理）'
+                ) as cj
+             ,sum(bz) as num    from V_TONGJI_DFPBZ_tjb t where dep_code like #{depCode} and  jgsy_system_code in  ('qebk_dfp', 'jfzl_dfp', 'cebt_dfp')
+
+
+        group by zhxsh order by zhxsh
+    </select>
+
+
+    <select id="selectDzq_fc" resultType="com.gxzh.jxvueserver.dto.Dzq_fc" >
+        <choose>
+            <when test="type=='dzqbz'">
+                select
+                (select desp
+                from geocode g
+                where g.code = geocode) desp,
+                jgsy_name as jgname ,
+                (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jgsy_system_code and dcl.code_type_no = '40') jgsy_system_code,
+                decode(jgtype,
+                'local',
+                '行政',
+                'lo_next',
+                '下设',
+                'sy',
+                '事业',
+                'jdxz',
+                '街道乡镇')jgtype,
+                dzq_bz as bzsy
+                from v_bzzz where
+                jgtype in ('local','lo_next','jdxz')
+                and geocode like #{depCode}
+                and dzq_bz !=0  order by geocode
+            </when>
+            <when test="type=='dzqzz'">
+                select
+                (select desp
+                from geocode g
+                where g.code = geocode) desp,
+                jgsy_name as jgname,
+                (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jgsy_system_code and dcl.code_type_no = '40') jgsy_system_code,
+                decode(jgtype,
+                'local',
+                '行政',
+                'lo_next',
+                '下设',
+                'sy',
+                '事业',
+                'jdxz',
+                '街道乡镇')jgtype,
+                dzq_zz as bzsy
+                from v_bzzz where
+                jgtype in ('local','lo_next','jdxz')
+                and geocode like #{depCode} and dzq_zz !=0  order by geocode
+            </when>
+
+        </choose>
+    </select>
+
+    <select id="selectZf_fc" resultType="com.gxzh.jxvueserver.dto.Zf_fc" >
+        <choose>
+            <when test="type=='zfbz'">
+                select
+                (select desp
+                from geocode g
+                where g.code = geocode) desp,
+                jgsy_name as jgname ,
+                (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jgsy_system_code and dcl.code_type_no = '40') jgsy_system_code,
+                decode(jgtype,
+                'local',
+                '行政',
+                'lo_next',
+                '下设',
+                'sy',
+                '事业',
+                'jdxz',
+                '街道乡镇')jgtype,
+                nvl(ga_bz,0) as ga,
+                nvl(jcy_bz,0) as jcy,
+                nvl(fy_bz,0) as fy,
+                nvl(sf_bz,0) as sf
+                from v_bzzz where
+                jgtype in ('local','lo_next','jdxz')
+                and geocode like #{depCode}
+                and ga_bz+jcy_bz+ fy_bz+sf_bz !=0  order by geocode
+            </when>
+            <when test="type=='zfzz'">
+                select
+                (select desp
+                from geocode g
+                where g.code = geocode) desp,
+                jgsy_name as jgname,
+                (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jgsy_system_code and dcl.code_type_no = '40') jgsy_system_code,
+                decode(jgtype,
+                'local',
+                '行政',
+                'lo_next',
+                '下设',
+                'sy',
+                '事业',
+                'jdxz',
+                '街道乡镇')jgtype,
+                nvl(ga_zz,0) as ga,
+                nvl(jcy_zz,0) as jcy,
+                nvl(fy_zz,0) as fy,
+                nvl(sf_zz,0) as sf
+                from v_bzzz where
+                jgtype in ('local','lo_next','jdxz')
+                and geocode like #{depCode} and ga_zz+jcy_zz+ fy_zz+sf_zz !=0  order by geocode
+            </when>
+
+        </choose>
+    </select>
+
+    <select id="getDzqChildDfp" resultType="com.gxzh.jxvueserver.dto.DzqChildDfp" >
+        select
+            decode(zhxsh,
+                   '100', '    直辖市','101','    直辖市属区','101201','    直辖市街道','000','省、自治区',
+                   '001','地州盟合计', '002','    副省级市','004','    副省级市属区','004201','    副省级市街道',
+                   '003','    地级市', '005','    地级市属区','005201','    地级市街道','006','    县级市','006201','    县级市街道',
+                   '007', '    县', '007201', '    县街道','111','乡镇合计','008','省以下垂管（省级统一管理）'
+                ) as cj
+
+
+
+
+             ,sum(bz)  as num   from V_TONGJI_DFPBZ_tjb t where dep_code like #{depCode} and  jgsy_system_code = 'xz_dfp'
+        group by zhxsh order by zhxsh
+    </select>
+
+    <select id="getZfChildDfp" resultType="com.gxzh.jxvueserver.dto.ZfChildDfp" >
+        select
+            decode(zhxsh,
+                   '100', '    直辖市','101','    直辖市属区','101201','    直辖市街道','000','省、自治区',
+                   '001','地州盟合计', '002','    副省级市','004','    副省级市属区','004201','    副省级市街道',
+                   '003','    地级市', '005','    地级市属区','005201','    地级市街道','006','    县级市','006201','    县级市街道',
+                   '007', '    县', '007201', '    县街道','111','乡镇合计','008','省以下垂管（省级统一管理）'
+                ) as cj
+
+
+
+
+                ,
+            sum(case
+                    when jgsy_system_code  ='ga_dfp' then
+                        bz
+                    else
+                        0
+                end) ga_dfp,
+            sum(case
+                    when jgsy_system_code  ='jcy_dfp' then
+                        bz
+                    else
+                        0
+                end) jcy_dfp,
+            sum(case
+                    when jgsy_system_code  ='fy_dfp' then
+                        bz
+                    else
+                        0
+                end) fy_dfp,
+            sum(case
+                    when jgsy_system_code  in ('sf_dfp','jy_dfp','qj_dfp')  then
+                        bz
+                    else
+                        0
+                end) sf_dfp
+
+        from V_TONGJI_DFPBZ_tjb t where dep_code like #{depCode}
+        group by zhxsh order by zhxsh
     </select>
 </mapper>

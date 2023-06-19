@@ -282,7 +282,7 @@
                                   local.l_r_zf_fy + local.l_r_zf_sf + local.l_r_qebk +
                                   local.l_r_cebt + local.l_r_jfzl)) bzs
                       from local
-                      where local.jgsy_code = jgsy_code) as bzs
+                      where local.jgsy_code = jc.jgsy_code) as bzs
               from
                   jgsy_common jc
               where
@@ -304,7 +304,7 @@
                                  (zf_sf_zz + zf_fy_zz + zf_jcy_zz + zf_ga_zz +
                                   qebksyry + cebtsyry + jfzlsyry)) bzs
                       from sy
-                      where sy.jgsy_code = jgsy_code
+                      where sy.jgsy_code = jc.jgsy_code
                         and rownum = 1) as               bzs
               from
                   jgsy_common jc
@@ -328,7 +328,7 @@
                                   jdxz.zf_fy_zz + jdxz.zf_sf_zz + jdxz.qebk_zz +
                                   jdxz.cebt_zz + jdxz.jfzl_zz)) bzs
                       from jdxz
-                      where jdxz.jgsy_code = jgsy_code) as bzs
+                      where jdxz.jgsy_code = jc.jgsy_code) as bzs
               from
                   jgsy_common jc
               where

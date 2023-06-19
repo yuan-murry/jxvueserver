@@ -438,4 +438,7 @@
           and j.dep_code like #{depCode}  and j.jgsy_type not in ('12','13')
     </select>
 
+    <select id="selectZzbzDetail" resultType="com.gxzh.jxvueserver.dto.ZzbzDetail">
+        select mc as jgsyname,(zzkbs-zzkbzzs) as num from sy where jgsy_code like #{depCode} and jgsy_states='1'
+    </select>
 </mapper>

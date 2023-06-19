@@ -51,5 +51,10 @@ public class ZzbzController {
         List<ZzbzRetire> retire = this.zzbzService.getRetire(depCode);
         return Res.ok(retire);
     }
+    @RequestMapping("/selectZzbzDetail")
+    public Res<?> selectZzbzDetail(@RequestParam("depCode") String depCode) {
+        List<ZzbzDetail> zzbzDetailList = this.zzbzService.selectZzbzDetail(depCode);
+        return Res.ok(zzbzDetailList);
+    }
 
 }

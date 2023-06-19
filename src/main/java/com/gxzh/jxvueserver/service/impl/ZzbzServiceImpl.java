@@ -126,5 +126,22 @@ public class ZzbzServiceImpl implements ZzbzService {
         return retire == null ? new ArrayList<ZzbzRetire>() : retire;
     }
 
+    @Override
+    public List<ZzbzDetail> selectZzbzDetail(String depCode) {
 
+        if (!"36%".equals(depCode)) {
+            depCode = depCode.substring(0, 4) + "%";
+        }
+        List<ZzbzDetail> zzbzDetailList = null;
+        Object o = redisTemplate.opsForValue().get(vuejx + "selectZzbzDetail:" + depCode);
+        if (o != null) {
+            zzbzDetailList = (List<ZzbzDetail>) o;
+        } else {
+
+            zzbzDetailList = zzbzMapper.selectZzbzDetail(depCode);
+            redisTemplate.opsForValue().set(vuejx + "selectZzbzDetail:" + depCode, zzbzDetailList == null ? new ArrayList<ZzbzDetail>() : zzbzDetailList);
+        }
+
+        return zzbzDetailList == null ? new ArrayList<ZzbzDetail>() : zzbzDetailList;
+    }
 }

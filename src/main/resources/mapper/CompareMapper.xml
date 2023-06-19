@@ -20,12 +20,12 @@
 
             case
             WHEN (NVL(sum(DZQ_BZ),
-            0))!=0 THEN ceil(round(
+            0))!=0 THEN round(
             (sum(SBJZZBZ) + sum(SBJFZBZ) + sum(TJJZZBZ) + sum(TJJFZBZ) + sum(XCJZZBZ) +
             sum(XCJFZBZ) + sum(XKJZZBZ) + sum(XKJFZBZ) + sum(GJZZBZ) + sum(GJFZBZ) + sum(WDJBZS) +
             sum(QTBZS)) /
             (sum(DZQ_BZ))
-            , 1))
+            , 5) * 10000
             ELSE 0 END                           xzpbz,
 
 
@@ -34,12 +34,12 @@
 
             case
             WHEN (NVL(sum(QEBK_BZ + CEBT_BZ + JFZL_BZ),
-            0))!=0 THEN ceil(round(
+            0))!=0 THEN round(
             (sum(SYSBJZZBZ) + sum(SYSBJFZBZ) + sum(SYTJJZZBZ) + sum(SYTJJFZBZ) + sum(SYXCJZZBZ) +
             sum(SYXCJFZBZ) + sum(SYXKJZZBZ) + sum(SYXKJFZBZ) + sum(SYGJZZBZ) + sum(SYGJFZBZ) +
             sum(SYWDJBZS) + sum(SYQTBZS)) /
             (sum(QEBK_BZ + CEBT_BZ + JFZL_BZ))
-            , 1))
+            , 5) * 10000
             ELSE 0 END                           sypbz
             from (
 
@@ -194,28 +194,28 @@
             0            QTBZS,
 
 
-            SBJZZBZ as SYSBJZZBZ,
+            SYSBJZZBZ as SYSBJZZBZ,
 
-            SBJFZBZ as SYSBJFZBZ,
+            SYSBJFZBZ as SYSBJFZBZ,
 
-            TJJZZBZ as SYTJJZZBZ,
+            SYTJJZZBZ as SYTJJZZBZ,
 
-            TJJFZBZ as SYTJJFZBZ,
+            SYTJJFZBZ as SYTJJFZBZ,
 
-            XCJZZBZ as SYXCJZZBZ,
+            SYXCJZZBZ as SYXCJZZBZ,
 
-            XCJFZBZ as SYXCJFZBZ,
+            SYXCJFZBZ as SYXCJFZBZ,
 
-            XKJZZBZ as SYXKJZZBZ,
+            SYXKJZZBZ as SYXKJZZBZ,
 
-            XKJFZBZ as SYXKJFZBZ,
+            SYXKJFZBZ as SYXKJFZBZ,
 
-            GJZZBZ  as SYGJZZBZ,
+            SYGJZZBZ  as SYGJZZBZ,
 
-            GJFZBZ  as SYGJFZBZ,
+            SYGJFZBZ  as SYGJFZBZ,
 
-            WDJBZS  as SYWDJBZS,
-            QTBZS   as SYQTBZS,
+            SYWDJBZS  as SYWDJBZS,
+            SYQTBZS   as SYQTBZS,
 
             dzq_bz    as DZQ_BZ,
 
@@ -306,12 +306,12 @@
 
             case
             WHEN (NVL(sum(DZQ_BZ),
-            0))!=0 THEN ceil(round(
+            0))!=0 THEN round(
             (sum(SBJZZBZ) + sum(SBJFZBZ) + sum(TJJZZBZ) + sum(TJJFZBZ) + sum(XCJZZBZ) +
             sum(XCJFZBZ) + sum(XKJZZBZ) + sum(XKJFZBZ) + sum(GJZZBZ) + sum(GJFZBZ) + sum(WDJBZS) +
             sum(QTBZS)) /
             (sum(DZQ_BZ))
-            , 1))
+            , 5) * 10000
             ELSE 0 END                           xzpbz,
 
 
@@ -320,12 +320,12 @@
 
             case
             WHEN (NVL(sum(QEBK_BZ + CEBT_BZ + JFZL_BZ),
-            0))!=0 THEN ceil(round(
+            0))!=0 THEN round(
             (sum(SYSBJZZBZ) + sum(SYSBJFZBZ) + sum(SYTJJZZBZ) + sum(SYTJJFZBZ) + sum(SYXCJZZBZ) +
             sum(SYXCJFZBZ) + sum(SYXKJZZBZ) + sum(SYXKJFZBZ) + sum(SYGJZZBZ) + sum(SYGJFZBZ) +
             sum(SYWDJBZS) + sum(SYQTBZS)) /
             (sum(QEBK_BZ + CEBT_BZ + JFZL_BZ))
-            , 1))
+            , 5) * 10000
             ELSE 0 END                           sypbz
             from (
 
@@ -480,28 +480,28 @@
             0            QTBZS,
 
 
-            SBJZZBZ as SYSBJZZBZ,
+            SYSBJZZBZ as SYSBJZZBZ,
 
-            SBJFZBZ as SYSBJFZBZ,
+            SYSBJFZBZ as SYSBJFZBZ,
 
-            TJJZZBZ as SYTJJZZBZ,
+            SYTJJZZBZ as SYTJJZZBZ,
 
-            TJJFZBZ as SYTJJFZBZ,
+            SYTJJFZBZ as SYTJJFZBZ,
 
-            XCJZZBZ as SYXCJZZBZ,
+            SYXCJZZBZ as SYXCJZZBZ,
 
-            XCJFZBZ as SYXCJFZBZ,
+            SYXCJFZBZ as SYXCJFZBZ,
 
-            XKJZZBZ as SYXKJZZBZ,
+            SYXKJZZBZ as SYXKJZZBZ,
 
-            XKJFZBZ as SYXKJFZBZ,
+            SYXKJFZBZ as SYXKJFZBZ,
 
-            GJZZBZ  as SYGJZZBZ,
+            SYGJZZBZ  as SYGJZZBZ,
 
-            GJFZBZ  as SYGJFZBZ,
+            SYGJFZBZ  as SYGJFZBZ,
 
-            WDJBZS  as SYWDJBZS,
-            QTBZS   as SYQTBZS,
+            SYWDJBZS  as SYWDJBZS,
+            SYQTBZS   as SYQTBZS,
 
             dzq_bz    as DZQ_BZ,
 

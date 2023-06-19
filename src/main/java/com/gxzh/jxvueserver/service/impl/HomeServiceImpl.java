@@ -281,4 +281,126 @@ public class HomeServiceImpl implements HomeService {
         }
         return fzqk_fc;
     }
+
+    @Override
+    public List<Bzqk_fc_sy> selectBzqk_sy(String depCode,String type) {
+        Object o = redisTemplate.opsForValue().get(vuejx + "selectBzqk_sy:" + depCode+type);
+        List<Bzqk_fc_sy> bzqk_fc_sy = null;
+        if (o != null) {
+            bzqk_fc_sy = (List<Bzqk_fc_sy>) o;
+        } else {
+
+            bzqk_fc_sy = homeMapper.selectBzqk_sy(depCode,type);
+            if (bzqk_fc_sy == null) {
+                bzqk_fc_sy = new ArrayList<>();
+            }
+            redisTemplate.opsForValue().set(vuejx + "selectBzqk_sy:" + depCode+type, bzqk_fc_sy);
+        }
+        return bzqk_fc_sy;
+    }
+
+    @Override
+    public List<XzjgBzsChildDfp> getXzjgBzsChildDfp(String depCode) {
+        Object o = redisTemplate.opsForValue().get(vuejx + "getXzjgBzsChildDfp:" + depCode);
+        List<XzjgBzsChildDfp> xzjgBzsChildDfpList = null;
+        if (o != null) {
+            xzjgBzsChildDfpList = (List<XzjgBzsChildDfp>) o;
+        } else {
+
+            xzjgBzsChildDfpList = homeMapper.getXzjgBzsChildDfp(depCode);
+            if (xzjgBzsChildDfpList == null) {
+                xzjgBzsChildDfpList = new ArrayList<>();
+            }
+            redisTemplate.opsForValue().set(vuejx + "getXzjgBzsChildDfp:" + depCode, xzjgBzsChildDfpList);
+        }
+        return xzjgBzsChildDfpList;
+    }
+
+    @Override
+    public List<SydwBzsChildDfp> getSydwBzsChildDfp(String depCode) {
+        Object o = redisTemplate.opsForValue().get(vuejx + "getSydwBzsChildDfp:" + depCode);
+        List<SydwBzsChildDfp> sydwBzsChildDfpList = null;
+        if (o != null) {
+            sydwBzsChildDfpList = (List<SydwBzsChildDfp>) o;
+        } else {
+
+            sydwBzsChildDfpList = homeMapper.getSydwBzsChildDfp(depCode);
+            if (sydwBzsChildDfpList == null) {
+                sydwBzsChildDfpList = new ArrayList<>();
+            }
+            redisTemplate.opsForValue().set(vuejx + "getSydwBzsChildDfp:" + depCode, sydwBzsChildDfpList);
+        }
+        return sydwBzsChildDfpList;
+    }
+
+
+    @Override
+    public List<Dzq_fc> selectDzq_fc(String depCode,String type) {
+        Object o = redisTemplate.opsForValue().get(vuejx + "selectDzq_fc:" + depCode+type);
+        List<Dzq_fc> dzqfcList = null;
+        if (o != null) {
+            dzqfcList = (List<Dzq_fc>) o;
+        } else {
+
+            dzqfcList = homeMapper.selectDzq_fc(depCode,type);
+            if (dzqfcList == null) {
+                dzqfcList = new ArrayList<>();
+            }
+            redisTemplate.opsForValue().set(vuejx + "selectDzq_fc:" + depCode+type, dzqfcList);
+        }
+        return dzqfcList;
+    }
+
+    @Override
+    public List<Zf_fc> selectZf_fc(String depCode,String type) {
+        Object o = redisTemplate.opsForValue().get(vuejx + "selectZf_fc:" + depCode+type);
+        List<Zf_fc> zffcList = null;
+        if (o != null) {
+            zffcList = (List<Zf_fc>) o;
+        } else {
+
+            zffcList = homeMapper.selectZf_fc(depCode,type);
+            if (zffcList == null) {
+                zffcList = new ArrayList<>();
+            }
+            redisTemplate.opsForValue().set(vuejx + "selectZf_fc:" + depCode+type, zffcList);
+        }
+        return zffcList;
+    }
+
+
+    @Override
+    public List<DzqChildDfp> getDzqChildDfp(String depCode) {
+        Object o = redisTemplate.opsForValue().get(vuejx + "getDzqChildDfp:" + depCode);
+        List<DzqChildDfp> dzqChildDfpList = null;
+        if (o != null) {
+            dzqChildDfpList = (List<DzqChildDfp>) o;
+        } else {
+
+            dzqChildDfpList = homeMapper.getDzqChildDfp(depCode);
+            if (dzqChildDfpList == null) {
+                dzqChildDfpList = new ArrayList<>();
+            }
+            redisTemplate.opsForValue().set(vuejx + "getDzqChildDfp:" + depCode, dzqChildDfpList);
+        }
+        return dzqChildDfpList;
+    }
+
+
+    @Override
+    public List<ZfChildDfp> getZfChildDfp(String depCode) {
+        Object o = redisTemplate.opsForValue().get(vuejx + "getZfChildDfp:" + depCode);
+        List<ZfChildDfp> zfChildDfpList = null;
+        if (o != null) {
+            zfChildDfpList = (List<ZfChildDfp>) o;
+        } else {
+
+            zfChildDfpList = homeMapper.getZfChildDfp(depCode);
+            if (zfChildDfpList == null) {
+                zfChildDfpList = new ArrayList<>();
+            }
+            redisTemplate.opsForValue().set(vuejx + "getZfChildDfp:" + depCode, zfChildDfpList);
+        }
+        return zfChildDfpList;
+    }
 }

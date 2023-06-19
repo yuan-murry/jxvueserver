@@ -47,21 +47,7 @@
                    and t.dep_code like #{depcode}
              )
         union all
-        select decode(count(0), 0, 0, 0)                          as num1,
-               decode(count(0), 0, 0, sum(qe_zz + ce_zz + jf_zz)) as num2,
-               decode(count(0), 0, 0, 0)                          as num3,
-               decode(count(0), 0, 0, 0)                          as num4
-        from (
-                 select t.qebk_zz as qe_zz,
-                        t.cebt_zz as ce_zz,
-                        t.jfzl_zz as jf_zz
 
-                 from v_bzzz t
-                          left join sy s
-                                    on t.jgsy_code = s.jgsy_code
-                 where t.geocode like #{depcode}
-             )
-        union all
         select decode(count(0), 0, 0, 0)            as num1,
                decode(count(0), 0, 0, sum(bary_zz)) as num2,
                decode(count(0), 0, 0, 0)            as num3,
@@ -84,6 +70,22 @@
 
              )
         union all
+        select decode(count(0), 0, 0, 0)                          as num1,
+               decode(count(0), 0, 0, sum(qe_zz + ce_zz + jf_zz)) as num2,
+               decode(count(0), 0, 0, 0)                          as num3,
+               decode(count(0), 0, 0, 0)                          as num4
+        from (
+                 select t.qebk_zz as qe_zz,
+                        t.cebt_zz as ce_zz,
+                        t.jfzl_zz as jf_zz
+
+                 from v_bzzz t
+                          left join sy s
+                                    on t.jgsy_code = s.jgsy_code
+                 where t.geocode like #{depcode}
+             )
+
+        union all
         select decode(count(0), 0, 0, 0)            as num1,
                decode(count(0), 0, 0, 0)            as num2,
                decode(count(0), 0, 0, sum(bary_bz)) as num3,
@@ -94,7 +96,9 @@
                 and t.geocode like #{depcode}
 
              )
+
         union all
+
         select decode(count(0), 0, 0, 0)            as num1,
                decode(count(0), 0, 0, 0)            as num2,
                decode(count(0), 0, 0, sum(kzry_bz)) as num3,

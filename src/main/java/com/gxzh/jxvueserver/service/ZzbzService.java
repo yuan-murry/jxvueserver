@@ -16,4 +16,6 @@ public interface ZzbzService {
     List<ZzbzRecycle> getRecycle(String depCode);
 
     List<ZzbzRetire> getRetire(String depCode);
+
+    List<ZzbzDetail> selectZzbzDetail(String depCode);
 }

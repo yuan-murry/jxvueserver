@@ -111,6 +111,7 @@ public class FreshRedisCache {
                 wtyjService.selectAzwtlx(dep);
                 wtyjService.selectAzzgfs(dep);
                 wtyjService.selectYwttz(dep);
+                wtyjService.selectLTX(dep);
             }
             reurnMsg.append("wtyj页面接口刷新完毕<br>");
             for (String dep : depArrBzzy) {
@@ -120,6 +121,7 @@ public class FreshRedisCache {
                 zzbzService.getStaffDuty(dep);
                 zzbzService.getZzbzAllot(dep);
                 zzbzService.getUseCondition(dep);
+
             }
             reurnMsg.append("zzbz页面接口刷新完毕<br>");
             for (String dep : depArrAnalyse) {
