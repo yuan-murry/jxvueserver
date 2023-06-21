@@ -1,5 +1,6 @@
 package com.gxzh.jxvueserver.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.gxzh.jxvueserver.dto.*;
 import com.gxzh.jxvueserver.service.ZzbzService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,12 @@ public class ZzbzController {
         return Res.ok(retire);
     }
     @RequestMapping("/selectZzbzDetail")
-    public Res<?> selectZzbzDetail(@RequestParam("depCode") String depCode) {
-        List<ZzbzDetail> zzbzDetailList = this.zzbzService.selectZzbzDetail(depCode);
+    public Res<?> selectZzbzDetail(@RequestParam("depCode") String depCode,
+                                   @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
+                                   @RequestParam(value = "pageSize",defaultValue = "10")int pageSize
+                                   ) {
+
+        PageInfo<ZzbzDetail> zzbzDetailList = this.zzbzService.selectZzbzDetail(depCode,pageNum,pageSize);
         return Res.ok(zzbzDetailList);
     }
 

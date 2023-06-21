@@ -1,8 +1,7 @@
 package com.gxzh.jxvueserver.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gxzh.jxvueserver.dto.*;
-
-import java.util.List;
 
 public interface HomeService {
     SydwPie selectSydwpie(String depCode);
@@ -19,30 +18,30 @@ public interface HomeService {
 
     GeoSituation getGeoSituation(String depCode);
 
-    List<XzjgLdzsChild>  selectXzjgLdzsChild(String depCode,String ldzstype);
+    PageInfo<XzjgLdzsChild> selectXzjgLdzsChild(String depCode, String ldzstype, int pageNum, int pageSize);
 
-    List<SyjgLdzsChild>  selectSyjgLdzsChild(String depCode,String ldzstype);
+    PageInfo<SyjgLdzsChild>  selectSyjgLdzsChild(String depCode,String ldzstype,int pageNum, int pageSize);
 
-    List<XzjgPieChild>  selectXzjgPieChild(String depCode,String depName);
-    List<SydwPieChild>  selectSydwPieChild(String depCode,String depName);
+    PageInfo<XzjgPieChild>  selectXzjgPieChild(String depCode,String depName,int pageNum,int pageSize);
+    PageInfo<SydwPieChild>  selectSydwPieChild(String depCode,String depName,int pageNum,int pageSize);
 
-    List<XzjgLdzsChildDetail>  selectXzjgLdzsChildDetail(String depCode,String doquery);
+    PageInfo<XzjgLdzsChildDetail>  selectXzjgLdzsChildDetail(String depCode,String doquery,int pageNum,int pageSize);
 
-    List<SydwLdzsChildDetail>  selectSydwLdzsChildDetail(String depCode,String doquery);
+    PageInfo<SydwLdzsChildDetail>  selectSydwLdzsChildDetail(String depCode,String doquery,int pageNum,int pageSize);
 
-    List<Bzqk_fc> selectBzqk_fc(String depCode ,String type);
+    PageInfo<Bzqk_fc> selectBzqk_fc(String depCode ,String type,int pageNum,int pageSize);
 
-    List<Bzqk_fc_sy> selectBzqk_sy(String depCode ,String type);
+    PageInfo<Bzqk_fc_sy> selectBzqk_sy(String depCode ,String type,int pageNum,int pageSize);
 
-    List<XzjgBzsChildDfp> getXzjgBzsChildDfp(String depCode);
+    PageInfo<XzjgBzsChildDfp> getXzjgBzsChildDfp(String depCode,int pageNum,int pageSize);
 
-    List<SydwBzsChildDfp> getSydwBzsChildDfp(String depCode);
+    PageInfo<SydwBzsChildDfp> getSydwBzsChildDfp(String depCode,int pageNum,int pageSize);
 
-    List<Dzq_fc> selectDzq_fc(String depCode ,String type);
+    PageInfo<Dzq_fc> selectDzq_fc(String depCode ,String type,int pageNum,int pageSize);
 
-    List<Zf_fc> selectZf_fc(String depCode ,String type);
+    PageInfo<Zf_fc> selectZf_fc(String depCode ,String type,int pageNum,int pageSize);
 
-    List<DzqChildDfp> getDzqChildDfp(String depCode);
+    PageInfo<DzqChildDfp> getDzqChildDfp(String depCode,int pageNum,int pageSize);
 
-    List<ZfChildDfp> getZfChildDfp(String depCode);
+    PageInfo<ZfChildDfp> getZfChildDfp(String depCode,int pageNum,int pageSize);
 }

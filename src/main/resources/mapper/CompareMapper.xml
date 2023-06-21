@@ -25,7 +25,7 @@
             sum(XCJFZBZ) + sum(XKJZZBZ) + sum(XKJFZBZ) + sum(GJZZBZ) + sum(GJFZBZ) + sum(WDJBZS) +
             sum(QTBZS)) /
             (sum(DZQ_BZ))
-            , 5) * 10000
+            , 4) * 10000
             ELSE 0 END                           xzpbz,
 
 
@@ -39,7 +39,7 @@
             sum(SYXCJFZBZ) + sum(SYXKJZZBZ) + sum(SYXKJFZBZ) + sum(SYGJZZBZ) + sum(SYGJFZBZ) +
             sum(SYWDJBZS) + sum(SYQTBZS)) /
             (sum(QEBK_BZ + CEBT_BZ + JFZL_BZ))
-            , 5) * 10000
+            , 4) * 10000
             ELSE 0 END                           sypbz
             from (
 

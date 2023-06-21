@@ -13,9 +13,9 @@
                 from geocode g
                 where g.code = (substr(geocode,0,4)||'00'))  as dis_order
                 ,
-                sum(case when chaobz&gt; 0 then chaobz else 0 end) as chaobz,
-                sum(case when chaozs&gt; 0 then chaozs else 0 end) as chaozs,
-                sum(case when chaojg&gt; 0 then chaojg else 0 end)  as chaojg
+                sum(case when chaobz&gt;0  then chaobz else 0 end) as chaobz,
+                sum(case when chaozs&gt;0 then chaozs else 0 end) as chaozs,
+                sum(case when chaojg&gt;0 then chaojg else 0 end)  as chaojg
 
 
                 from (select
@@ -52,9 +52,9 @@
                 from geocode g
                 where g.code = geocode)  as dis_order
                 ,
-                sum(case when chaobz&gt; 0 then chaobz else 0 end) as chaobz,
-                sum(case when chaozs&gt; 0 then chaozs else 0 end) as chaozs,
-                sum(case when chaojg&gt; 0 then chaojg else 0 end)  as chaojg
+                sum(case when chaobz&gt;0 then chaobz else 0 end) as chaobz,
+                sum(case when chaozs&gt;0 then chaozs else 0 end) as chaozs,
+                sum(case when chaojg&gt;0 then chaojg else 0 end)  as chaojg
 
 
                 from (select

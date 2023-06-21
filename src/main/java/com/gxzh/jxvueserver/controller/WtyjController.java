@@ -1,5 +1,6 @@
 package com.gxzh.jxvueserver.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.gxzh.jxvueserver.dto.Res;
 import com.gxzh.jxvueserver.dto.VtxPie;
 import com.gxzh.jxvueserver.dto.WtyjJgsy;
@@ -7,6 +8,7 @@ import com.gxzh.jxvueserver.entity.*;
 import com.gxzh.jxvueserver.service.WtyjService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -41,22 +43,30 @@ public class WtyjController {
     }
 
     @RequestMapping("/getextraPieChild")
-    public Res<?> getextraPieChild(String depCode,String jgsyNum){
-        List<WtyjJgsy> jgsyList = null;
-        if (depCode != null) {
-            jgsyList = wtyjService.getextraPieChild(depCode,jgsyNum);
-        }
+    public Res<?> getextraPieChild(@RequestParam("depCode") String depCode,
+                                   @RequestParam("jgsyNum") String jgsyNum,
+                                   @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
+                                   @RequestParam(value = "pageSize",defaultValue = "10")int pageSize
+                                   ){
+
+
+            PageInfo<WtyjJgsy> jgsyList = wtyjService.getextraPieChild(depCode,jgsyNum,pageNum,pageSize);
+
         return Res.ok(jgsyList);
     }
 
 
 
     @RequestMapping("/selectextraPieChildDetail")
-    public Res<?> selectextraPieChildDetail(String depName,String classNum){
-        List<WtyjJgsy> jgsyList = null;
-        if (depName != null) {
-            jgsyList = wtyjService.selectextraPieChildDetail(depName,classNum);
-        }
+    public Res<?> selectextraPieChildDetail(@RequestParam("depName") String depName,
+                                            @RequestParam("classNum") String classNum,
+                                            @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
+                                            @RequestParam(value ="pageSize",defaultValue = "10")int pageSize
+
+                                            ){
+
+            PageInfo<WtyjJgsy>   jgsyList = wtyjService.selectextraPieChildDetail(depName,classNum,pageNum,pageSize);
+
         return Res.ok(jgsyList);
     }
 

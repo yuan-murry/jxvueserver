@@ -1,5 +1,6 @@
 package com.gxzh.jxvueserver.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gxzh.jxvueserver.dto.*;
 
 import java.util.List;
@@ -17,5 +18,5 @@ public interface ZzbzService {
 
     List<ZzbzRetire> getRetire(String depCode);
 
-    List<ZzbzDetail> selectZzbzDetail(String depCode);
+    PageInfo<ZzbzDetail> selectZzbzDetail(String depCode, int pageNum, int pageSize);
 }

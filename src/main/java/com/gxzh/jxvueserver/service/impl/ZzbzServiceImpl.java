@@ -1,5 +1,7 @@
 package com.gxzh.jxvueserver.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gxzh.jxvueserver.dto.*;
 import com.gxzh.jxvueserver.mapper.ZzbzMapper;
 import com.gxzh.jxvueserver.service.ZzbzService;
@@ -127,21 +129,21 @@ public class ZzbzServiceImpl implements ZzbzService {
     }
 
     @Override
-    public List<ZzbzDetail> selectZzbzDetail(String depCode) {
+    public PageInfo<ZzbzDetail> selectZzbzDetail(String depCode,int pageNum,int pageSize) {
 
         if (!"36%".equals(depCode)) {
             depCode = depCode.substring(0, 4) + "%";
         }
         List<ZzbzDetail> zzbzDetailList = null;
-        Object o = redisTemplate.opsForValue().get(vuejx + "selectZzbzDetail:" + depCode);
-        if (o != null) {
-            zzbzDetailList = (List<ZzbzDetail>) o;
-        } else {
 
+            PageHelper.startPage(pageNum,pageSize);
             zzbzDetailList = zzbzMapper.selectZzbzDetail(depCode);
-            redisTemplate.opsForValue().set(vuejx + "selectZzbzDetail:" + depCode, zzbzDetailList == null ? new ArrayList<ZzbzDetail>() : zzbzDetailList);
-        }
+            PageInfo<ZzbzDetail> pageList=new PageInfo<>(zzbzDetailList);
+            if(zzbzDetailList==null){
+                zzbzDetailList=new ArrayList<>();
+            }
 
-        return zzbzDetailList == null ? new ArrayList<ZzbzDetail>() : zzbzDetailList;
+
+        return pageList;
     }
 }

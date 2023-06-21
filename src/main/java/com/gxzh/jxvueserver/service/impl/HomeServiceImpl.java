@@ -1,5 +1,7 @@
 package com.gxzh.jxvueserver.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gxzh.jxvueserver.dto.*;
 import com.gxzh.jxvueserver.mapper.HomeMapper;
 import com.gxzh.jxvueserver.service.HomeService;
@@ -124,40 +126,35 @@ public class HomeServiceImpl implements HomeService {
 
 
 
-   public List<XzjgLdzsChild> selectXzjgLdzsChild(String depCode, String ldzstype){
-       Object o = redisTemplate.opsForValue().get(vuejx + "xzjgLdzsChild:" + depCode+ldzstype);
-       List<XzjgLdzsChild> xzjgLdzsChildList = null;
-       if (o != null) {
-           xzjgLdzsChildList = (List<XzjgLdzsChild>) o;
-       } else {
+   public PageInfo<XzjgLdzsChild> selectXzjgLdzsChild(String depCode, String ldzstype ,int pageNum, int pageSize){
 
+       List<XzjgLdzsChild> xzjgLdzsChildList = null;
+
+            PageHelper.startPage(pageNum,pageSize);
            xzjgLdzsChildList = homeMapper.selectXzjgLdzsChild(depCode,ldzstype);
-           if (xzjgLdzsChildList == null) {
-               xzjgLdzsChildList = new ArrayList<>();
-           }
-           redisTemplate.opsForValue().set(vuejx + "xzjgLdzsChild:" + depCode+ldzstype, xzjgLdzsChildList);
-       }
-       return xzjgLdzsChildList;
+           PageInfo<XzjgLdzsChild> pageList=new PageInfo<>(xzjgLdzsChildList);
+
+
+       return pageList;
    }
 
-    public List<SyjgLdzsChild> selectSyjgLdzsChild(String depCode, String ldzstype){
-        Object o = redisTemplate.opsForValue().get(vuejx + "syjgLdzsChild:" + depCode+ldzstype);
-        List<SyjgLdzsChild> syjgLdzsChildList = null;
-        if (o != null) {
-            syjgLdzsChildList = (List<SyjgLdzsChild>) o;
-        } else {
+    public PageInfo<SyjgLdzsChild> selectSyjgLdzsChild(String depCode, String ldzstype,int pageNum, int pageSize){
 
+        List<SyjgLdzsChild> syjgLdzsChildList = null;
+
+        PageHelper.startPage(pageNum,pageSize);
             syjgLdzsChildList = homeMapper.selectSyjgLdzsChild(depCode,ldzstype);
+        PageInfo<SyjgLdzsChild> pageList=new PageInfo<>(syjgLdzsChildList);
             if (syjgLdzsChildList == null) {
                 syjgLdzsChildList = new ArrayList<>();
             }
-            redisTemplate.opsForValue().set(vuejx + "syjgLdzsChild:" + depCode+ldzstype, syjgLdzsChildList);
-        }
-        return syjgLdzsChildList;
+
+
+        return pageList;
     }
 
 
-    public List<XzjgPieChild> selectXzjgPieChild(String depCode, String depName){
+    public PageInfo<XzjgPieChild> selectXzjgPieChild(String depCode, String depName,int pageNum,int pageSize){
         if(depName.equals("dw")){
             depName="01";
         }else if(depName.equals("rd")){
@@ -179,22 +176,21 @@ public class HomeServiceImpl implements HomeService {
 
 
 
-        Object o = redisTemplate.opsForValue().get(vuejx + "xzjgPieChild:" + depCode+depName);
-        List<XzjgPieChild> xzjgPieChildList = null;
-        if (o != null) {
-            xzjgPieChildList = (List<XzjgPieChild>) o;
-        } else {
 
+        List<XzjgPieChild> xzjgPieChildList = null;
+
+            PageHelper.startPage(pageNum,pageSize);
             xzjgPieChildList = homeMapper.selectXzjgPieChild(depCode,depName);
+            PageInfo<XzjgPieChild> pageList=new PageInfo<>(xzjgPieChildList);
             if (xzjgPieChildList == null) {
                 xzjgPieChildList = new ArrayList<>();
             }
-            redisTemplate.opsForValue().set(vuejx + "xzjgPieChild:" + depCode+depName, xzjgPieChildList);
-        }
-        return xzjgPieChildList;
+
+
+        return pageList;
     }
 
-    public List<SydwPieChild> selectSydwPieChild(String depCode, String depName){
+    public PageInfo<SydwPieChild> selectSydwPieChild(String depCode, String depName,int pageNum,int pageSize){
         if(depName.equals("dw")){
             depName="01";
         }else if(depName.equals("rd")){
@@ -216,191 +212,180 @@ public class HomeServiceImpl implements HomeService {
 
 
 
-        Object o = redisTemplate.opsForValue().get(vuejx + "sydwPieChild:" + depCode+depName);
-        List<SydwPieChild> sydwPieChildList = null;
-        if (o != null) {
-            sydwPieChildList = (List<SydwPieChild>) o;
-        } else {
 
+        List<SydwPieChild> sydwPieChildList = null;
+
+            PageHelper.startPage(pageNum,pageSize);
             sydwPieChildList = homeMapper.selectSydwPieChild(depCode,depName);
+            PageInfo<SydwPieChild> pageList=new PageInfo<>(sydwPieChildList);
             if (sydwPieChildList == null) {
                 sydwPieChildList = new ArrayList<>();
             }
-            redisTemplate.opsForValue().set(vuejx + "sydwPieChild:" + depCode+depName, sydwPieChildList);
-        }
-        return sydwPieChildList;
+
+
+        return pageList;
     }
 
 
-    public List<XzjgLdzsChildDetail> selectXzjgLdzsChildDetail(String depCode, String doquery){
-        Object o = redisTemplate.opsForValue().get(vuejx + "xzjgLdzsChildDetail:" + depCode+doquery);
-        List<XzjgLdzsChildDetail> xzjgLdzsChildDetailList = null;
-        if (o != null) {
-            xzjgLdzsChildDetailList = (List<XzjgLdzsChildDetail>) o;
-        } else {
+    public PageInfo<XzjgLdzsChildDetail> selectXzjgLdzsChildDetail(String depCode, String doquery,int pageNum,int pageSize){
 
+        List<XzjgLdzsChildDetail> xzjgLdzsChildDetailList = null;
+
+            PageHelper.startPage(pageNum,pageSize);
             xzjgLdzsChildDetailList = homeMapper.selectXzjgLdzsChildDetail(depCode,doquery);
+            PageInfo<XzjgLdzsChildDetail> pageList=new PageInfo<>(xzjgLdzsChildDetailList);
             if (xzjgLdzsChildDetailList == null) {
                 xzjgLdzsChildDetailList = new ArrayList<>();
             }
-            redisTemplate.opsForValue().set(vuejx + "xzjgLdzsChildDetail:" + depCode+doquery, xzjgLdzsChildDetailList);
-        }
-        return xzjgLdzsChildDetailList;
+
+
+        return pageList;
     }
 
-    public List<SydwLdzsChildDetail> selectSydwLdzsChildDetail(String depCode, String doquery){
-        Object o = redisTemplate.opsForValue().get(vuejx + "sydwLdzsChildDetail:" + depCode+doquery);
-        List<SydwLdzsChildDetail> sydwLdzsChildDetailList = null;
-        if (o != null) {
-            sydwLdzsChildDetailList = (List<SydwLdzsChildDetail>) o;
-        } else {
+    public PageInfo<SydwLdzsChildDetail> selectSydwLdzsChildDetail(String depCode, String doquery,int pageNum,int pageSize){
 
+        List<SydwLdzsChildDetail> sydwLdzsChildDetailList = null;
+
+        PageHelper.startPage(pageNum,pageSize);
             sydwLdzsChildDetailList = homeMapper.selectSydwLdzsChildDetail(depCode,doquery);
+        PageInfo<SydwLdzsChildDetail> pageList=new PageInfo<>(sydwLdzsChildDetailList);
             if (sydwLdzsChildDetailList == null) {
                 sydwLdzsChildDetailList = new ArrayList<>();
             }
-            redisTemplate.opsForValue().set(vuejx + "sydwLdzsChildDetail:" + depCode+doquery, sydwLdzsChildDetailList);
-        }
-        return sydwLdzsChildDetailList;
+
+
+        return pageList;
     }
 
 
     @Override
-    public List<Bzqk_fc> selectBzqk_fc(String depCode,String type) {
-        Object o = redisTemplate.opsForValue().get(vuejx + "fzqk_fc:" + depCode+type);
-        List<Bzqk_fc> fzqk_fc = null;
-        if (o != null) {
-            fzqk_fc = (List<Bzqk_fc>) o;
-        } else {
+    public PageInfo<Bzqk_fc> selectBzqk_fc(String depCode,String type,int pageNum,int pageSize) {
 
+        List<Bzqk_fc> fzqk_fc = null;
+
+            PageHelper.startPage(pageNum,pageSize);
             fzqk_fc = homeMapper.selectBzqk_fc(depCode,type);
+            PageInfo<Bzqk_fc> pageList=new PageInfo<>(fzqk_fc);
             if (fzqk_fc == null) {
                 fzqk_fc = new ArrayList<>();
             }
-            redisTemplate.opsForValue().set(vuejx + "fzqk_fc:" + depCode+type, fzqk_fc);
-        }
-        return fzqk_fc;
+
+
+        return pageList;
     }
 
     @Override
-    public List<Bzqk_fc_sy> selectBzqk_sy(String depCode,String type) {
-        Object o = redisTemplate.opsForValue().get(vuejx + "selectBzqk_sy:" + depCode+type);
-        List<Bzqk_fc_sy> bzqk_fc_sy = null;
-        if (o != null) {
-            bzqk_fc_sy = (List<Bzqk_fc_sy>) o;
-        } else {
+    public PageInfo<Bzqk_fc_sy> selectBzqk_sy(String depCode,String type,int pageNum,int pageSize) {
 
+        List<Bzqk_fc_sy> bzqk_fc_sy = null;
+
+            PageHelper.startPage(pageNum,pageSize);
             bzqk_fc_sy = homeMapper.selectBzqk_sy(depCode,type);
+            PageInfo<Bzqk_fc_sy> pageList=new PageInfo<>(bzqk_fc_sy);
             if (bzqk_fc_sy == null) {
                 bzqk_fc_sy = new ArrayList<>();
             }
-            redisTemplate.opsForValue().set(vuejx + "selectBzqk_sy:" + depCode+type, bzqk_fc_sy);
-        }
-        return bzqk_fc_sy;
+
+
+        return pageList;
     }
 
     @Override
-    public List<XzjgBzsChildDfp> getXzjgBzsChildDfp(String depCode) {
-        Object o = redisTemplate.opsForValue().get(vuejx + "getXzjgBzsChildDfp:" + depCode);
-        List<XzjgBzsChildDfp> xzjgBzsChildDfpList = null;
-        if (o != null) {
-            xzjgBzsChildDfpList = (List<XzjgBzsChildDfp>) o;
-        } else {
+    public PageInfo<XzjgBzsChildDfp> getXzjgBzsChildDfp(String depCode,int pageNum,int pageSize) {
 
+        List<XzjgBzsChildDfp> xzjgBzsChildDfpList = null;
+
+            PageHelper.startPage(pageNum,pageSize);
             xzjgBzsChildDfpList = homeMapper.getXzjgBzsChildDfp(depCode);
+            PageInfo<XzjgBzsChildDfp> pageList=new PageInfo<>(xzjgBzsChildDfpList);
             if (xzjgBzsChildDfpList == null) {
                 xzjgBzsChildDfpList = new ArrayList<>();
             }
-            redisTemplate.opsForValue().set(vuejx + "getXzjgBzsChildDfp:" + depCode, xzjgBzsChildDfpList);
-        }
-        return xzjgBzsChildDfpList;
+
+
+        return pageList;
     }
 
     @Override
-    public List<SydwBzsChildDfp> getSydwBzsChildDfp(String depCode) {
-        Object o = redisTemplate.opsForValue().get(vuejx + "getSydwBzsChildDfp:" + depCode);
-        List<SydwBzsChildDfp> sydwBzsChildDfpList = null;
-        if (o != null) {
-            sydwBzsChildDfpList = (List<SydwBzsChildDfp>) o;
-        } else {
+    public PageInfo<SydwBzsChildDfp> getSydwBzsChildDfp(String depCode,int pageNum,int pageSize) {
 
+        List<SydwBzsChildDfp> sydwBzsChildDfpList = null;
+
+            PageHelper.startPage(pageNum,pageSize);
             sydwBzsChildDfpList = homeMapper.getSydwBzsChildDfp(depCode);
+            PageInfo<SydwBzsChildDfp> pageList=new PageInfo<>(sydwBzsChildDfpList);
             if (sydwBzsChildDfpList == null) {
                 sydwBzsChildDfpList = new ArrayList<>();
             }
-            redisTemplate.opsForValue().set(vuejx + "getSydwBzsChildDfp:" + depCode, sydwBzsChildDfpList);
-        }
-        return sydwBzsChildDfpList;
+
+
+        return pageList;
     }
 
 
     @Override
-    public List<Dzq_fc> selectDzq_fc(String depCode,String type) {
-        Object o = redisTemplate.opsForValue().get(vuejx + "selectDzq_fc:" + depCode+type);
-        List<Dzq_fc> dzqfcList = null;
-        if (o != null) {
-            dzqfcList = (List<Dzq_fc>) o;
-        } else {
+    public PageInfo<Dzq_fc> selectDzq_fc(String depCode,String type,int pageNum,int pageSize) {
 
+        List<Dzq_fc> dzqfcList = null;
+
+            PageHelper.startPage(pageNum,pageSize);
             dzqfcList = homeMapper.selectDzq_fc(depCode,type);
+            PageInfo<Dzq_fc> pageList=new PageInfo<>(dzqfcList);
             if (dzqfcList == null) {
                 dzqfcList = new ArrayList<>();
             }
-            redisTemplate.opsForValue().set(vuejx + "selectDzq_fc:" + depCode+type, dzqfcList);
-        }
-        return dzqfcList;
+
+
+        return pageList;
     }
 
     @Override
-    public List<Zf_fc> selectZf_fc(String depCode,String type) {
-        Object o = redisTemplate.opsForValue().get(vuejx + "selectZf_fc:" + depCode+type);
-        List<Zf_fc> zffcList = null;
-        if (o != null) {
-            zffcList = (List<Zf_fc>) o;
-        } else {
+    public PageInfo<Zf_fc> selectZf_fc(String depCode,String type,int pageNum,int pageSize) {
 
+        List<Zf_fc> zffcList = null;
+
+            PageHelper.startPage(pageNum,pageSize);
             zffcList = homeMapper.selectZf_fc(depCode,type);
+            PageInfo<Zf_fc> pageList=new PageInfo<>(zffcList);
             if (zffcList == null) {
                 zffcList = new ArrayList<>();
             }
-            redisTemplate.opsForValue().set(vuejx + "selectZf_fc:" + depCode+type, zffcList);
-        }
-        return zffcList;
+
+
+        return pageList;
     }
 
 
     @Override
-    public List<DzqChildDfp> getDzqChildDfp(String depCode) {
-        Object o = redisTemplate.opsForValue().get(vuejx + "getDzqChildDfp:" + depCode);
-        List<DzqChildDfp> dzqChildDfpList = null;
-        if (o != null) {
-            dzqChildDfpList = (List<DzqChildDfp>) o;
-        } else {
+    public PageInfo<DzqChildDfp> getDzqChildDfp(String depCode,int pageNum,int pageSize) {
 
+        List<DzqChildDfp> dzqChildDfpList = null;
+
+            PageHelper.startPage(pageNum,pageSize);
             dzqChildDfpList = homeMapper.getDzqChildDfp(depCode);
+            PageInfo<DzqChildDfp> pageList=new PageInfo<>(dzqChildDfpList);
             if (dzqChildDfpList == null) {
                 dzqChildDfpList = new ArrayList<>();
             }
-            redisTemplate.opsForValue().set(vuejx + "getDzqChildDfp:" + depCode, dzqChildDfpList);
-        }
-        return dzqChildDfpList;
+
+
+        return pageList;
     }
 
 
     @Override
-    public List<ZfChildDfp> getZfChildDfp(String depCode) {
-        Object o = redisTemplate.opsForValue().get(vuejx + "getZfChildDfp:" + depCode);
-        List<ZfChildDfp> zfChildDfpList = null;
-        if (o != null) {
-            zfChildDfpList = (List<ZfChildDfp>) o;
-        } else {
+    public PageInfo<ZfChildDfp> getZfChildDfp(String depCode,int pageNum,int pageSize) {
 
+        List<ZfChildDfp> zfChildDfpList = null;
+
+            PageHelper.startPage(pageNum,pageSize);
             zfChildDfpList = homeMapper.getZfChildDfp(depCode);
+            PageInfo<ZfChildDfp> pageList=new PageInfo<>(zfChildDfpList);
             if (zfChildDfpList == null) {
                 zfChildDfpList = new ArrayList<>();
             }
-            redisTemplate.opsForValue().set(vuejx + "getZfChildDfp:" + depCode, zfChildDfpList);
-        }
-        return zfChildDfpList;
+
+
+        return pageList;
     }
 }

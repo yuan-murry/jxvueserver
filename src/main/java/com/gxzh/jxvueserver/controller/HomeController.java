@@ -1,13 +1,12 @@
 package com.gxzh.jxvueserver.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.gxzh.jxvueserver.dto.*;
 import com.gxzh.jxvueserver.service.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/home")
@@ -53,59 +52,87 @@ public class HomeController {
 
 
     @RequestMapping("/selectXzjgLdzsChild")
-    public Res<?> selectXzjgLdzsChild(@RequestParam("depCode") String depCode,@RequestParam("ldzstype") String ldzstype) {
-        List<XzjgLdzsChild> xzjgLdzsChildList = this.homeService.selectXzjgLdzsChild(depCode,ldzstype);
+    public Res<?> selectXzjgLdzsChild(@RequestParam("depCode") String depCode,
+                                      @RequestParam("ldzstype") String ldzstype,
+                                      @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
+                                      @RequestParam(value = "pageSize",defaultValue = "10") int pageSize) {
+        PageInfo<XzjgLdzsChild> xzjgLdzsChildList = this.homeService.selectXzjgLdzsChild(depCode,ldzstype,pageNum,pageSize);
         return Res.ok(xzjgLdzsChildList);
     }
 
 
     @RequestMapping("/selectSyjgLdzsChild")
-    public Res<?> selectSyjgLdzsChild(@RequestParam("depCode") String depCode,@RequestParam("ldzstype") String ldzstype) {
-        List<SyjgLdzsChild> syjgLdzsChildList = this.homeService.selectSyjgLdzsChild(depCode,ldzstype);
+    public Res<?> selectSyjgLdzsChild(@RequestParam("depCode") String depCode,
+                                      @RequestParam("ldzstype") String ldzstype,
+                                      @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
+                                      @RequestParam(value = "pageSize",defaultValue = "10") int pageSize)
+     {
+        PageInfo<SyjgLdzsChild> syjgLdzsChildList = this.homeService.selectSyjgLdzsChild(depCode,ldzstype,pageNum,pageSize);
         return Res.ok(syjgLdzsChildList);
     }
 
     @RequestMapping("/selectXzjgPieChild")
-    public Res<?> selectXzjgPieChild(@RequestParam("depCode") String depCode,@RequestParam("depName") String depName) {
-        List<XzjgPieChild> xzjgPieChildList = this.homeService.selectXzjgPieChild(depCode,depName);
+    public Res<?> selectXzjgPieChild(@RequestParam("depCode") String depCode,
+                                     @RequestParam("depName") String depName,
+                                     @RequestParam(value = "1",defaultValue = "1")int pageNum,
+                                     @RequestParam(value = "1",defaultValue = "10")int pageSize
+    ) {
+        PageInfo<XzjgPieChild> xzjgPieChildList = this.homeService.selectXzjgPieChild(depCode,depName,pageNum,pageSize);
         return Res.ok(xzjgPieChildList);
     }
 
     @RequestMapping("/selectSydwPieChild")
-    public Res<?> selectSydwPieChild(@RequestParam("depCode") String depCode,@RequestParam("depName") String depName) {
-        List<SydwPieChild> sydwPieChildList = this.homeService.selectSydwPieChild(depCode,depName);
+    public Res<?> selectSydwPieChild(@RequestParam("depCode") String depCode,
+                                     @RequestParam("depName") String depName,
+                                     @RequestParam(value = "1",defaultValue = "1")int pageNum,
+                                     @RequestParam(value = "1",defaultValue = "10")int pageSize
+                                     ) {
+        PageInfo<SydwPieChild> sydwPieChildList = this.homeService.selectSydwPieChild(depCode,depName,pageNum,pageSize);
         return Res.ok(sydwPieChildList);
     }
 
 
     @RequestMapping("/selectXzjgLdzsChildDetail")
-    public Res<?> selectXzjgLdzsChildDetail(@RequestParam("depCode") String depCode,@RequestParam("doquery") String doquery) {
-        List<XzjgLdzsChildDetail> xzjgLdzsChildDetailList = this.homeService.selectXzjgLdzsChildDetail(depCode,doquery);
+    public Res<?> selectXzjgLdzsChildDetail(@RequestParam("depCode") String depCode,
+                                            @RequestParam("doquery") String doquery,
+                                            @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
+                                            @RequestParam(value = "pageSize",defaultValue = "10") int pageSize) {
+        PageInfo<XzjgLdzsChildDetail> xzjgLdzsChildDetailList = this.homeService.selectXzjgLdzsChildDetail(depCode,doquery,pageNum,pageSize);
         return Res.ok(xzjgLdzsChildDetailList);
     }
 
     @RequestMapping("/selectSydwLdzsChildDetail")
-    public Res<?> selectSydwLdzsChildDetail(@RequestParam("depCode") String depCode,@RequestParam("doquery") String doquery) {
-        List<SydwLdzsChildDetail> sydwLdzsChildDetailList = this.homeService.selectSydwLdzsChildDetail(depCode,doquery);
+    public Res<?> selectSydwLdzsChildDetail(@RequestParam("depCode") String depCode,
+                                            @RequestParam("doquery") String doquery,
+                                            @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
+                                            @RequestParam(value = "pageSize",defaultValue = "10") int pageSize) {
+        PageInfo<SydwLdzsChildDetail> sydwLdzsChildDetailList = this.homeService.selectSydwLdzsChildDetail(depCode,doquery,pageNum,pageSize);
         return Res.ok(sydwLdzsChildDetailList);
     }
 
 
     @RequestMapping("/bzqk_fc")
-    public Res<?> selectBzqk(@RequestParam("depCode") String depCode,@RequestParam("type") String type) {
+    public Res<?> selectBzqk(@RequestParam("depCode") String depCode,
+                             @RequestParam("type") String type,
+                             @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
+                             @RequestParam(value = "pageSize",defaultValue = "10") int pageSize){
 
 
-        List<Bzqk_fc>   bzqk_fc=  this.homeService.selectBzqk_fc(depCode,type);
+        PageInfo<Bzqk_fc>   bzqk_fc=  this.homeService.selectBzqk_fc(depCode,type,pageNum,pageSize);
 
 
         return Res.ok(bzqk_fc);
     }
 
     @RequestMapping("/bzqk_fc_sy")
-    public Res<?> selectBzqk_sy(@RequestParam("depCode") String depCode,@RequestParam("type") String type) {
+    public Res<?> selectBzqk_sy(@RequestParam("depCode") String depCode,
+                                @RequestParam("type") String type,
+                                @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
+                                @RequestParam(value = "pageSize",defaultValue = "10")int pageSize
+                                ) {
 
 
-        List<Bzqk_fc_sy>   bzqk_fc_sy=  this.homeService.selectBzqk_sy(depCode,type);
+        PageInfo<Bzqk_fc_sy>   bzqk_fc_sy=  this.homeService.selectBzqk_sy(depCode,type,pageNum,pageSize);
 
 
         return Res.ok(bzqk_fc_sy);
@@ -114,20 +141,26 @@ public class HomeController {
 
 
     @RequestMapping("/getXzjgBzsChildDfp")
-    public Res<?> getXzjgBzsChildDfp(@RequestParam("depCode") String depCode) {
+    public Res<?> getXzjgBzsChildDfp(@RequestParam("depCode") String depCode,
+                                     @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
+                                     @RequestParam(value = "pageSize",defaultValue = "10")int pageSize
+                                     ) {
 
 
-        List<XzjgBzsChildDfp>   xzjgBzsChildDfpList=  this.homeService.getXzjgBzsChildDfp(depCode);
+        PageInfo<XzjgBzsChildDfp>   xzjgBzsChildDfpList=  this.homeService.getXzjgBzsChildDfp(depCode,pageNum,pageSize);
 
 
         return Res.ok(xzjgBzsChildDfpList);
     }
 
     @RequestMapping("/getSydwBzsChildDfp")
-    public Res<?> getSydwBzsChildDfp(@RequestParam("depCode") String depCode) {
+    public Res<?> getSydwBzsChildDfp(@RequestParam("depCode") String depCode,
+                                     @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
+                                     @RequestParam(value = "pageSize",defaultValue = "10")int pageSize
+                                     ) {
 
 
-        List<SydwBzsChildDfp>   sydwBzsChildDfpList=  this.homeService.getSydwBzsChildDfp(depCode);
+        PageInfo<SydwBzsChildDfp>   sydwBzsChildDfpList=  this.homeService.getSydwBzsChildDfp(depCode,pageNum,pageSize);
 
 
         return Res.ok(sydwBzsChildDfpList);
@@ -135,10 +168,14 @@ public class HomeController {
 
 
     @RequestMapping("/selectDzq_fc")
-    public Res<?> selectDzq_fc(@RequestParam("depCode") String depCode,@RequestParam("type") String type) {
+    public Res<?> selectDzq_fc(@RequestParam("depCode") String depCode,
+                               @RequestParam("type") String type,
+                               @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
+                               @RequestParam(value="pageSize",defaultValue = "10")int pageSize
+                               ) {
 
 
-        List<Dzq_fc>   dzqfcList=  this.homeService.selectDzq_fc(depCode,type);
+        PageInfo<Dzq_fc>   dzqfcList=  this.homeService.selectDzq_fc(depCode,type,pageNum,pageSize);
 
 
         return Res.ok(dzqfcList);
@@ -146,30 +183,39 @@ public class HomeController {
 
 
     @RequestMapping("/selectZf_fc")
-    public Res<?> selectZf_fc(@RequestParam("depCode") String depCode,@RequestParam("type") String type) {
+    public Res<?> selectZf_fc(@RequestParam("depCode") String depCode,
+                              @RequestParam("type") String type,
+                              @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
+                              @RequestParam(value = "pageSize",defaultValue = "10") int pageSize
+                              ) {
 
 
-        List<Zf_fc>   zffcList=  this.homeService.selectZf_fc(depCode,type);
+        PageInfo<Zf_fc>   zffcList=  this.homeService.selectZf_fc(depCode,type,pageNum,pageSize);
 
 
         return Res.ok(zffcList);
     }
 
     @RequestMapping("/getDzqChildDfp")
-    public Res<?> getDzqChildDfp(@RequestParam("depCode") String depCode) {
+    public Res<?> getDzqChildDfp(@RequestParam("depCode") String depCode,
+                                 @RequestParam(value="pageNum",defaultValue = "1") int pageNum,
+                                 @RequestParam(value="pageSize",defaultValue = "10") int pageSize
+                                 ) {
 
 
-        List<DzqChildDfp>   dzqChildDfpList=  this.homeService.getDzqChildDfp(depCode);
+        PageInfo<DzqChildDfp>   dzqChildDfpList=  this.homeService.getDzqChildDfp(depCode,pageNum,pageSize);
 
 
         return Res.ok(dzqChildDfpList);
     }
 
     @RequestMapping("/getZfChildDfp")
-    public Res<?> getZfChildDfp(@RequestParam("depCode") String depCode) {
+    public Res<?> getZfChildDfp(@RequestParam("depCode") String depCode,
+                                @RequestParam(value="pageNum",defaultValue = "1") int pageNum,
+                                @RequestParam(value="pageSize",defaultValue = "10") int pageSize) {
 
 
-        List<ZfChildDfp>   zfChildDfpList=  this.homeService.getZfChildDfp(depCode);
+        PageInfo<ZfChildDfp>   zfChildDfpList=  this.homeService.getZfChildDfp(depCode,pageNum,pageSize);
 
 
         return Res.ok(zfChildDfpList);

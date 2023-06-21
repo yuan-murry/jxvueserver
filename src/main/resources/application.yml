@@ -57,3 +57,10 @@ mybatis:
 logging:
   level:
     com.gxzh.jxvueserver.mapper: debug
+
+
+
+pagehelper:
+  helper-dialect: oracle
+  reasonable: false
+  support-methods-arguments: true

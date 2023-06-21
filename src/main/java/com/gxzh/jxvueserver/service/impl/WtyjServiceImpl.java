@@ -1,5 +1,7 @@
 package com.gxzh.jxvueserver.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gxzh.jxvueserver.dto.VtxPie;
 import com.gxzh.jxvueserver.dto.WtyjJgsy;
 import com.gxzh.jxvueserver.entity.*;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -120,30 +123,35 @@ public class WtyjServiceImpl implements WtyjService {
     }
 
     @Override
-    public List<WtyjJgsy> getextraPieChild(String depCode, String jgsyNum) {
+    public PageInfo<WtyjJgsy> getextraPieChild(String depCode, String jgsyNum, int pageNum, int pageSize) {
         if (depCode != null && depCode.indexOf("__") != -1) {
             depCode = "36%";
         }
-        List<WtyjJgsy> jgsyList = wtyjMapper.getextraPieChild(depCode, jgsyNum);
-        return jgsyList;
+        List<WtyjJgsy> jgsyList=null;
+        PageHelper.startPage(pageNum,pageSize);
+        jgsyList = wtyjMapper.getextraPieChild(depCode, jgsyNum);
+        PageInfo<WtyjJgsy> pageList=new PageInfo<>(jgsyList);
+        if(jgsyList==null){
+            jgsyList=new ArrayList<>();
+        }
+        return pageList;
     }
 
 
 
     @Override
-    public List<WtyjJgsy> selectextraPieChildDetail(String depName,String classNum) {
+    public PageInfo<WtyjJgsy> selectextraPieChildDetail(String depName,String classNum,int pageNum,int pageSize) {
 
         List<WtyjJgsy> jgsyList = null;
 
-        Object o = redisTemplate.opsForValue().get(vuejx + "selectextraPieChildDetail:" + depName+classNum);
-        if (o != null) {
-            jgsyList = (List<WtyjJgsy>) o;
-        } else {
-
+            PageHelper.startPage(pageNum,pageSize);
             jgsyList = wtyjMapper.selectextraPieChildDetail(depName, classNum);
-            redisTemplate.opsForValue().set(vuejx + "selectextraPieChildDetail:" + depName+classNum, jgsyList);
-        }
-        return jgsyList;
+            PageInfo<WtyjJgsy> pageList=new PageInfo<>(jgsyList);
+         if(jgsyList==null){
+             jgsyList=new ArrayList<>();
+         }
+
+        return pageList;
     }
 
     @Override
