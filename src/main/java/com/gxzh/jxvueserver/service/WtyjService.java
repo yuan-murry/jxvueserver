@@ -2,6 +2,7 @@ package com.gxzh.jxvueserver.service;
 
 import com.github.pagehelper.PageInfo;
 import com.gxzh.jxvueserver.dto.VtxPie;
+import com.gxzh.jxvueserver.dto.Vtx_fc;
 import com.gxzh.jxvueserver.dto.WtyjJgsy;
 import com.gxzh.jxvueserver.entity.*;
 
@@ -24,5 +25,7 @@ public interface WtyjService {
     PageInfo<WtyjJgsy> selectextraPieChildDetail(String depName,String classNum,int pageNum,int pageSize);
 
     List<VtxPie> selectLTX(String depcode);
+
+    PageInfo<Vtx_fc> selectVTX_fc(String depName,  int pageNum, int pageSize);
 
 }

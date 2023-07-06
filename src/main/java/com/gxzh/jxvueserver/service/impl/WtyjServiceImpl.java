@@ -3,6 +3,7 @@ package com.gxzh.jxvueserver.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxzh.jxvueserver.dto.VtxPie;
+import com.gxzh.jxvueserver.dto.Vtx_fc;
 import com.gxzh.jxvueserver.dto.WtyjJgsy;
 import com.gxzh.jxvueserver.entity.*;
 import com.gxzh.jxvueserver.mapper.WtyjMapper;
@@ -172,6 +173,24 @@ public class WtyjServiceImpl implements WtyjService {
             redisTemplate.opsForValue().set(vuejx + "selectLTX:" + depcode, despList);
         }
         return despList;
+    }
+
+
+
+
+    @Override
+    public PageInfo<Vtx_fc> selectVTX_fc(String depName,  int pageNum, int pageSize) {
+
+        List<Vtx_fc> jgsyList = null;
+
+        PageHelper.startPage(pageNum,pageSize);
+        jgsyList = wtyjMapper.selectVTX_fc(depName);
+        PageInfo<Vtx_fc> pageList=new PageInfo<>(jgsyList);
+        if(jgsyList==null){
+            jgsyList=new ArrayList<>();
+        }
+
+        return pageList;
     }
 
 }

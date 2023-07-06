@@ -1,6 +1,7 @@
 package com.gxzh.jxvueserver.mapper;
 
 import com.gxzh.jxvueserver.dto.VtxPie;
+import com.gxzh.jxvueserver.dto.Vtx_fc;
 import com.gxzh.jxvueserver.dto.WtyjJgsy;
 import com.gxzh.jxvueserver.entity.*;
 import org.apache.ibatis.annotations.Param;
@@ -25,4 +26,6 @@ public interface WtyjMapper {
 
 
     List<VtxPie> selectLTX(@Param("depCode")String depCode, @Param("code") String code);
+
+    List<Vtx_fc> selectVTX_fc(@Param("depName")String depName);
 }

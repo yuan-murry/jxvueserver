@@ -1,9 +1,7 @@
 package com.gxzh.jxvueserver.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.gxzh.jxvueserver.dto.Res;
-import com.gxzh.jxvueserver.dto.VtxPie;
-import com.gxzh.jxvueserver.dto.WtyjJgsy;
+import com.gxzh.jxvueserver.dto.*;
 import com.gxzh.jxvueserver.entity.*;
 import com.gxzh.jxvueserver.service.WtyjService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,6 +116,18 @@ public class WtyjController {
             despList = wtyjService.selectLTX(depcode);
         }
         return Res.ok(despList);
+    }
+
+    @RequestMapping("/selectVTX_fc")
+    public Res<?> selectVTX_fc(
+            @RequestParam("depName") String depName,
+            @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
+            @RequestParam(value = "pageSize",defaultValue = "10")int pageSize
+    ) {
+
+            PageInfo<Vtx_fc> jgsyList  = wtyjService.selectVTX_fc(depName,pageNum,pageSize);
+
+        return Res.ok(jgsyList);
     }
 
 }
