@@ -132,6 +132,9 @@ public class HomeServiceImpl implements HomeService {
 
             PageHelper.startPage(pageNum,pageSize);
            xzjgLdzsChildList = homeMapper.selectXzjgLdzsChild(depCode,ldzstype);
+           if(xzjgLdzsChildList==null){
+               xzjgLdzsChildList=new ArrayList<>();
+           }
            PageInfo<XzjgLdzsChild> pageList=new PageInfo<>(xzjgLdzsChildList);
 
 
@@ -144,10 +147,11 @@ public class HomeServiceImpl implements HomeService {
 
         PageHelper.startPage(pageNum,pageSize);
             syjgLdzsChildList = homeMapper.selectSyjgLdzsChild(depCode,ldzstype);
+        if (syjgLdzsChildList == null) {
+            syjgLdzsChildList = new ArrayList<>();
+        }
+
         PageInfo<SyjgLdzsChild> pageList=new PageInfo<>(syjgLdzsChildList);
-            if (syjgLdzsChildList == null) {
-                syjgLdzsChildList = new ArrayList<>();
-            }
 
 
         return pageList;
@@ -181,10 +185,11 @@ public class HomeServiceImpl implements HomeService {
 
             PageHelper.startPage(pageNum,pageSize);
             xzjgPieChildList = homeMapper.selectXzjgPieChild(depCode,depName);
-            PageInfo<XzjgPieChild> pageList=new PageInfo<>(xzjgPieChildList);
-            if (xzjgPieChildList == null) {
-                xzjgPieChildList = new ArrayList<>();
-            }
+        if (xzjgPieChildList == null) {
+            xzjgPieChildList = new ArrayList<>();
+        }
+
+        PageInfo<XzjgPieChild> pageList=new PageInfo<>(xzjgPieChildList);
 
 
         return pageList;
@@ -217,10 +222,11 @@ public class HomeServiceImpl implements HomeService {
 
             PageHelper.startPage(pageNum,pageSize);
             sydwPieChildList = homeMapper.selectSydwPieChild(depCode,depName);
-            PageInfo<SydwPieChild> pageList=new PageInfo<>(sydwPieChildList);
-            if (sydwPieChildList == null) {
-                sydwPieChildList = new ArrayList<>();
-            }
+        if (sydwPieChildList == null) {
+            sydwPieChildList = new ArrayList<>();
+        }
+
+        PageInfo<SydwPieChild> pageList=new PageInfo<>(sydwPieChildList);
 
 
         return pageList;
@@ -233,10 +239,11 @@ public class HomeServiceImpl implements HomeService {
 
             PageHelper.startPage(pageNum,pageSize);
             xzjgLdzsChildDetailList = homeMapper.selectXzjgLdzsChildDetail(depCode,doquery);
+        if (xzjgLdzsChildDetailList == null) {
+            xzjgLdzsChildDetailList = new ArrayList<>();
+        }
             PageInfo<XzjgLdzsChildDetail> pageList=new PageInfo<>(xzjgLdzsChildDetailList);
-            if (xzjgLdzsChildDetailList == null) {
-                xzjgLdzsChildDetailList = new ArrayList<>();
-            }
+
 
 
         return pageList;
@@ -248,10 +255,11 @@ public class HomeServiceImpl implements HomeService {
 
         PageHelper.startPage(pageNum,pageSize);
             sydwLdzsChildDetailList = homeMapper.selectSydwLdzsChildDetail(depCode,doquery);
+        if (sydwLdzsChildDetailList == null) {
+            sydwLdzsChildDetailList = new ArrayList<>();
+        }
         PageInfo<SydwLdzsChildDetail> pageList=new PageInfo<>(sydwLdzsChildDetailList);
-            if (sydwLdzsChildDetailList == null) {
-                sydwLdzsChildDetailList = new ArrayList<>();
-            }
+
 
 
         return pageList;
@@ -265,10 +273,11 @@ public class HomeServiceImpl implements HomeService {
 
             PageHelper.startPage(pageNum,pageSize);
             fzqk_fc = homeMapper.selectBzqk_fc(depCode,type);
+        if (fzqk_fc == null) {
+            fzqk_fc = new ArrayList<>();
+        }
             PageInfo<Bzqk_fc> pageList=new PageInfo<>(fzqk_fc);
-            if (fzqk_fc == null) {
-                fzqk_fc = new ArrayList<>();
-            }
+
 
 
         return pageList;
@@ -281,10 +290,11 @@ public class HomeServiceImpl implements HomeService {
 
             PageHelper.startPage(pageNum,pageSize);
             bzqk_fc_sy = homeMapper.selectBzqk_sy(depCode,type);
-            PageInfo<Bzqk_fc_sy> pageList=new PageInfo<>(bzqk_fc_sy);
-            if (bzqk_fc_sy == null) {
-                bzqk_fc_sy = new ArrayList<>();
-            }
+        if (bzqk_fc_sy == null) {
+            bzqk_fc_sy = new ArrayList<>();
+        }
+
+        PageInfo<Bzqk_fc_sy> pageList=new PageInfo<>(bzqk_fc_sy);
 
 
         return pageList;
@@ -297,10 +307,11 @@ public class HomeServiceImpl implements HomeService {
 
             PageHelper.startPage(pageNum,pageSize);
             xzjgBzsChildDfpList = homeMapper.getXzjgBzsChildDfp(depCode);
-            PageInfo<XzjgBzsChildDfp> pageList=new PageInfo<>(xzjgBzsChildDfpList);
-            if (xzjgBzsChildDfpList == null) {
-                xzjgBzsChildDfpList = new ArrayList<>();
-            }
+        if (xzjgBzsChildDfpList == null) {
+            xzjgBzsChildDfpList = new ArrayList<>();
+        }
+
+        PageInfo<XzjgBzsChildDfp> pageList=new PageInfo<>(xzjgBzsChildDfpList);
 
 
         return pageList;
@@ -313,10 +324,11 @@ public class HomeServiceImpl implements HomeService {
 
             PageHelper.startPage(pageNum,pageSize);
             sydwBzsChildDfpList = homeMapper.getSydwBzsChildDfp(depCode);
+        if (sydwBzsChildDfpList == null) {
+            sydwBzsChildDfpList = new ArrayList<>();
+        }
             PageInfo<SydwBzsChildDfp> pageList=new PageInfo<>(sydwBzsChildDfpList);
-            if (sydwBzsChildDfpList == null) {
-                sydwBzsChildDfpList = new ArrayList<>();
-            }
+
 
 
         return pageList;
@@ -330,10 +342,11 @@ public class HomeServiceImpl implements HomeService {
 
             PageHelper.startPage(pageNum,pageSize);
             dzqfcList = homeMapper.selectDzq_fc(depCode,type);
-            PageInfo<Dzq_fc> pageList=new PageInfo<>(dzqfcList);
-            if (dzqfcList == null) {
-                dzqfcList = new ArrayList<>();
-            }
+        if (dzqfcList == null) {
+            dzqfcList = new ArrayList<>();
+        }
+
+        PageInfo<Dzq_fc> pageList=new PageInfo<>(dzqfcList);
 
 
         return pageList;
@@ -346,10 +359,11 @@ public class HomeServiceImpl implements HomeService {
 
             PageHelper.startPage(pageNum,pageSize);
             zffcList = homeMapper.selectZf_fc(depCode,type);
+        if (zffcList == null) {
+            zffcList = new ArrayList<>();
+        }
             PageInfo<Zf_fc> pageList=new PageInfo<>(zffcList);
-            if (zffcList == null) {
-                zffcList = new ArrayList<>();
-            }
+
 
 
         return pageList;
@@ -363,10 +377,11 @@ public class HomeServiceImpl implements HomeService {
 
             PageHelper.startPage(pageNum,pageSize);
             dzqChildDfpList = homeMapper.getDzqChildDfp(depCode);
+        if (dzqChildDfpList == null) {
+            dzqChildDfpList = new ArrayList<>();
+        }
             PageInfo<DzqChildDfp> pageList=new PageInfo<>(dzqChildDfpList);
-            if (dzqChildDfpList == null) {
-                dzqChildDfpList = new ArrayList<>();
-            }
+
 
 
         return pageList;
@@ -380,10 +395,11 @@ public class HomeServiceImpl implements HomeService {
 
             PageHelper.startPage(pageNum,pageSize);
             zfChildDfpList = homeMapper.getZfChildDfp(depCode);
+        if (zfChildDfpList == null) {
+            zfChildDfpList = new ArrayList<>();
+        }
             PageInfo<ZfChildDfp> pageList=new PageInfo<>(zfChildDfpList);
-            if (zfChildDfpList == null) {
-                zfChildDfpList = new ArrayList<>();
-            }
+
 
 
         return pageList;

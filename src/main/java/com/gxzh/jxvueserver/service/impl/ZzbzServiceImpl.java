@@ -138,10 +138,11 @@ public class ZzbzServiceImpl implements ZzbzService {
 
             PageHelper.startPage(pageNum,pageSize);
             zzbzDetailList = zzbzMapper.selectZzbzDetail(depCode);
-            PageInfo<ZzbzDetail> pageList=new PageInfo<>(zzbzDetailList);
-            if(zzbzDetailList==null){
-                zzbzDetailList=new ArrayList<>();
-            }
+        if(zzbzDetailList==null){
+            zzbzDetailList=new ArrayList<>();
+        }
+
+        PageInfo<ZzbzDetail> pageList=new PageInfo<>(zzbzDetailList);
 
 
         return pageList;

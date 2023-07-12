@@ -707,53 +707,83 @@
 
     </select>
     <select id="selectXzjgPieChild" resultType="com.gxzh.jxvueserver.dto.XzjgPieChild">
-        select jc.jgsy_name as jgname
+        select
+            (select desp
+             from geocode g
+             where g.code = jc.dep_code) desp,
+            jc.jgsy_name as jgname ,
+            (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jc.jgsy_system_code
+                                                                and dcl.code_type_no = '40') jgsy_system_code,
+            decode(jc.jgsy_type,'04','行政机构','06','下设机构','10','街道乡镇','12','事业单位')
+                jgtype
+
         from jgsy_common jc
         where jc.jgsy_states = '1'
           and jc.jgsy_type in ('04', '06', '10')
           and jc.dep_code like #{depCode}
           and jgsy_system_code = #{depName}
-
-
     </select>
 
     <select id="selectSydwPieChild" resultType="com.gxzh.jxvueserver.dto.SydwPieChild">
-        select jc.jgsy_name as jgname
-        from jgsy_common jc
+        select
+            (select desp
+             from geocode g
+             where g.code = jc.dep_code) desp,
+            jgsy_name as jgname,
+            (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jgsy_system_code and dcl.code_type_no = '40') jgsy_system_code,
+            (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = s.jfxs and dcl.code_type_no = 'z6') jfxs,
+            (select h.hyfl_name from HYFL h where h.hyfl_code = s.hylb) sydwhyfl
+
+        from jgsy_common jc left join sy s  on jc.jgsy_code=s.jgsy_code
         where jc.jgsy_states = '1'
           and jc.jgsy_type = '12'
           and jc.dep_code like #{depCode}
           and jgsy_system_code = #{depName}
-
-
     </select>
 
     <select id="selectXzjgLdzsChildDetail" resultType="com.gxzh.jxvueserver.dto.XzjgLdzsChildDetail" parameterType="String">
 
-                 select jc.jgsy_name as ldzsname,
-                        ${doquery}   as ldzscount
-                 from bmldzs vv
-                          left join jgsy_common jc
-                                    on jc.jgsy_code = vv.jgsy_code
-                 where jc.jgsy_type in ('04', '06', '10')
-                   and jc.jgsy_states = '1'
-                   and jc.dep_code like #{depCode}
-                   and ${doquery} !=0
+        select  (select desp
+                 from geocode g
+                 where g.code = jc.dep_code) desp,
+                jc.jgsy_name as jgname ,
+                (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jc.jgsy_system_code
+                                                                    and dcl.code_type_no = '40') jgsy_system_code,
+                decode(jc.jgsy_type,'04','行政机构','06','下设机构','10','街道乡镇','12','事业单位')
+                    jgtype,
+                ${doquery}   as ldzscount
+        from bmldzs vv
+                 left join jgsy_common jc
+                           on jc.jgsy_code = vv.jgsy_code
+        where jc.jgsy_type in ('04', '06', '10')
+          and jc.jgsy_states = '1'
+          and jc.dep_code like #{depCode}
+          and ${doquery} !=0
+
 
     </select>
 
 
     <select id="selectSydwLdzsChildDetail" resultType="com.gxzh.jxvueserver.dto.SydwLdzsChildDetail" parameterType="String">
-
-        select jc.jgsy_name as ldzsname,
+        select (select desp
+                from geocode g
+                where g.code = jc.dep_code) desp,
+               jgsy_name as jgname,
+               (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jgsy_system_code and dcl.code_type_no = '40') jgsy_system_code,
+               (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = s.jfxs and dcl.code_type_no = 'z6') jfxs,
+               (select h.hyfl_name from HYFL h where h.hyfl_code = s.hylb) sydwhyfl,
                ${doquery}   as ldzscount
+
         from bmldzs vv
                  left join jgsy_common jc
                            on jc.jgsy_code = vv.jgsy_code
+                 left join sy s
+                           on s.jgsy_code = vv.jgsy_code
         where jc.jgsy_type = '12'
           and jc.jgsy_states = '1'
           and jc.dep_code like #{depCode}
           and ${doquery} !=0
+
 
     </select>
 
@@ -1040,4 +1070,6 @@
         from V_TONGJI_DFPBZ_tjb t where dep_code like #{depCode}
         group by zhxsh order by zhxsh
     </select>
+
+
 </mapper>

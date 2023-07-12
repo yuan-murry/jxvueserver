@@ -1,5 +1,6 @@
 package com.gxzh.jxvueserver.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.gxzh.jxvueserver.dto.*;
 import com.gxzh.jxvueserver.service.BzzyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,4 +58,23 @@ public class BzzyController {
         return Res.ok(insdstry);
     }
 
+
+    @RequestMapping("/getBzzyBzlxChild")
+    public Res<?> getBzzyBzlxChild(@RequestParam("bzType") String bzType,
+                                      @RequestParam("depCode") String depCode,
+                                      @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
+                                      @RequestParam(value = "pageSize",defaultValue = "10") int pageSize) {
+        PageInfo<BzlxChild> bzlxChildList = this.bzzyService.getBzzyBzlxChild(bzType,depCode,pageNum,pageSize);
+        return Res.ok(bzlxChildList);
+    }
+
+
+    @RequestMapping("/getBzzyJfxsChild")
+    public Res<?> getBzzyJfxsChild(@RequestParam("bzType") String bzType,
+                                   @RequestParam("depCode") String depCode,
+                                   @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
+                                   @RequestParam(value = "pageSize",defaultValue = "10") int pageSize) {
+        PageInfo<JfxsChild> jfxsChildList = this.bzzyService.getBzzyJfxsChild(bzType,depCode,pageNum,pageSize);
+        return Res.ok(jfxsChildList);
+    }
 }

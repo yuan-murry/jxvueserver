@@ -1,6 +1,9 @@
 package com.gxzh.jxvueserver.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gxzh.jxvueserver.dto.AreaBusinessChild;
+import com.gxzh.jxvueserver.dto.YwlxChild;
 import com.gxzh.jxvueserver.entity.*;
 import com.gxzh.jxvueserver.mapper.AnalyzeMapper;
 import com.gxzh.jxvueserver.service.AnalyzeService;
@@ -8,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -126,5 +130,26 @@ public class AnalyzeServiceImpl implements AnalyzeService {
     public AreaBusinessChild getAreaBusinessChild(String depName) {
         AreaBusinessChild areaBusinessChild = analyzeMapper.getAreaBusinessChild(depName);
         return areaBusinessChild;
+    }
+
+
+
+    @Override
+    public PageInfo<YwlxChild> selectYwlxChild(String depCode, String codeValue, int pageNum, int pageSize) {
+        if (depCode != null && depCode.indexOf("__") != -1) {
+            depCode="36%";
+        }
+        List<YwlxChild> ywlxChildList = null;
+
+        PageHelper.startPage(pageNum,pageSize);
+        ywlxChildList = analyzeMapper.selectYwlxChild(depCode,codeValue);
+        if (ywlxChildList == null) {
+            ywlxChildList = new ArrayList<>();
+        }
+
+        PageInfo<YwlxChild> pageList=new PageInfo<>(ywlxChildList);
+
+
+        return pageList;
     }
 }

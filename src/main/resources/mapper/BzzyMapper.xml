@@ -505,5 +505,73 @@
         order by bzs desc
     </select>
 
+    <select id="getBzzyBzlxChild" resultType="com.gxzh.jxvueserver.dto.BzlxChild">
+        select
+            (select desp
+             from geocode g
+             where g.code = geocode) desp,
+            jgsy_name as jgname ,
+            (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jgsy_system_code and dcl.code_type_no = '40') jgsy_system_code,
+            decode(jgtype,
+                   'local',
+                   '行政',
+                   'lo_next',
+                   '下设',
+                   'sy',
+                   '事业',
+                   'jdxz',
+                   '街道乡镇')jgtype,
 
+            ${bzType}  bz
+
+        from v_bzzz
+        where
+            jgtype in ('local','lo_next','jdxz')
+          and geocode like #{depCode}
+          and ${bzType} !=0  order by geocode
+    </select>
+
+
+    <select id="getBzzyBzlxChild" resultType="com.gxzh.jxvueserver.dto.BzlxChild">
+        select
+            (select desp
+             from geocode g
+             where g.code = geocode) desp,
+            jgsy_name as jgname ,
+            (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jgsy_system_code and dcl.code_type_no = '40') jgsy_system_code,
+            decode(jgtype,
+                   'local',
+                   '行政',
+                   'lo_next',
+                   '下设',
+                   'sy',
+                   '事业',
+                   'jdxz',
+                   '街道乡镇')jgtype,
+
+            ${bzType}  bz
+
+        from v_bzzz
+        where
+            jgtype in ('local','lo_next','jdxz')
+          and geocode like #{depCode}
+          and ${bzType} !=0  order by geocode
+    </select>
+
+
+    <select id="getBzzyJfxsChild" resultType="com.gxzh.jxvueserver.dto.JfxsChild">
+        select
+            (select desp
+             from geocode g
+             where g.code = geocode) desp,
+            jgsy_name as jgname,
+            (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jgsy_system_code and dcl.code_type_no = '40') jgsy_system_code,
+            (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = jfxs and dcl.code_type_no = 'z6') jfxs,
+            (select h.hyfl_name from HYFL h where h.hyfl_code = sydwhyfl) sydwhyfl,
+            (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = SYDWLX and dcl.code_type_no = 'z3') sydwlx,
+            ${bzType} as bz
+        from v_bzzz t left join sy s on t.jgsy_code=s.jgsy_code
+        where  geocode like #{depCode} and ${bzType} !=0 and jgtype='sy'
+        order by geocode
+    </select>
 </mapper>

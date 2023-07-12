@@ -1,5 +1,6 @@
 package com.gxzh.jxvueserver.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gxzh.jxvueserver.dto.*;
 
 import java.util.List;
@@ -20,4 +21,7 @@ public interface BzzyService {
 
     List<BzzyIndstry> getInsdstryChild(String depCode, String flCode);
 
+    PageInfo<BzlxChild>  getBzzyBzlxChild(String bzType, String depCode,int pageNum, int pageSize);
+
+    PageInfo<JfxsChild>  getBzzyJfxsChild(String bzType, String depCode,int pageNum, int pageSize);
 }

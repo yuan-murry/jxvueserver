@@ -1,5 +1,7 @@
 package com.gxzh.jxvueserver.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gxzh.jxvueserver.dto.*;
 import com.gxzh.jxvueserver.mapper.BzzyMapper;
 import com.gxzh.jxvueserver.service.BzzyService;
@@ -141,5 +143,42 @@ public class BzzyServiceImpl implements BzzyService {
         }
 
         return insdstry;
+    }
+
+
+    @Override
+    public PageInfo<BzlxChild> getBzzyBzlxChild(String bzType,String depCode,int pageNum,int pageSize) {
+
+        List<BzlxChild> bzlxList = null;
+
+        PageHelper.startPage(pageNum,pageSize);
+        bzlxList = bzzyMapper.getBzzyBzlxChild(bzType,depCode);
+        if (bzlxList == null) {
+            bzlxList = new ArrayList<>();
+        }
+
+        PageInfo<BzlxChild> pageList=new PageInfo<>(bzlxList);
+
+
+        return pageList;
+    }
+
+
+
+    @Override
+    public PageInfo<JfxsChild> getBzzyJfxsChild(String bzType,String depCode,int pageNum,int pageSize) {
+
+        List<JfxsChild> jfxsList = null;
+
+        PageHelper.startPage(pageNum,pageSize);
+        jfxsList = bzzyMapper.getBzzyJfxsChild(bzType,depCode);
+        if (jfxsList == null) {
+            jfxsList = new ArrayList<>();
+        }
+
+        PageInfo<JfxsChild> pageList=new PageInfo<>(jfxsList);
+
+
+        return pageList;
     }
 }

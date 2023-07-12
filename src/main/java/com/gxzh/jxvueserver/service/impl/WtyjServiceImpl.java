@@ -131,10 +131,11 @@ public class WtyjServiceImpl implements WtyjService {
         List<WtyjJgsy> jgsyList=null;
         PageHelper.startPage(pageNum,pageSize);
         jgsyList = wtyjMapper.getextraPieChild(depCode, jgsyNum);
-        PageInfo<WtyjJgsy> pageList=new PageInfo<>(jgsyList);
         if(jgsyList==null){
             jgsyList=new ArrayList<>();
         }
+        PageInfo<WtyjJgsy> pageList=new PageInfo<>(jgsyList);
+
         return pageList;
     }
 
@@ -147,10 +148,11 @@ public class WtyjServiceImpl implements WtyjService {
 
             PageHelper.startPage(pageNum,pageSize);
             jgsyList = wtyjMapper.selectextraPieChildDetail(depName, classNum);
+        if(jgsyList==null){
+            jgsyList=new ArrayList<>();
+        }
             PageInfo<WtyjJgsy> pageList=new PageInfo<>(jgsyList);
-         if(jgsyList==null){
-             jgsyList=new ArrayList<>();
-         }
+
 
         return pageList;
     }
@@ -185,10 +187,11 @@ public class WtyjServiceImpl implements WtyjService {
 
         PageHelper.startPage(pageNum,pageSize);
         jgsyList = wtyjMapper.selectVTX_fc(depName);
-        PageInfo<Vtx_fc> pageList=new PageInfo<>(jgsyList);
         if(jgsyList==null){
             jgsyList=new ArrayList<>();
         }
+        PageInfo<Vtx_fc> pageList=new PageInfo<>(jgsyList);
+
 
         return pageList;
     }

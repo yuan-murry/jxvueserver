@@ -23,4 +23,9 @@ public interface BzzyMapper {
     List<BzzyIndstry> getInsdstry(String depCode);
 
     List<BzzyIndstry> getInsdstryChild(@Param("depCode") String depCode,@Param("flCode") String flCode);
+
+    List<BzlxChild> getBzzyBzlxChild(@Param("bzType") String bzType,@Param("depCode") String depCode);
+
+    List<JfxsChild> getBzzyJfxsChild(@Param("bzType") String bzType,@Param("depCode") String depCode);
+
 }

@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 @Data
 public class Bzqk_fc_sy implements Serializable {
+    private static final long serialVersionUID = -3940436267650370871L;
     private String desp;
     private String jgname;
     private String jgsySystemCode;

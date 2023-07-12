@@ -1,6 +1,7 @@
 package com.gxzh.jxvueserver.mapper;
 
 import com.gxzh.jxvueserver.dto.AreaBusinessChild;
+import com.gxzh.jxvueserver.dto.YwlxChild;
 import com.gxzh.jxvueserver.entity.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,4 +15,6 @@ public interface AnalyzeMapper {
     List<Jryw> selectJryw(String depcode, String code);
 
     AreaBusinessChild getAreaBusinessChild(@Param("depName") String depName);
+
+    List<YwlxChild> selectYwlxChild(@Param("depCode") String depCode,@Param("codeValue") String codeValue);
 }

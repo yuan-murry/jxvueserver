@@ -369,31 +369,38 @@
     </select>
 
     <select id="selectVTX_fc" resultType="com.gxzh.jxvueserver.dto.Vtx_fc" >
+        select desp,jgname,jgsy_system_code,jgtype,num from (
+        select
+        (select desp
+        from geocode g
+        where g.code = t.geocode) desp,
+        j.jgsy_name as jgname ,
+        (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = j.jgsy_system_code
+        and dcl.code_type_no = '40') jgsy_system_code,
+        decode(j.jgsy_type,'04','行政机构','06','下设机构','10','街道乡镇','12','事业单位')
+        jgtype,
+        nvl(sum((case
+        when ((t.xb = '1' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(add_months(sysdate, 12) - interval '60' year,
+        'yyyymmdd'))
+        or (xb = '2' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(add_months(sysdate, 12) - interval '55' year,
+        'yyyymmdd') and zwjb &gt; '132')
 
-        select jgname,num from (
-                                   select (select j.jgsy_name from jgsy_common j where j.jgsy_code = t.jgsy_code) as jgname,
-                                          nvl(sum((case
-                                                       when ((t.xb = '1' and
-                                                              to_char(csrq, 'yyyymmdd') &lt;=
-                                                              to_char(add_months(sysdate, 12) - interval '60' year,
-                                                                      'yyyymmdd'))
-                                                           or (xb = '2' and
-                                                               to_char(csrq, 'yyyymmdd') &lt;=
-                                                               to_char(add_months(sysdate, 12) - interval '55' year,
-                                                                       'yyyymmdd') and zwjb &gt; '132')
-
-                                                           or (xb = '2' and
-                                                               to_char(csrq, 'yyyymmdd') &lt;=
-                                                               to_char(add_months(sysdate, 12) - interval '60' year,
-                                                                       'yyyymmdd') and zwjb &lt;= '132')) and
-                                                            t.states = 1 and (t.zbzt = '01' or t.zbzt like '02%') and
-                                                            zwjb not in ('111', '112', '121', '122') then
-                                                           1
-                                              end)),
-                                              0) num
-                                   from
-                                       t_ry_jbxx t
-                                   where t.geocode
+        or (xb = '2' and
+        to_char(csrq, 'yyyymmdd') &lt;=
+        to_char(add_months(sysdate, 12) - interval '60' year,
+        'yyyymmdd') and zwjb &lt;= '132')) and
+        t.states = 1 and (t.zbzt = '01' or t.zbzt like '02%') and
+        zwjb not in ('111', '112', '121', '122') then
+        1
+        end)),
+        0) num
+        from
+        t_ry_jbxx t left join jgsy_common j on t.jgsy_code = j.jgsy_code
+        where t.geocode
         <choose>
             <when test='depName.contains("本级")'>
                 like (select g.code||'%' as  depcode
@@ -416,7 +423,7 @@
 
             </otherwise>
         </choose>
-            group by t.jgsy_code ) where num!=0
+        group by t.jgsy_code,j.jgsy_name,j.jgsy_type, t.geocode,j.jgsy_system_code ) where num!=0
     </select>
 
 </mapper>

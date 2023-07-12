@@ -8,7 +8,8 @@
         select d.code_chin_name as name, count(t.dsh_id) as value
         from DICT_CODE_LIB d
             left join t_ry_jbxx_dsh t
-        on d.code_value =t.auditing_ztbg and t.geocode like #{depcode}
+        on d.code_value =t.auditing_ztbg
+            and t.geocode like #{depcode}
             and t.states='1'
         where code_type_no ='61' and code_value !=-1
         group by code_chin_name
@@ -192,10 +193,27 @@
     where g.desp = #{depName}))
 
 </otherwise>
-
-
-
     </choose>
+    </select>
+
+
+    <select id="selectYwlxChild" resultType="com.gxzh.jxvueserver.dto.YwlxChild" >
+        select
+            (select desp
+             from geocode g
+             where g.code = t.geocode) desp,
+            j.jgsy_name as jgname ,
+            (select dcl.code_chin_name from DICT_CODE_LIB dcl where dcl.code_value = j.jgsy_system_code and dcl.code_type_no = '40') jgsy_system_code,
+            decode(j.jgsy_type,'04','行政机构','06','下设机构','10','街道乡镇','12','事业单位') jgtype,
+
+            d.code_chin_name as code_chin_name, count(t.dsh_id) as value
+        from t_ry_jbxx_dsh t
+            left join DICT_CODE_LIB d on d.code_value =t.auditing_ztbg
+            left join jgsy_common j  on j.jgsy_code = t.jgsy_code
+
+
+        where code_type_no ='61' and code_value =#{codeValue} and t.auditing_ztbg is not null  and t.states='1'  and t.geocode like #{depCode}
+        group by j.jgsy_code,j.jgsy_name,j.jgsy_type,d.code_chin_name,t.geocode,j.jgsy_system_code
 
     </select>
 </mapper>

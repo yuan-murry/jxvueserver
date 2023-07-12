@@ -2,9 +2,15 @@ package com.gxzh.jxvueserver.dto;
 
 import lombok.Data;
 
-@Data
-public class XzjgLdzsChildDetail {
+import java.io.Serializable;
 
-    private String ldzsname;
-    private String    ldzscount;
+@Data
+public class XzjgLdzsChildDetail implements Serializable {
+
+    private static final long serialVersionUID = 514313049966391453L;
+    private String desp;
+    private String jgname;
+    private String jgsySystemCode;
+    private String jgtype;
+    private int   ldzscount;
 }
