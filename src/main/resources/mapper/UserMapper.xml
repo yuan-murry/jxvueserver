@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.gxzh.jxvueserver.mapper.UserMapper">
+    <select id="selectUser" resultType="com.gxzh.jxvueserver.dto.User" parameterType="java.lang.String">
+        select count(id) as logincount from GBP_USER t where t.dep_code='360000' and  t.is_bbuser ='2'
+        and t.name = #{username}
+        and t.password = #{password}
+    </select>
+
+
+
+
+</mapper>
